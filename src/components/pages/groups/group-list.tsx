@@ -1,7 +1,7 @@
 import { fetchGroups } from '@/actions/server/groups'
 import { NotFoundItem } from '@/components/not-found-item'
 import { GroupsFilterParams } from '@/types/filters'
-import LoadMoreButton from '../load-more-button'
+import LoadMoreButton from '../../load-more-button'
 import GroupsCard from './group-card'
 
 const GroupsList = async (props: GroupsFilterParams) => {

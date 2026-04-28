@@ -99,6 +99,7 @@ export interface Config {
     };
     lessons: {
       users: 'users';
+      lesson_requests: 'lesson-requests';
       feedbacks: 'feedbacks';
     };
     teams: {
@@ -264,6 +265,10 @@ export interface Lesson {
    */
   name: string;
   /**
+   * Dersin ait olduğu kategori. Örn: Yazılım, Tasarım, Proje Yönetimi.
+   */
+  category?: (number | null) | Category;
+  /**
    * Dersin içeriği, hedefleri ve katılımcılardan beklentiler hakkında detaylı bilgi.
    */
   description: string;
@@ -292,15 +297,11 @@ export interface Lesson {
    */
   rating?: number | null;
   /**
-   * Dersin ait olduğu kategori. Örn: Yazılım, Tasarım, Proje Yönetimi.
-   */
-  category?: (number | null) | Category;
-  /**
-   * Dersin başlayacağı tarih ve saat. Girildiğinde durum otomatik olarak "Planlanıyor" olur. Bitiş tarihinden önce olmalıdır.
+   * Dersin başlayacağı tarih ve saat. Girildiğinde durum otomatik olarak "Planlanıyor" olur.
    */
   date_from?: string | null;
   /**
-   * Dersin biteceği tarih ve saat. Bu tarih geçtiğinde durum otomatik olarak "Tamamlandı" olur. Başlangıç tarihinden sonra olmalıdır.
+   * Dersin biteceği tarih ve saat.
    */
   date_to?: string | null;
   /**
@@ -312,6 +313,14 @@ export interface Lesson {
    */
   users?: {
     docs?: (number | User)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  /**
+   * Bu derse kayıtlı olan kullanıcılar.
+   */
+  lesson_requests?: {
+    docs?: (number | LessonRequest)[];
     hasNextPage?: boolean;
     totalDocs?: number;
   };
@@ -332,6 +341,20 @@ export interface Lesson {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories".
+ */
+export interface Category {
+  id: number;
+  name?: string | null;
+  /**
+   * Bi renk seç
+   */
+  color: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "locations".
  */
 export interface Location {
@@ -342,15 +365,19 @@ export interface Location {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "categories".
+ * via the `definition` "lesson-requests".
  */
-export interface Category {
+export interface LessonRequest {
   id: number;
-  name?: string | null;
   /**
-   * Bi renk seç
+   * İstek Yapan Personel
    */
-  color: string;
+  users?: (number | null) | User;
+  /**
+   * İstek Yapılan Ders
+   */
+  lessons: number | Lesson;
+  description?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -494,24 +521,6 @@ export interface FolderInterface {
     totalDocs?: number;
   };
   folderType?: 'modules'[] | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "lesson-requests".
- */
-export interface LessonRequest {
-  id: number;
-  /**
-   * İstek Yapan Personel
-   */
-  users?: (number | null) | User;
-  /**
-   * İstek Yapılan Ders
-   */
-  lessons: number | Lesson;
-  description?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -881,6 +890,7 @@ export interface ModulesSelect<T extends boolean = true> {
  */
 export interface LessonsSelect<T extends boolean = true> {
   name?: T;
+  category?: T;
   description?: T;
   status?: T;
   location?: T;
@@ -888,11 +898,11 @@ export interface LessonsSelect<T extends boolean = true> {
   duration?: T;
   instructor?: T;
   rating?: T;
-  category?: T;
   date_from?: T;
   date_to?: T;
   by_generate?: T;
   users?: T;
+  lesson_requests?: T;
   feedbacks?: T;
   module?: T;
   updatedAt?: T;

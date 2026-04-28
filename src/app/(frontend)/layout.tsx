@@ -2,7 +2,6 @@ import React from 'react'
 import { ThemeProvider } from '@/components/theme-provider'
 import '../globals.css'
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
-import CalenderLayout from '@/components/dasboard/calender/calender-layout'
 import { AppSidebar } from '@/components/app-sidebar'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { Providers } from './provider'
@@ -27,12 +26,10 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
           >
             <TooltipProvider>
               <SidebarProvider>
-                <CalenderLayout>
-                  <AppSidebar user={user} />
-                  <SidebarInset>
-                    <div className="  gap-4 p-4 mt-4 pt-0">{children}</div>
-                  </SidebarInset>
-                </CalenderLayout>
+                <AppSidebar user={user} />
+                <SidebarInset>
+                  <div className="  gap-4 p-4 mt-4 pt-0">{children}</div>
+                </SidebarInset>
               </SidebarProvider>
             </TooltipProvider>
           </ThemeProvider>

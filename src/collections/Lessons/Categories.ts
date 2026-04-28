@@ -5,6 +5,7 @@ export const Categories: CollectionConfig = {
   slug: 'categories', // API adresi: /api/categories
   admin: {
     hidden: true,
+    useAsTitle: 'name',
   },
   labels: {
     singular: 'Kategori',

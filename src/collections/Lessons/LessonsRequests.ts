@@ -29,7 +29,6 @@ export const LessonsRequests: CollectionConfig = {
       label: 'İstek Yapılan Ders',
       relationTo: 'lessons',
       required: true,
-
       admin: {
         readOnly: true,
         position: 'sidebar',

@@ -26,44 +26,61 @@ export const Lessons: CollectionConfig = {
   },
   fields: [
     {
-      name: 'name',
-      type: 'text',
-      label: 'Ders Adı',
-      required: true,
-      admin: {
-        description: 'Dersin görünen adı. Örn: "İleri Seviye React Eğitimi"',
-      },
-    },
-    {
-      name: 'description',
-      label: 'Ders Açıklaması',
-      type: 'textarea',
-      required: true,
-      admin: {
-        description:
-          'Dersin içeriği, hedefleri ve katılımcılardan beklentiler hakkında detaylı bilgi.',
-      },
-    },
-    {
       type: 'row',
       fields: [
         {
-          name: 'status',
-          type: 'select',
+          name: 'name',
+          type: 'text',
+          label: 'Ders Adı',
           required: true,
-          defaultValue: 'Taslak',
-          options: [
-            { label: 'Taslak', value: 'Taslak' },
-            { label: 'Planlanıyor', value: 'Planlanıyor' },
-            { label: 'İşleme Alındı', value: 'İşleme Alındı' },
-            { label: 'Tamamlandı', value: 'Tamamlandı' },
-          ],
           admin: {
-            readOnly: true,
-            description:
-              'Dersin mevcut durumu. Otomatik olarak tarihlere göre güncellenir: Taslak (tarih yok) → Planlanıyor (başlangıç gelecekte) → İşleme Alındı (şu an aktif) → Tamamlandı (bitiş geçmişte).',
+            description: 'Dersin görünen adı. Örn: "İleri Seviye React Eğitimi"',
           },
         },
+        {
+          name: 'category',
+          label: 'Ders Kategorisi',
+          type: 'relationship',
+          relationTo: 'categories',
+          hasMany: false,
+          admin: {
+            description: 'Dersin ait olduğu kategori. Örn: Yazılım, Tasarım, Proje Yönetimi.',
+          },
+        },
+        {
+          name: 'description',
+          label: 'Ders Açıklaması',
+          type: 'textarea',
+          required: true,
+          admin: {
+            description:
+              'Dersin içeriği, hedefleri ve katılımcılardan beklentiler hakkında detaylı bilgi.',
+          },
+        },
+      ],
+    },
+    {
+      name: 'status',
+      label: 'Ders Durumu',
+      type: 'select',
+      required: true,
+      defaultValue: 'Taslak',
+      options: [
+        { label: 'Taslak', value: 'Taslak' },
+        { label: 'Planlanıyor', value: 'Planlanıyor' },
+        { label: 'İşleme Alındı', value: 'İşleme Alındı' },
+        { label: 'Tamamlandı', value: 'Tamamlandı' },
+      ],
+      admin: {
+        readOnly: true,
+        description:
+          'Dersin mevcut durumu. Otomatik olarak tarihlere göre güncellenir: Taslak (tarih yok) → Planlanıyor (başlangıç gelecekte) → İşleme Alındı (şu an aktif) → Tamamlandı (bitiş geçmişte).',
+      },
+    },
+
+    {
+      type: 'row',
+      fields: [
         {
           name: 'location',
           label: 'Ders Yeri',
@@ -112,36 +129,40 @@ export const Lessons: CollectionConfig = {
           'Dersin genel değerlendirme puanı (0-10 arası). Geri bildirimlere göre otomatik hesaplanabilir.',
       },
     },
+
     {
-      name: 'category',
-      label: 'Ders Kategorisi',
-      type: 'relationship',
-      relationTo: 'categories',
-      hasMany: false,
-      admin: {
-        description: 'Dersin ait olduğu kategori. Örn: Yazılım, Tasarım, Proje Yönetimi.',
-      },
+      type: 'row',
+      fields: [
+        {
+          name: 'date_from',
+          label: 'Ders Başlangıç Tarihi',
+          type: 'date',
+          admin: {
+            date: { pickerAppearance: 'dayAndTime' },
+            description:
+              'Dersin başlayacağı tarih ve saat. Girildiğinde durum otomatik olarak "Planlanıyor" olur.',
+          },
+        },
+        {
+          name: 'date_to',
+          label: 'Ders Bitiş Tarihi',
+          type: 'date',
+          admin: {
+            date: { pickerAppearance: 'dayAndTime' },
+            description: 'Dersin biteceği tarih ve saat. ',
+          },
+        },
+      ],
     },
-    {
-      name: 'date_from',
-      label: 'Ders Başlangıç Tarihi',
-      type: 'date',
-      admin: {
-        date: { pickerAppearance: 'dayAndTime' },
-        description:
-          'Dersin başlayacağı tarih ve saat. Girildiğinde durum otomatik olarak "Planlanıyor" olur. Bitiş tarihinden önce olmalıdır.',
-      },
-    },
-    {
-      name: 'date_to',
-      label: 'Ders Bitiş Tarihi',
-      type: 'date',
-      admin: {
-        date: { pickerAppearance: 'dayAndTime' },
-        description:
-          'Dersin biteceği tarih ve saat. Bu tarih geçtiğinde durum otomatik olarak "Tamamlandı" olur. Başlangıç tarihinden sonra olmalıdır.',
-      },
-    },
+    // {
+    //   type: 'upload',
+    //   label: 'Dokümanlar',
+    //   relationTo: 'media',
+    //   name: 'docs',
+    //   admin: {
+    //     description: 'Derslere ait dokümanlar.',
+    //   },
+    // },
     {
       name: 'by_generate',
       label: 'Dersi Oluşturan',
@@ -163,6 +184,18 @@ export const Lessons: CollectionConfig = {
       },
       type: 'join',
       collection: 'users',
+      on: 'lessons',
+    },
+    {
+      name: 'lesson_requests',
+      label: 'Ders İstekleri',
+      maxDepth: 3,
+      admin: {
+        hidden: true,
+        description: 'Bu derse kayıtlı olan kullanıcılar.',
+      },
+      type: 'join',
+      collection: 'lesson-requests',
       on: 'lessons',
     },
     {

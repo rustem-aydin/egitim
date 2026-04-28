@@ -1,5 +1,5 @@
 import { getDrillById } from '@/actions/server/drills'
-import DrillDetails from '@/components/drills/drill-details'
+import DrillDetails from '@/components/pages/drills/drill-details'
 import { notFound } from 'next/navigation'
 interface Props {
   params: Promise<{ id: number }>

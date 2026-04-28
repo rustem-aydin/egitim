@@ -1,5 +1,5 @@
 import { getGroupById } from '@/actions/server/groups'
-import GroupDetails from '@/components/groups/group-details'
+import GroupDetails from '@/components/pages/groups/group-details'
 import { notFound } from 'next/navigation'
 
 interface Props {

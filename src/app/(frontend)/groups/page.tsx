@@ -4,7 +4,7 @@ import { getAllModules } from '@/actions/server/modules'
 import { getAllTeams } from '@/actions/server/teams'
 import FilterTab from '@/components/filters/filter-tab'
 import FilterLoading from '@/components/filters/filterLoading'
-import GroupsList from '@/components/groups/group-list'
+import GroupsList from '@/components/pages/groups/group-list'
 import { getSortOptions, GroupsFilterParams } from '@/types/filters'
 import { Suspense } from 'react'
 const mySortOptions = getSortOptions(['CREATED_AT_ASC', 'CREATED_AT_DESC', 'NAME_ASC', 'NAME_DESC'])

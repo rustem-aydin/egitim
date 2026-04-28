@@ -10,7 +10,6 @@ interface HighlightableSectionProps {
   description?: string
   children: React.ReactNode // İçine grafik gelecek
   className?: string
-  category?: string
 }
 
 export function HighlightableSection({
@@ -18,7 +17,6 @@ export function HighlightableSection({
   description,
   children,
   className,
-  category,
 }: HighlightableSectionProps) {
   return (
     <section className={cn('relative flex items-center justify-center scroll-mt-24', className)}>
@@ -29,7 +27,6 @@ export function HighlightableSection({
               <CardTitle>{title}</CardTitle>
               {description && <CardDescription>{description}</CardDescription>}
             </div>
-            <Badge className="h-7">{category}</Badge>
           </div>
         </CardHeader>
         <CardContent className="flex-1  pb-0">{children}</CardContent>

@@ -3,7 +3,7 @@ import { ClipboardList, Network, User } from 'lucide-react'
 import DetailLink from '@/components/detail-link'
 import MotionCard from '@/components/motion-card'
 import { Group } from '@/payload-types'
-import { Badge } from '../ui/badge'
+import { Badge } from '../../ui/badge'
 import { TeamFlag } from './team-flag'
 
 interface GroupCardProps {

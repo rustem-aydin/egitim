@@ -5,7 +5,7 @@ import { Separator } from '@/components/ui/separator'
 import Link from 'next/link'
 import Fallback from '@/components/fallback'
 import { Group, Module, Team, User as PayloadUser } from '@/payload-types'
-import { Badge } from '../ui/badge'
+import { Badge } from '../../ui/badge'
 import BadgeModule from '../modules/modules-badge-code'
 
 interface GroupDetailsProps {
