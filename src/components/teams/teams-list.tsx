@@ -1,0 +1,27 @@
+import { TeamsFilterParams } from '@/types/filters'
+import { fetchTeams } from '@/actions/server/teams'
+import { TeamCard } from './team-card'
+import { NotFoundItem } from '../not-found-item'
+import LoadMoreButton from '../load-more-button'
+
+const TeamList = async (props: TeamsFilterParams) => {
+  const currentPage = props.page ? Number(props.page) : 1
+  const pages = Array.from({ length: currentPage }, (_, i) => i + 1)
+  const results = await Promise.all(pages.map((page) => fetchTeams({ ...props, page })))
+
+  const allTeams = results.flatMap((result) => result?.data || [])
+  return (
+    <div className="mx-auto relative z-10">
+      {!allTeams?.length && <NotFoundItem title="Takım Bulunamadı" description="" />}
+
+      <div className="w-full grid grid-cols-1 lg:grid-cols-4 gap-8 items-start justify-center py-4">
+        {allTeams?.map((team: any) => (
+          <TeamCard key={team.id} team={team} />
+        ))}
+      </div>
+      {results[0].hasNextPage && <LoadMoreButton nextPage={currentPage + 1} />}
+    </div>
+  )
+}
+
+export default TeamList

@@ -1,0 +1,4 @@
+// Menü gruplarını default kapalı göster
+.nav__group-toggle[aria-expanded='true']:not(.nav__group-toggle--manually-opened) {
+  // Bu çalışmaz çünkü Payload state'i JS ile tutar
+}

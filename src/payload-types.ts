@@ -64,27 +64,80 @@ export type SupportedTimezones =
 export interface Config {
   auth: {
     users: UserAuthOperations;
+    'payload-mcp-api-keys': PayloadMcpApiKeyAuthOperations;
   };
   blocks: {};
   collections: {
     users: User;
+    'lesson-requests': LessonRequest;
     media: Media;
+    groups: Group;
+    modules: Module;
+    lessons: Lesson;
+    teams: Team;
+    feedbacks: Feedback;
+    locations: Location;
+    drills: Drill;
+    parentModules: ParentModule;
+    categories: Category;
+    levels: Level;
+    'drill-groups': DrillGroup;
+    'drill-categories': DrillCategory;
+    'payload-mcp-api-keys': PayloadMcpApiKey;
     'payload-kv': PayloadKv;
+    folders: FolderInterface;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
-  collectionsJoins: {};
+  collectionsJoins: {
+    groups: {
+      users: 'users';
+    };
+    modules: {
+      lessons: 'lessons';
+    };
+    lessons: {
+      users: 'users';
+      feedbacks: 'feedbacks';
+    };
+    teams: {
+      groups: 'groups';
+    };
+    parentModules: {
+      modules: 'modules';
+      groups: 'groups';
+      teams: 'teams';
+    };
+    folders: {
+      documentsAndFolders: 'folders' | 'modules';
+    };
+  };
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
+    'lesson-requests': LessonRequestsSelect<false> | LessonRequestsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    groups: GroupsSelect<false> | GroupsSelect<true>;
+    modules: ModulesSelect<false> | ModulesSelect<true>;
+    lessons: LessonsSelect<false> | LessonsSelect<true>;
+    teams: TeamsSelect<false> | TeamsSelect<true>;
+    feedbacks: FeedbacksSelect<false> | FeedbacksSelect<true>;
+    locations: LocationsSelect<false> | LocationsSelect<true>;
+    drills: DrillsSelect<false> | DrillsSelect<true>;
+    parentModules: ParentModulesSelect<false> | ParentModulesSelect<true>;
+    categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    levels: LevelsSelect<false> | LevelsSelect<true>;
+    'drill-groups': DrillGroupsSelect<false> | DrillGroupsSelect<true>;
+    'drill-categories': DrillCategoriesSelect<false> | DrillCategoriesSelect<true>;
+    'payload-mcp-api-keys': PayloadMcpApiKeysSelect<false> | PayloadMcpApiKeysSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
+    folders: FoldersSelect<false> | FoldersSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
-    defaultIDType: string;
+    defaultIDType: number;
   };
   fallbackLocale: null;
   globals: {};
@@ -93,7 +146,7 @@ export interface Config {
   widgets: {
     collections: CollectionsWidget;
   };
-  user: User;
+  user: User | PayloadMcpApiKey;
   jobs: {
     tasks: unknown;
     workflows: unknown;
@@ -117,12 +170,68 @@ export interface UserAuthOperations {
     password: string;
   };
 }
+export interface PayloadMcpApiKeyAuthOperations {
+  forgotPassword: {
+    email: string;
+    password: string;
+  };
+  login: {
+    email: string;
+    password: string;
+  };
+  registerFirstUser: {
+    email: string;
+    password: string;
+  };
+  unlock: {
+    email: string;
+    password: string;
+  };
+}
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
-  id: string;
+  id: number;
+  name?: string | null;
+  rank?:
+    | (
+        | 'Asb.Çvş.'
+        | 'Asb.Kd.Çvş.'
+        | 'Asb.Üçvş.'
+        | 'Asb.Kd.Üçvş.'
+        | 'Asb.Bçvş.'
+        | 'Asb.Kd.Bçvş.'
+        | 'Tğm'
+        | 'Ütğm'
+        | 'Yzb'
+        | 'Bnb'
+        | 'Yb'
+        | 'Alb.'
+      )
+    | null;
+  lessons?: (number | Lesson)[] | null;
+  /**
+   * Üyesi Olduğu Kadro
+   */
+  group?: (number | null) | Group;
+  education_levels?: ('Önlisans' | 'Yüksek Lisans' | 'Doktora' | 'Lisans') | null;
+  yds_score?: number | null;
+  is_admin?: boolean | null;
+  university_names?:
+    | {
+        university?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  certificates?:
+    | {
+        certificate_name?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  join_date?: string | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -143,11 +252,275 @@ export interface User {
   collection: 'users';
 }
 /**
+ * Eğitim derslerinin oluşturulduğu, planlandığı ve takip edildiği koleksiyon. Dersler otomatik olarak tarihe göre durum değiştirir.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lessons".
+ */
+export interface Lesson {
+  id: number;
+  /**
+   * Dersin görünen adı. Örn: "İleri Seviye React Eğitimi"
+   */
+  name: string;
+  /**
+   * Dersin içeriği, hedefleri ve katılımcılardan beklentiler hakkında detaylı bilgi.
+   */
+  description: string;
+  /**
+   * Dersin mevcut durumu. Otomatik olarak tarihlere göre güncellenir: Taslak (tarih yok) → Planlanıyor (başlangıç gelecekte) → İşleme Alındı (şu an aktif) → Tamamlandı (bitiş geçmişte).
+   */
+  status: 'Taslak' | 'Planlanıyor' | 'İşleme Alındı' | 'Tamamlandı';
+  /**
+   * Dersin fiziksel veya sanal olarak yapılacağı konum.
+   */
+  location?: (number | null) | Location;
+  /**
+   * Bu derse kayıtlı veya planlanan toplam öğrenci sayısı.
+   */
+  students?: number | null;
+  /**
+   * Dersin toplam süresi saat cinsinden. Örn: 8 (8 saat)
+   */
+  duration?: number | null;
+  /**
+   * Dersi verecek eğitmenin adı ve soyadı.
+   */
+  instructor?: string | null;
+  /**
+   * Dersin genel değerlendirme puanı (0-10 arası). Geri bildirimlere göre otomatik hesaplanabilir.
+   */
+  rating?: number | null;
+  /**
+   * Dersin ait olduğu kategori. Örn: Yazılım, Tasarım, Proje Yönetimi.
+   */
+  category?: (number | null) | Category;
+  /**
+   * Dersin başlayacağı tarih ve saat. Girildiğinde durum otomatik olarak "Planlanıyor" olur. Bitiş tarihinden önce olmalıdır.
+   */
+  date_from?: string | null;
+  /**
+   * Dersin biteceği tarih ve saat. Bu tarih geçtiğinde durum otomatik olarak "Tamamlandı" olur. Başlangıç tarihinden sonra olmalıdır.
+   */
+  date_to?: string | null;
+  /**
+   * Bu dersi oluşturan kullanıcı. Otomatik olarak atanır.
+   */
+  by_generate?: (number | null) | User;
+  /**
+   * Bu derse kayıtlı olan kullanıcılar.
+   */
+  users?: {
+    docs?: (number | User)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  /**
+   * Derse ait katılımcı geri bildirimleri.
+   */
+  feedbacks?: {
+    docs?: (number | Feedback)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  /**
+   * Bu dersin bağlı olduğu eğitim modülü.
+   */
+  module?: (number | null) | Module;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "locations".
+ */
+export interface Location {
+  id: number;
+  name?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories".
+ */
+export interface Category {
+  id: number;
+  name?: string | null;
+  /**
+   * Bi renk seç
+   */
+  color: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "feedbacks".
+ */
+export interface Feedback {
+  id: number;
+  content_meets_expectations?: number | null;
+  topics_contribution_to_job?: number | null;
+  training_materials_usefulness?: number | null;
+  trainer_expertise_and_delivery?: number | null;
+  duration_and_tempo_suitability?: number | null;
+  practical_apps_and_examples?: number | null;
+  perceived_knowledge_increase?: number | null;
+  training_environment_suitability?: number | null;
+  overall_satisfaction?: number | null;
+  recommendation_to_colleagues?: number | null;
+  user_id?: (number | null) | User;
+  lesson?: (number | null) | Lesson;
+  comment_text?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "modules".
+ */
+export interface Module {
+  id: number;
+  name: string;
+  description?: string | null;
+  parentModule?: (number | null) | ParentModule;
+  /**
+   * Üst modül seçildikten sonra otomatik olarak oluşturulur. (Örn: C103.1, A101.2)
+   */
+  code?: string | null;
+  lessons?: {
+    docs?: (number | Lesson)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  folder?: (number | null) | FolderInterface;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "parentModules".
+ */
+export interface ParentModule {
+  id: number;
+  name?: string | null;
+  code?: string | null;
+  description?: string | null;
+  modules?: {
+    docs?: (number | Module)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  groups?: {
+    docs?: (number | Group)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  teams?: {
+    docs?: (number | Team)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "groups".
+ */
+export interface Group {
+  id: number;
+  name?: string | null;
+  /**
+   * Gruba ait takım
+   */
+  team?: (number | null) | Team;
+  /**
+   * Bu gruba atanmış modüller
+   */
+  parentModules?: (number | ParentModule)[] | null;
+  users?: {
+    docs?: (number | User)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "teams".
+ */
+export interface Team {
+  id: number;
+  name: string;
+  /**
+   * Bi renk seç
+   */
+  color: string;
+  groups?: {
+    docs?: (number | Group)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  /**
+   * Takıma göre alınması zorunlu modüller
+   */
+  parentModules?: (number | ParentModule)[] | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "folders".
+ */
+export interface FolderInterface {
+  id: number;
+  name: string;
+  folder?: (number | null) | FolderInterface;
+  documentsAndFolders?: {
+    docs?: (
+      | {
+          relationTo?: 'folders';
+          value: number | FolderInterface;
+        }
+      | {
+          relationTo?: 'modules';
+          value: number | Module;
+        }
+    )[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  folderType?: 'modules'[] | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lesson-requests".
+ */
+export interface LessonRequest {
+  id: number;
+  /**
+   * İstek Yapan Personel
+   */
+  users?: (number | null) | User;
+  /**
+   * İstek Yapılan Ders
+   */
+  lessons: number | Lesson;
+  description?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
  */
 export interface Media {
-  id: string;
+  id: number;
   alt: string;
   updatedAt: string;
   createdAt: string;
@@ -163,10 +536,110 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "drills".
+ */
+export interface Drill {
+  id: number;
+  name: string;
+  description?: string | null;
+  location?: string | null;
+  participants?: (number | User)[] | null;
+  date_from?: string | null;
+  date_to?: string | null;
+  info_url?: string | null;
+  group?: (number | null) | DrillGroup;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "drill-groups".
+ */
+export interface DrillGroup {
+  id: number;
+  name: string;
+  /**
+   * Bu grubun bağlı olduğu tatbikat kategorisi
+   */
+  category?: (number | null) | DrillCategory;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "drill-categories".
+ */
+export interface DrillCategory {
+  id: number;
+  name: string;
+  /**
+   * Bi renk seç
+   */
+  color: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "levels".
+ */
+export interface Level {
+  id: number;
+  name?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * API keys control which collections, resources, tools, and prompts MCP clients can access
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-mcp-api-keys".
+ */
+export interface PayloadMcpApiKey {
+  id: number;
+  /**
+   * The user that the API key is associated with.
+   */
+  user: number | User;
+  /**
+   * A useful label for the API key.
+   */
+  label?: string | null;
+  /**
+   * The purpose of the API key.
+   */
+  description?: string | null;
+  users?: {
+    /**
+     * Allow clients to find users.
+     */
+    find?: boolean | null;
+    /**
+     * Allow clients to create users.
+     */
+    create?: boolean | null;
+    /**
+     * Allow clients to update users.
+     */
+    update?: boolean | null;
+    /**
+     * Allow clients to delete users.
+     */
+    delete?: boolean | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+  enableAPIKey?: boolean | null;
+  apiKey?: string | null;
+  apiKeyIndex?: string | null;
+  collection: 'payload-mcp-api-keys';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
-  id: string;
+  id: number;
   key: string;
   data:
     | {
@@ -183,21 +656,86 @@ export interface PayloadKv {
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: string;
+  id: number;
   document?:
     | ({
         relationTo: 'users';
-        value: string | User;
+        value: number | User;
+      } | null)
+    | ({
+        relationTo: 'lesson-requests';
+        value: number | LessonRequest;
       } | null)
     | ({
         relationTo: 'media';
-        value: string | Media;
+        value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'groups';
+        value: number | Group;
+      } | null)
+    | ({
+        relationTo: 'modules';
+        value: number | Module;
+      } | null)
+    | ({
+        relationTo: 'lessons';
+        value: number | Lesson;
+      } | null)
+    | ({
+        relationTo: 'teams';
+        value: number | Team;
+      } | null)
+    | ({
+        relationTo: 'feedbacks';
+        value: number | Feedback;
+      } | null)
+    | ({
+        relationTo: 'locations';
+        value: number | Location;
+      } | null)
+    | ({
+        relationTo: 'drills';
+        value: number | Drill;
+      } | null)
+    | ({
+        relationTo: 'parentModules';
+        value: number | ParentModule;
+      } | null)
+    | ({
+        relationTo: 'categories';
+        value: number | Category;
+      } | null)
+    | ({
+        relationTo: 'levels';
+        value: number | Level;
+      } | null)
+    | ({
+        relationTo: 'drill-groups';
+        value: number | DrillGroup;
+      } | null)
+    | ({
+        relationTo: 'drill-categories';
+        value: number | DrillCategory;
+      } | null)
+    | ({
+        relationTo: 'payload-mcp-api-keys';
+        value: number | PayloadMcpApiKey;
+      } | null)
+    | ({
+        relationTo: 'folders';
+        value: number | FolderInterface;
       } | null);
   globalSlug?: string | null;
-  user: {
-    relationTo: 'users';
-    value: string | User;
-  };
+  user:
+    | {
+        relationTo: 'users';
+        value: number | User;
+      }
+    | {
+        relationTo: 'payload-mcp-api-keys';
+        value: number | PayloadMcpApiKey;
+      };
   updatedAt: string;
   createdAt: string;
 }
@@ -206,11 +744,16 @@ export interface PayloadLockedDocument {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: string;
-  user: {
-    relationTo: 'users';
-    value: string | User;
-  };
+  id: number;
+  user:
+    | {
+        relationTo: 'users';
+        value: number | User;
+      }
+    | {
+        relationTo: 'payload-mcp-api-keys';
+        value: number | PayloadMcpApiKey;
+      };
   key?: string | null;
   value?:
     | {
@@ -229,7 +772,7 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: string;
+  id: number;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;
@@ -240,6 +783,26 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  name?: T;
+  rank?: T;
+  lessons?: T;
+  group?: T;
+  education_levels?: T;
+  yds_score?: T;
+  is_admin?: T;
+  university_names?:
+    | T
+    | {
+        university?: T;
+        id?: T;
+      };
+  certificates?:
+    | T
+    | {
+        certificate_name?: T;
+        id?: T;
+      };
+  join_date?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -256,6 +819,17 @@ export interface UsersSelect<T extends boolean = true> {
         createdAt?: T;
         expiresAt?: T;
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lesson-requests_select".
+ */
+export interface LessonRequestsSelect<T extends boolean = true> {
+  users?: T;
+  lessons?: T;
+  description?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -277,11 +851,205 @@ export interface MediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "groups_select".
+ */
+export interface GroupsSelect<T extends boolean = true> {
+  name?: T;
+  team?: T;
+  parentModules?: T;
+  users?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "modules_select".
+ */
+export interface ModulesSelect<T extends boolean = true> {
+  name?: T;
+  description?: T;
+  parentModule?: T;
+  code?: T;
+  lessons?: T;
+  folder?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lessons_select".
+ */
+export interface LessonsSelect<T extends boolean = true> {
+  name?: T;
+  description?: T;
+  status?: T;
+  location?: T;
+  students?: T;
+  duration?: T;
+  instructor?: T;
+  rating?: T;
+  category?: T;
+  date_from?: T;
+  date_to?: T;
+  by_generate?: T;
+  users?: T;
+  feedbacks?: T;
+  module?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "teams_select".
+ */
+export interface TeamsSelect<T extends boolean = true> {
+  name?: T;
+  color?: T;
+  groups?: T;
+  parentModules?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "feedbacks_select".
+ */
+export interface FeedbacksSelect<T extends boolean = true> {
+  content_meets_expectations?: T;
+  topics_contribution_to_job?: T;
+  training_materials_usefulness?: T;
+  trainer_expertise_and_delivery?: T;
+  duration_and_tempo_suitability?: T;
+  practical_apps_and_examples?: T;
+  perceived_knowledge_increase?: T;
+  training_environment_suitability?: T;
+  overall_satisfaction?: T;
+  recommendation_to_colleagues?: T;
+  user_id?: T;
+  lesson?: T;
+  comment_text?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "locations_select".
+ */
+export interface LocationsSelect<T extends boolean = true> {
+  name?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "drills_select".
+ */
+export interface DrillsSelect<T extends boolean = true> {
+  name?: T;
+  description?: T;
+  location?: T;
+  participants?: T;
+  date_from?: T;
+  date_to?: T;
+  info_url?: T;
+  group?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "parentModules_select".
+ */
+export interface ParentModulesSelect<T extends boolean = true> {
+  name?: T;
+  code?: T;
+  description?: T;
+  modules?: T;
+  groups?: T;
+  teams?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories_select".
+ */
+export interface CategoriesSelect<T extends boolean = true> {
+  name?: T;
+  color?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "levels_select".
+ */
+export interface LevelsSelect<T extends boolean = true> {
+  name?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "drill-groups_select".
+ */
+export interface DrillGroupsSelect<T extends boolean = true> {
+  name?: T;
+  category?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "drill-categories_select".
+ */
+export interface DrillCategoriesSelect<T extends boolean = true> {
+  name?: T;
+  color?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-mcp-api-keys_select".
+ */
+export interface PayloadMcpApiKeysSelect<T extends boolean = true> {
+  user?: T;
+  label?: T;
+  description?: T;
+  users?:
+    | T
+    | {
+        find?: T;
+        create?: T;
+        update?: T;
+        delete?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  enableAPIKey?: T;
+  apiKey?: T;
+  apiKeyIndex?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
   key?: T;
   data?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "folders_select".
+ */
+export interface FoldersSelect<T extends boolean = true> {
+  name?: T;
+  folder?: T;
+  documentsAndFolders?: T;
+  folderType?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
