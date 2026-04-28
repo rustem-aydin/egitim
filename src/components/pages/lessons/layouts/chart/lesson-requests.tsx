@@ -29,38 +29,41 @@ const chartConfig = {
 } satisfies ChartConfig
 
 export function ChartBarLessonRequests({ lessons }: { lessons: Lesson[] }) {
-  const chartData = lessons.map((lesson) => ({
-    name: lesson.name,
-    requests: lesson.lesson_requests?.docs?.length || 0,
-    color: (lesson.category as Category)?.color || '#888888',
-  }))
+  const chartData = lessons
+    .map((lesson) => ({
+      name: lesson.name,
+      requests: lesson.lesson_requests?.docs?.length || 0,
+      color: (lesson.category as Category).color || '#888888',
+    }))
+    .filter((item) => item.requests > 0)
+    .sort((a, b) => b.requests - a.requests)
+
+  if (chartData.length === 0) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>En Çok İstekte Bulunulan Dersler</CardTitle>
+          <CardDescription>Henüz hiç istek bulunmuyor</CardDescription>
+        </CardHeader>
+        <CardContent className="flex items-center justify-center h-40 text-muted-foreground">
+          Talep edilen ders bulunmamaktadır.
+        </CardContent>
+      </Card>
+    )
+  }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>En Çok İstekte Bulunulan Dersler</CardTitle>
-        <CardDescription>Derslere yapılan istek sayıları</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <ChartContainer config={chartConfig}>
-          <BarChart accessibilityLayer data={chartData}>
-            <CartesianGrid vertical={false} />
-            <XAxis dataKey="name" tickLine={false} tickMargin={10} axisLine={false} />
-            <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-            <Bar dataKey="requests" radius={8}>
-              {chartData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.color} />
-              ))}
-            </Bar>
-          </BarChart>
-        </ChartContainer>
-      </CardContent>
-      <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 leading-none font-medium">
-          En çok istek alan dersleri gösteriyor <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="leading-none text-muted-foreground">Her ders için toplam istek sayısı</div>
-      </CardFooter>
-    </Card>
+    <ChartContainer config={chartConfig} className="h-87.5  w-full">
+      <BarChart accessibilityLayer data={chartData}>
+        <CartesianGrid vertical={false} />
+        <XAxis dataKey="name" tickLine={false} tickMargin={10} axisLine={false} />
+        <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+        <Bar dataKey="requests" radius={8}>
+          {chartData.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={entry.color} />
+          ))}
+        </Bar>
+      </BarChart>
+    </ChartContainer>
   )
 }

@@ -2,6 +2,7 @@ import { Lesson } from '@/payload-types'
 import { MostCompletedLessonsChart } from './most-completed'
 import { HighlightableSection } from '@/components/ui/highlightable-section'
 import { ChartBarLessonRequests } from './lesson-requests'
+import { ChartBarRatings } from './ratings'
 
 export default function Main({ lessons }: { lessons: Lesson[] }) {
   return (
@@ -15,10 +16,17 @@ export default function Main({ lessons }: { lessons: Lesson[] }) {
       </HighlightableSection>
       <HighlightableSection
         className="col-span-12"
-        title={'item.subject'}
-        description={'item.description'}
+        title={'En Çok İstekte Bulunulan Dersler'}
+        description={'Derslere yapılan istek sayıları'}
       >
         <ChartBarLessonRequests lessons={lessons} />
+      </HighlightableSection>
+      <HighlightableSection
+        className="col-span-12"
+        title={'En Çok Sevilen Derslerr'}
+        description={'Derslere verilen puanlar'}
+      >
+        <ChartBarRatings lessons={lessons} />
       </HighlightableSection>
     </div>
   )

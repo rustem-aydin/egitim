@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { updateLessonRatingHook } from '../_hooks/Feedbacks'
 
 export const Feedbacks: CollectionConfig = {
   slug: 'feedbacks', // API adresi: /api/feedbacks
@@ -9,6 +10,9 @@ export const Feedbacks: CollectionConfig = {
   labels: {
     singular: 'Geri Bildirim',
     plural: 'Geri Bildirimler',
+  },
+  hooks: {
+    afterChange: [updateLessonRatingHook],
   },
   fields: [
     {

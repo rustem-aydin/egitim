@@ -77,7 +77,7 @@ export function MostCompletedLessonsChart({ lessons }: { lessons: Lesson[] }) {
   }, [chartData])
 
   return (
-    <ChartContainer config={chartConfig} className="h-[350px] col-span-8 w-full">
+    <ChartContainer config={chartConfig} className="h-[350px]  w-full">
       <BarChart accessibilityLayer data={chartData} margin={{ top: 20, bottom: 75 }}>
         <CartesianGrid vertical={false} />
         <XAxis

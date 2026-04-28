@@ -122,9 +122,11 @@ export const Lessons: CollectionConfig = {
     {
       name: 'rating',
       label: 'Ders Puanı',
+
       type: 'number',
       admin: {
         step: 0.1,
+        hidden: true,
         description:
           'Dersin genel değerlendirme puanı (0-10 arası). Geri bildirimlere göre otomatik hesaplanabilir.',
       },
