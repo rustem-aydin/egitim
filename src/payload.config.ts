@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 import { mcpPlugin } from '@payloadcms/plugin-mcp'
 import { tr } from '@payloadcms/translations/languages/tr'
-
+import { s3Storage } from '@payloadcms/storage-s3'
 import { Users } from './collections/Users/Users'
 import { Media } from './collections/Media'
 import { Groups } from './collections/Groups/Groups'
@@ -23,6 +23,7 @@ import { LessonsRequests } from './collections/Lessons/LessonsRequests'
 import { Teams } from './collections/Teams/Teams'
 import { DrillCategories } from './collections/Drills/DrillCategories'
 import { seedData } from './actions/server/seed'
+import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -31,6 +32,19 @@ export default buildConfig({
   folders: {
     slug: 'folders',
   },
+  // email: nodemailerAdapter({
+  //   defaultFromAddress: 'info@payloadcms.com',
+  //   defaultFromName: 'Payload',
+  //   // Nodemailer transportOptions
+  //   transportOptions: {
+  //     host: process.env.SMTP_HOST,
+  //     port: 587,
+  //     auth: {
+  //       user: process.env.SMTP_USER,
+  //       pass: process.env.SMTP_PASS,
+  //     },
+  //   },
+  // }),
   onInit: async (payload) => {
     const users = await payload.find({
       collection: 'users',
@@ -98,6 +112,21 @@ export default buildConfig({
         users: {
           enabled: true,
         },
+      },
+    }),
+    s3Storage({
+      collections: {
+        media: true,
+      },
+      bucket: process.env.S3_BUCKET!,
+      config: {
+        credentials: {
+          accessKeyId: process.env.S3_ACCESS_KEY!,
+          secretAccessKey: process.env.S3_SECRET_KEY!,
+        },
+        region: process.env.S3_REGION,
+        endpoint: process.env.S3_ENDPOINT,
+        forcePathStyle: true,
       },
     }),
   ],

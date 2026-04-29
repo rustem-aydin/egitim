@@ -1,5 +1,5 @@
 import { getLessonById } from '@/actions/server/lessons'
-import LessonDetails from '@/components/pages/lessons/lesson-details'
+import LessonDetails from '@/components/pages/lessons/details/lesson-details'
 import { notFound } from 'next/navigation'
 interface Props {
   params: Promise<{ id: number }>

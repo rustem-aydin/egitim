@@ -7,7 +7,7 @@ export const LessonsModulesDetails = ({ modules }: { modules: Module }) => {
   return (
     <>
       {modules && (
-        <div className="group relative w-2/6 mt-4 min-h-full transform shadow-2xl rounded-2xl transition-all duration-500">
+        <div className="group relative w-6/6 mt-4 min-h-full transform shadow-2xl rounded-2xl transition-all duration-500">
           <Card className="h-full border">
             <CardHeader className=" relative">
               <div className="flex items-center gap-2">

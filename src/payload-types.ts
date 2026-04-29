@@ -305,6 +305,10 @@ export interface Lesson {
    */
   date_to?: string | null;
   /**
+   * Derslere ait dokümanlar.
+   */
+  docs?: (number | Media)[] | null;
+  /**
    * Bu dersi oluşturan kullanıcı. Otomatik olarak atanır.
    */
   by_generate?: (number | null) | User;
@@ -362,6 +366,24 @@ export interface Location {
   name?: string | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: number;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -523,25 +545,6 @@ export interface FolderInterface {
   folderType?: 'modules'[] | null;
   updatedAt: string;
   createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
- */
-export interface Media {
-  id: number;
-  alt: string;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -845,7 +848,6 @@ export interface LessonRequestsSelect<T extends boolean = true> {
  * via the `definition` "media_select".
  */
 export interface MediaSelect<T extends boolean = true> {
-  alt?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -900,6 +902,7 @@ export interface LessonsSelect<T extends boolean = true> {
   rating?: T;
   date_from?: T;
   date_to?: T;
+  docs?: T;
   by_generate?: T;
   users?: T;
   lesson_requests?: T;

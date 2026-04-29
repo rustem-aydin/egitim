@@ -19,7 +19,7 @@ const LessonRequestCardList = async ({ id }: { id: string }) => {
 
   if (!requests || requests.length === 0) {
     return (
-      <Card className="mt-4">
+      <Card className="mt-4 ">
         <CardHeader>
           <CardTitle>
             <div className="flex flex-row  justify-between">

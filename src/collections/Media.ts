@@ -12,12 +12,6 @@ export const Media: CollectionConfig = {
     singular: 'Depolama',
     plural: 'Depolama',
   },
-  fields: [
-    {
-      name: 'alt',
-      type: 'text',
-      required: true,
-    },
-  ],
+  fields: [],
   upload: true,
 }

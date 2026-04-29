@@ -156,15 +156,16 @@ export const Lessons: CollectionConfig = {
         },
       ],
     },
-    // {
-    //   type: 'upload',
-    //   label: 'Dokümanlar',
-    //   relationTo: 'media',
-    //   name: 'docs',
-    //   admin: {
-    //     description: 'Derslere ait dokümanlar.',
-    //   },
-    // },
+    {
+      type: 'upload',
+      label: 'Dokümanlar',
+      relationTo: 'media',
+      name: 'docs',
+      hasMany: true,
+      admin: {
+        description: 'Derslere ait dokümanlar.',
+      },
+    },
     {
       name: 'by_generate',
       label: 'Dersi Oluşturan',
