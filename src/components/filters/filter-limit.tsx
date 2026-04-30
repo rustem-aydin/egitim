@@ -59,7 +59,7 @@ export default function FilterLimit({ startTransition }: FilterLevelsProps) {
                 variant="outline"
                 role="combobox"
                 aria-expanded={open}
-                className="bg-background hover:bg-background border-input w-full justify-between px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]"
+                className="bg-background  hover:bg-background border-input w-full justify-between px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]"
               >
                 {currentValue ? (
                   levels.find((l) => l.name === currentValue)?.name

@@ -6,16 +6,33 @@ import Section from '@/components/section'
 import { Group, Lesson, Module, Team } from '@/payload-types'
 import BadgeModule from './modules-badge-code'
 import { getUsersWhoTookModule } from '@/actions/server/modules'
+
 interface ModuleDetailsProps {
   module: Module
 }
+
 const ModuleDetails = async ({ module }: ModuleDetailsProps) => {
   const lessons = module.lessons?.docs as Lesson[]
-  const groups = module.groups?.docs as Group[]
-  const teams = module.teams?.docs as Team[]
+  const experts = module.experts?.docs as Group[]
+
+  // ✅ Teams'i experts içinden çek ve tekrarları kaldır
+  const teams = React.useMemo(() => {
+    const allTeams = (module.experts?.docs || []).flatMap(
+      (expert) => (expert as any).teams?.docs || [],
+    ) as Team[]
+
+    const uniqueTeams = allTeams.filter(
+      (team, index, self) => index === self.findIndex((t) => t.id === team.id),
+    )
+
+    return uniqueTeams
+  }, [module.experts])
+
   const users = await getUsersWhoTookModule(module?.id)
+
   const fallback = '#888888'
   let borderBg = fallback
+
   if (teams && teams.length > 0) {
     if (teams.length === 1) {
       borderBg = teams[0].color
@@ -23,6 +40,7 @@ const ModuleDetails = async ({ module }: ModuleDetailsProps) => {
       borderBg = `linear-gradient(135deg, ${teams.map((t) => t.color).join(', ')})`
     }
   }
+
   return (
     <div className="max-w-4xl w-full mx-auto p-4">
       <Fallback />
@@ -56,7 +74,7 @@ const ModuleDetails = async ({ module }: ModuleDetailsProps) => {
 
             <Section data={users} name="name" path="/users/" title="Tamamlayan Personel" />
 
-            <Section data={groups} name="name" path="/groups/" title="Kadrolar" />
+            <Section data={experts} name="name" path="/groups/" title="Uzmanlıklar" />
 
             <Section data={lessons} name="lesson_name" path="/lessons/" title="Eğitimler" />
           </div>

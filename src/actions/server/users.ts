@@ -100,32 +100,29 @@ export const fetchUsers = async (
     })
   }
 
-  // --- Sort ---
   let sortField: string | undefined = '-createdAt'
   if (filters.sort) {
     const [field, direction] = filters.sort.split('-')
     sortField = direction === 'desc' ? `-${field}` : field
   }
 
-  // --- Execute ---
   const result = await payload.find({
     collection: 'users',
     where: and.length > 0 ? { and } : {},
-    page, // Artık doğru sayfayı çağırıyor
+    page,
     ...(filters.limit === 'Hepsi'
       ? {}
       : {
           limit: filters.limit ? Number(filters.limit) : 12,
         }),
     sort: sortField,
-    depth: 1,
+    depth: 2,
     overrideAccess: true,
   })
 
   return {
     data: result.docs,
     hasNextPage: result.hasNextPage,
-    // Dönüş tipi de fetchModules ile aynı yapıldı
     nextCursor: result.hasNextPage ? page + 1 : undefined,
   }
 }

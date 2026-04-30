@@ -1,7 +1,7 @@
 import { getTeamById } from '@/actions/server/teams'
 import { getUserById } from '@/actions/server/users'
 import { TeamDetails } from '@/components/teams/team-details'
-import UserDetails from '@/components/users/user-details'
+import UserDetails from '@/components/pages/users/user-details'
 import { get } from 'http'
 import { notFound } from 'next/navigation'
 

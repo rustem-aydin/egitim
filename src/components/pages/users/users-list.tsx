@@ -1,5 +1,5 @@
-import { NotFoundItem } from '../not-found-item'
-import LoadMoreButton from '../load-more-button'
+import { NotFoundItem } from '../../not-found-item'
+import LoadMoreButton from '../../load-more-button'
 import { UsersFilterParams } from '@/types/filters'
 import { fetchUsers } from '@/actions/server/users'
 import { UsersCard } from './user-card'
@@ -10,6 +10,8 @@ const UsersList = async (props: UsersFilterParams) => {
   const results = await Promise.all(pages.map((page) => fetchUsers({ ...props, page })))
 
   const allUsers = results.flatMap((result) => result?.data || [])
+  console.log(JSON.stringify(allUsers[0], null, 2))
+
   return (
     <div className="mx-auto relative z-10">
       {!allUsers.length && <NotFoundItem title="Personel Bulunamadı" description="" />}

@@ -83,7 +83,6 @@ export const Users: CollectionConfig = {
   },
   fields: [
     // UI Field - Buton burada gözükecek
-    reminderButtonField(),
 
     {
       name: 'name',
@@ -122,6 +121,7 @@ export const Users: CollectionConfig = {
       label: 'Personelin Aldığı Dersler',
       type: 'relationship',
       relationTo: 'lessons',
+      maxDepth: 1,
       hasMany: true,
       required: false,
       admin: {
@@ -134,6 +134,7 @@ export const Users: CollectionConfig = {
       type: 'relationship',
       label: 'Üye Kadro',
       relationTo: 'groups',
+      maxDepth: 3,
       hasMany: false,
       admin: {
         position: 'sidebar',

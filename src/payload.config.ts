@@ -18,12 +18,11 @@ import { Categories } from './collections/Lessons/Categories'
 import { DrillGroups } from './collections/Drills/DrillGroups'
 import { Locations } from './collections/Lessons/Locations'
 import { Levels } from './collections/Lessons/Levels'
-import { ParentModules } from './collections/Modules/ParentModule'
 import { LessonsRequests } from './collections/Lessons/LessonsRequests'
 import { Teams } from './collections/Teams/Teams'
 import { DrillCategories } from './collections/Drills/DrillCategories'
 import { seedData } from './actions/server/seed'
-import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
+import { Expert } from './collections/Experts/Experts'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -83,7 +82,7 @@ export default buildConfig({
     Feedbacks,
     Locations,
     Drills,
-    ParentModules,
+    Expert,
     Categories,
     Levels,
     DrillGroups,

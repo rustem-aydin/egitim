@@ -4,7 +4,7 @@ import { getAllModules } from '@/actions/server/modules'
 import { getAllTeams } from '@/actions/server/teams'
 import FilterTab from '@/components/filters/filter-tab'
 import FilterLoading from '@/components/filters/filterLoading'
-import UsersList from '@/components/users/users-list'
+import UsersList from '@/components/pages/users/users-list'
 import { getSortOptions, UsersFilterParams } from '@/types/filters'
 import { Suspense } from 'react'
 const mySortOptions = getSortOptions([

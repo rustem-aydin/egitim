@@ -11,11 +11,10 @@ const ModulesList = async (props: ModuleFilterParams) => {
 
   const allModules = results.flatMap((result) => result?.data || [])
   const hasNextPage = results[results.length - 1]?.hasNextPage || false
-
   return (
     <div className="mx-auto relative z-10">
       {!allModules.length && <NotFoundItem title="Modül Bulunamadı" description="" />}
-      <div className="grid grid-cols-1 mt-2 lg:grid-cols-2 xl:grid-cols-4 pt-2 gap-6">
+      <div className="grid grid-cols-1 mt-4 lg:grid-cols-2 xl:grid-cols-4  gap-4">
         {allModules.map((module) => {
           return <ModuleCard key={module.id} module={module} />
         })}

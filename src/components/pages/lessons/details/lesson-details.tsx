@@ -64,15 +64,12 @@ const sampleFiles: any[] = [
 
 const LessonDetails = ({ lesson }: { lesson: Lesson }) => {
   return (
-    <div className="max-w-6xl w-full text-sidebar-foreground mx-auto p-4">
+    <div className=" w-full text-sidebar-foreground mx-auto p-4">
       <Fallback />
 
-      {/* Ana Grid - 3 Sütunlu */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {/* ═══════════════════════════════════════════════════════════════ */}
-        {/* SATIR 1: Ana Ders Kartı (2/3) */}
-        {/* ═══════════════════════════════════════════════════════════════ */}
-        <div className="md:col-span-2">
+      <div className="grid grid-cols-3 w-full gap-4">
+        {/* ═══════ SATIR 1 SOL: Ana Ders Kartı (2/3) ═══════ */}
+        <div className="col-span-3 w-full min-w-0">
           <div className="group relative w-full transform shadow-2xl rounded-2xl transition-all duration-500">
             <div
               className={`absolute -inset-1 bg-linear-to-r ${getStatusLessonColor(String(lesson?.status))} rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000`}
@@ -108,7 +105,6 @@ const LessonDetails = ({ lesson }: { lesson: Lesson }) => {
 
               {/* İçerik */}
               <div className="p-6">
-                {/* Bilgi Grid'i */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
                   {lesson?.date_from && (
                     <div className="flex items-center">
@@ -180,7 +176,6 @@ const LessonDetails = ({ lesson }: { lesson: Lesson }) => {
                   )}
                 </div>
 
-                {/* Oluşturan Bilgisi */}
                 <div className="flex items-center shadow-xl justify-between mb-6 p-4 rounded-xl border border-white/10">
                   <div className="flex items-center">
                     <div
@@ -203,10 +198,8 @@ const LessonDetails = ({ lesson }: { lesson: Lesson }) => {
           </div>
         </div>
 
-        {/* ═══════════════════════════════════════════════════════════════ */}
-        {/* SATIR 1: Tamamlayan Personeller (1/3) */}
-        {/* ═══════════════════════════════════════════════════════════════ */}
-        <div className="md:col-span-1">
+        {/* ═══════ SATIR 1 SAĞ: Tamamlayan Personeller (1/3) ═══════ */}
+        <div className=" w-full">
           {lesson?.users?.docs && (
             <div className="bg-sidebar rounded-2xl border border-white/20 overflow-hidden h-full">
               <LessonCompletedUser users={lesson.users.docs} />
@@ -214,24 +207,18 @@ const LessonDetails = ({ lesson }: { lesson: Lesson }) => {
           )}
         </div>
 
-        {/* ═══════════════════════════════════════════════════════════════ */}
-        {/* SATIR 2: Modüller (2/3) */}
-        {/* ═══════════════════════════════════════════════════════════════ */}
-        <div className="md:col-span-2">
+        {/* ═══════ SATIR 2 SOL: Modüller (2/3) - içerik çok olduğu için geniş alanda ═══════ */}
+        <div className="col-span-2 w-full">
           <LessonsModulesDetails modules={lesson?.module as Module} />
         </div>
 
-        {/* ═══════════════════════════════════════════════════════════════ */}
-        {/* SATIR 2: Dosya Listesi (1/3) */}
-        {/* ═══════════════════════════════════════════════════════════════ */}
-        <div className="md:col-span-1">
+        {/* ═══════ SATIR 2 SAĞ: Dosya Listesi (1/3) - dikey liste dar alanda daha iyi ═══════ */}
+        <div className="col-span-1 min-w-0">
           <FileList files={sampleFiles} title="Proje Dosyaları" />
         </div>
 
-        {/* ═══════════════════════════════════════════════════════════════ */}
-        {/* SATIR 3: Talepler (3/3 - Tam Genişlik) */}
-        {/* ═══════════════════════════════════════════════════════════════ */}
-        <div className="md:col-span-3">
+        {/* ═══════ SATIR 3: Talepler (3/3 tam genişlik) ═══════ */}
+        <div className="col-span-3 min-w-0">
           <LessonRequestCardList id={String(lesson.id)} />
         </div>
       </div>

@@ -16,7 +16,6 @@ export const Categories: CollectionConfig = {
       name: 'name',
       type: 'text',
       label: 'Kategori Adı',
-      // SQL'de "text null" olduğu için zorunlu (required) yapmadık.
     },
     colorPickerField({
       name: 'color',
@@ -24,6 +23,5 @@ export const Categories: CollectionConfig = {
       required: true,
       description: 'Bi renk seç',
     }),
-    // id ve created_at Payload tarafından otomatik olarak yönetilir.
   ],
 }

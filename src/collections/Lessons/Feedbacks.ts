@@ -2,7 +2,7 @@ import type { CollectionConfig } from 'payload'
 import { updateLessonRatingHook } from '../_hooks/Feedbacks'
 
 export const Feedbacks: CollectionConfig = {
-  slug: 'feedbacks', // API adresi: /api/feedbacks
+  slug: 'feedbacks',
   admin: {
     useAsTitle: 'id',
     group: 'Dersler',

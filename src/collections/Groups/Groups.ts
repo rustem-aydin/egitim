@@ -4,11 +4,11 @@ export const Groups: CollectionConfig = {
   slug: 'groups',
   admin: {
     useAsTitle: 'name', // Admin panelinde ID yerine grubun adı görünsün
-    group: 'Gruplar',
+    group: 'Kadrolar',
   },
   labels: {
-    singular: 'Grup',
-    plural: 'Gruplar',
+    singular: 'Kadro',
+    plural: 'Kadrolar',
   },
   fields: [
     {
@@ -21,20 +21,20 @@ export const Groups: CollectionConfig = {
       type: 'relationship',
       relationTo: 'teams',
       hasMany: false,
+      maxDepth: 3,
       admin: {
         description: 'Gruba ait takım',
       },
     },
-
     {
-      name: 'parentModules',
+      name: 'experts',
       type: 'relationship',
-      label: 'Gruba Ait Modüller',
-      relationTo: 'parentModules',
+      label: 'Gruba Ait Uzmanlıklar',
+      relationTo: 'experts',
       hasMany: true,
       admin: {
         position: 'sidebar',
-        description: 'Bu gruba atanmış modüller',
+        description: 'Gruba ait uzmanlıklar',
       },
     },
     {

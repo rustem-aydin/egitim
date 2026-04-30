@@ -14,7 +14,6 @@ export async function LessonsTabs(props: LessonFilterParams) {
   const results = await Promise.all(pages.map((page) => fetchLessons({ ...props, page })))
   const allLessons = results.flatMap((result) => result?.data || [])
   const hasNextPage = results[results.length - 1]?.hasNextPage || false
-  console.log(JSON.stringify(allLessons, null, 2))
   const drilss = await getAllDrills()
   return (
     <div className="flex w-full  items-center">

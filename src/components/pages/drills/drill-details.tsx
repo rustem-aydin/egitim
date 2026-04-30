@@ -22,7 +22,6 @@ interface DrillDetailsProps {
 }
 
 function DrillDetails({ drill }: DrillDetailsProps) {
-  console.log(JSON.stringify(drill, null, 2))
   const categoryName: string = (drill?.group as any)?.category?.name ?? ''
   const categoryColor: string = (drill?.group as any)?.category?.color ?? '#f59e0b'
   const theme = getGroupColors(categoryColor)

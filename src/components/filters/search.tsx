@@ -68,7 +68,7 @@ export default function SearchInput({ startTransition }: SearchSelectProps) {
               placeholder="Aramak için yazın..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-9 bg-background "
+              className="pl-9 h-8 bg-background "
             />
           </div>
         </TooltipTrigger>

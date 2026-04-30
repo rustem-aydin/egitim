@@ -1,6 +1,6 @@
 'use client'
 import React, { useMemo } from 'react'
-import { Progress } from '../ui/progress'
+import { Progress } from '../../ui/progress'
 
 interface UserModuleProgressProps {
   requiredModules: any[]

@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import { getModuleById } from '@/actions/server/modules'
-import ModuleDetails from '@/components/modules/module-details'
+import ModuleDetails from '@/components/pages/modules/module-details'
 interface Props {
   params: Promise<{ id: number }>
 }

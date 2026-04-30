@@ -195,7 +195,6 @@ export const fetchLessons = async (filters: LessonFilterParams) => {
 
   //     // 3. Tüm parentModules'lardaki modules ID'lerini topla
   //     const moduleIds: string[] = []
-  //     console.log(parentModuleIds)
   //     parentModulesResult.docs.forEach((pm: any) => {
   //       const mods =
   //         pm?.modules?.map((m: any) => {
@@ -204,8 +203,6 @@ export const fetchLessons = async (filters: LessonFilterParams) => {
   //         }) || []
   //       moduleIds.push(...mods)
   //     })
-
-  //     console.log('Module IDs:', moduleIds)
 
   //     if (moduleIds.length === 0) {
   //       and.push({ id: { equals: -1 } })

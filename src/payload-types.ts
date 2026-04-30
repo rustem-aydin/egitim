@@ -78,7 +78,7 @@ export interface Config {
     feedbacks: Feedback;
     locations: Location;
     drills: Drill;
-    parentModules: ParentModule;
+    experts: Expert;
     categories: Category;
     levels: Level;
     'drill-groups': DrillGroup;
@@ -96,6 +96,7 @@ export interface Config {
     };
     modules: {
       lessons: 'lessons';
+      experts: 'experts';
     };
     lessons: {
       users: 'users';
@@ -105,9 +106,7 @@ export interface Config {
     teams: {
       groups: 'groups';
     };
-    parentModules: {
-      modules: 'modules';
-      groups: 'groups';
+    experts: {
       teams: 'teams';
     };
     folders: {
@@ -125,7 +124,7 @@ export interface Config {
     feedbacks: FeedbacksSelect<false> | FeedbacksSelect<true>;
     locations: LocationsSelect<false> | LocationsSelect<true>;
     drills: DrillsSelect<false> | DrillsSelect<true>;
-    parentModules: ParentModulesSelect<false> | ParentModulesSelect<true>;
+    experts: ExpertsSelect<false> | ExpertsSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     levels: LevelsSelect<false> | LevelsSelect<true>;
     'drill-groups': DrillGroupsSelect<false> | DrillGroupsSelect<true>;
@@ -433,13 +432,17 @@ export interface Module {
   id: number;
   name: string;
   description?: string | null;
-  parentModule?: (number | null) | ParentModule;
   /**
-   * Üst modül seçildikten sonra otomatik olarak oluşturulur. (Örn: C103.1, A101.2)
+   *  (Örn: C103.1, A101.2)
    */
   code?: string | null;
   lessons?: {
     docs?: (number | Lesson)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  experts?: {
+    docs?: (number | Expert)[];
     hasNextPage?: boolean;
     totalDocs?: number;
   };
@@ -449,48 +452,15 @@ export interface Module {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "parentModules".
+ * via the `definition` "experts".
  */
-export interface ParentModule {
+export interface Expert {
   id: number;
   name?: string | null;
-  code?: string | null;
   description?: string | null;
-  modules?: {
-    docs?: (number | Module)[];
-    hasNextPage?: boolean;
-    totalDocs?: number;
-  };
-  groups?: {
-    docs?: (number | Group)[];
-    hasNextPage?: boolean;
-    totalDocs?: number;
-  };
+  modules?: (number | Module)[] | null;
   teams?: {
     docs?: (number | Team)[];
-    hasNextPage?: boolean;
-    totalDocs?: number;
-  };
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "groups".
- */
-export interface Group {
-  id: number;
-  name?: string | null;
-  /**
-   * Gruba ait takım
-   */
-  team?: (number | null) | Team;
-  /**
-   * Bu gruba atanmış modüller
-   */
-  parentModules?: (number | ParentModule)[] | null;
-  users?: {
-    docs?: (number | User)[];
     hasNextPage?: boolean;
     totalDocs?: number;
   };
@@ -514,9 +484,32 @@ export interface Team {
     totalDocs?: number;
   };
   /**
-   * Takıma göre alınması zorunlu modüller
+   * Bu takıma ait uzmanlıklar
    */
-  parentModules?: (number | ParentModule)[] | null;
+  experts?: (number | Expert)[] | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "groups".
+ */
+export interface Group {
+  id: number;
+  name?: string | null;
+  /**
+   * Gruba ait takım
+   */
+  team?: (number | null) | Team;
+  /**
+   * Gruba ait uzmanlıklar
+   */
+  experts?: (number | Expert)[] | null;
+  users?: {
+    docs?: (number | User)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -711,8 +704,8 @@ export interface PayloadLockedDocument {
         value: number | Drill;
       } | null)
     | ({
-        relationTo: 'parentModules';
-        value: number | ParentModule;
+        relationTo: 'experts';
+        value: number | Expert;
       } | null)
     | ({
         relationTo: 'categories';
@@ -867,7 +860,7 @@ export interface MediaSelect<T extends boolean = true> {
 export interface GroupsSelect<T extends boolean = true> {
   name?: T;
   team?: T;
-  parentModules?: T;
+  experts?: T;
   users?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -879,9 +872,9 @@ export interface GroupsSelect<T extends boolean = true> {
 export interface ModulesSelect<T extends boolean = true> {
   name?: T;
   description?: T;
-  parentModule?: T;
   code?: T;
   lessons?: T;
+  experts?: T;
   folder?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -919,7 +912,7 @@ export interface TeamsSelect<T extends boolean = true> {
   name?: T;
   color?: T;
   groups?: T;
-  parentModules?: T;
+  experts?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -971,14 +964,12 @@ export interface DrillsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "parentModules_select".
+ * via the `definition` "experts_select".
  */
-export interface ParentModulesSelect<T extends boolean = true> {
+export interface ExpertsSelect<T extends boolean = true> {
   name?: T;
-  code?: T;
   description?: T;
   modules?: T;
-  groups?: T;
   teams?: T;
   updatedAt?: T;
   createdAt?: T;

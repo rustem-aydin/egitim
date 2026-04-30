@@ -180,7 +180,7 @@ export const Lessons: CollectionConfig = {
     {
       name: 'users',
       label: 'Dersi Alanlar',
-      maxDepth: 3,
+      maxDepth: 1,
       admin: {
         hidden: true,
         description: 'Bu derse kayıtlı olan kullanıcılar.',

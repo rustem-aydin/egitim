@@ -1,5 +1,5 @@
 import { getUserById } from '@/actions/server/users'
-import UserDetails from '@/components/users/user-details'
+import UserDetails from '@/components/pages/users/user-details'
 import { notFound } from 'next/navigation'
 
 interface Props {

@@ -65,7 +65,8 @@ export const fetchModules = async (
         : `-${filters.sort.split('-')[0]}`
       : '-createdAt',
     where: { and },
-    depth: 1, // Join fieldlar zaten gerekli veriyi getirecek
+    depth: 3,
+
     overrideAccess: true,
   })
 

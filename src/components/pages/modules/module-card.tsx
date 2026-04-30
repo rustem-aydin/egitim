@@ -2,7 +2,16 @@
 
 import * as React from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { GraduationCap, Users, Shield } from 'lucide-react'
+import {
+  GraduationCap,
+  Users,
+  Shield,
+  Briefcase,
+  KeyRound,
+  FlaskConical,
+  ShieldBan,
+  Flag,
+} from 'lucide-react'
 import Link from 'next/link'
 
 import DetailLink from '@/components/detail-link'
@@ -14,15 +23,21 @@ interface ModulesCardProps {
   module: Module
 }
 export function ModuleCard({ module }: ModulesCardProps) {
-  const [setIsHovered] = React.useState(false)
-
   const lessons = module.lessons?.docs as Lesson[]
-  const groups = module.groups?.docs as Group[]
-  const teams = module.teams?.docs as Team[]
+  const experts = module.experts?.docs as Group[]
+  const teams = React.useMemo(() => {
+    const allTeams = (module.experts?.docs || []).flatMap(
+      (expert) => (expert as any).teams?.docs || [],
+    ) as Team[]
 
+    const uniqueTeams = allTeams.filter(
+      (team, index, self) => index === self.findIndex((t) => t.id === team.id),
+    )
+
+    return uniqueTeams
+  }, [module.experts])
   const lessonCount = lessons.length || 0
-  const groupCount = groups?.length || 0
-
+  const expertsCount = experts?.length || 0
   const cardStyle = React.useMemo(() => {
     const defaultColor = '#888888'
 
@@ -62,38 +77,34 @@ export function ModuleCard({ module }: ModulesCardProps) {
 
   return (
     <MotionCard>
-      <div
-        className="rounded-2xl  p-[2px] shadow-2xl"
-        style={{ background: cardStyle.borderBg }}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        <div className="relative  rounded-2xl   bg-gradient-to-br from-background via-background/95 to-muted/100 min-h-66 overflow-hidden">
+      <div className="rounded-2xl  p-0.5 shadow-2xl" style={{ background: cardStyle.borderBg }}>
+        <div className="relative  rounded-2xl   bg-linear-to-br from-background via-background/95 to-muted/100 min-h-56 overflow-hidden">
           <div
             className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500"
             style={{ background: cardStyle.radialGradient }}
           />
 
-          <div className="relative z-10 p-6 pb-4">
-            <div className="flex flex-wrap gap-2 justify-between items-center mb-2">
+          <div className="relative z-10 p-4 ">
+            <div className="flex  justify-between items-center ">
               <div className="flex gap-1">
                 <BadgeModule code={module?.code} />
                 {teams?.map((team) => (
                   <Link
                     href={`/teams/${team.id}`}
                     key={team.id}
-                    className="flex items-center p-1 rounded-full"
-                    style={{ backgroundColor: team.color }}
+                    className="flex items-center border  p-0.5 px-1 rounded-sm"
+                    style={{ backgroundColor: team?.color }}
                   >
-                    <Shield className="h-4 w-5 text-slate-700" />
+                    <Flag color="#000" size={14}></Flag>
+                    <span className="text-xs text-black ml-1 font-semibold">{team.name}</span>
                   </Link>
                 ))}
               </div>
               <DetailLink route="modules" id={module?.id} />
             </div>
 
-            <h3 className="text-2xl font-bold mb-3">{module.name}</h3>
-            <p className="text-muted-foreground text-sm mb-6">{module.description}</p>
+            <h3 className="text-2xl font-bold  ">{module.name}</h3>
+            <p className="text-muted-foreground text-sm mb-4">{module.description}</p>
 
             <div className="flex gap-3">
               <div
@@ -116,8 +127,8 @@ export function ModuleCard({ module }: ModulesCardProps) {
                   color: cardStyle.pillColor,
                 }}
               >
-                <Users className="h-4 w-4" />
-                <span className="text-sm font-semibold">{groupCount} Kadro</span>
+                <FlaskConical className="h-4 w-4" />
+                <span className="text-sm font-semibold">{expertsCount} Uzmanlık</span>
               </div>
             </div>
           </div>

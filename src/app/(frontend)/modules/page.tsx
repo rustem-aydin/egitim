@@ -43,7 +43,6 @@ export default async function ModulesPage({
           groups={groups}
           sortOptions={mySortOptions}
           levels
-          categories={categories}
           teams={teams}
         />
         <Suspense fallback={<FilterLoading />}></Suspense>

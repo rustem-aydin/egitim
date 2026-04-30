@@ -1,4 +1,3 @@
-import { ReminderButton as ReminderButton_95d6664ee6804a25fe399b324fe389a2 } from '@/collections/custom/ReminderButton'
 import { FolderTableCell as FolderTableCell_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 import { FolderField as FolderField_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 import { ColorPickerClient as ColorPickerClient_308f29044fe37d5413f8466e84527d11 } from '@/collections/custom/ColorPicker/components/ColorPickerClient'
@@ -8,7 +7,6 @@ import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } f
 
 /** @type import('payload').ImportMap */
 export const importMap = {
-  "@/collections/custom/ReminderButton#ReminderButton": ReminderButton_95d6664ee6804a25fe399b324fe389a2,
   "@payloadcms/next/rsc#FolderTableCell": FolderTableCell_f9c02e79a4aed9a3924487c0cd4cafb1,
   "@payloadcms/next/rsc#FolderField": FolderField_f9c02e79a4aed9a3924487c0cd4cafb1,
   "@/collections/custom/ColorPicker/components/ColorPickerClient#ColorPickerClient": ColorPickerClient_308f29044fe37d5413f8466e84527d11,

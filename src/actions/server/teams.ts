@@ -25,18 +25,18 @@ export const getAllTeams = async (): Promise<Team[]> => {
   return teams.docs
 }
 
-export const getTeamByGroupId = async (id: number): Promise<Team> => {
-  const payload = await getPayload({ config })
+// export const getTeamByGroupId = async (id: number): Promise<Team> => {
+//   const payload = await getPayload({ config })
 
-  const team = await payload.find({
-    collection: 'teams',
-    where: { 'groups.id': { equals: id } },
-    limit: 1,
-    depth: 1,
-  })
+//   const team = await payload.find({
+//     collection: 'teams',
+//     where: { 'groups.id': { equals: id } },
+//     limit: 1,
+//     depth: 1,
+//   })
 
-  return team.docs[0]
-}
+//   return team.docs[0]
+// }
 
 export const fetchTeams = async (
   filters: TeamsFilterParams,
@@ -97,4 +97,17 @@ export const getTeamById = async (id: string): Promise<Team> => {
   })
 
   return teams.docs[0]
+}
+
+export const getTeamByIds = async (id: string): Promise<Team[]> => {
+  const payload = await getPayload({ config })
+
+  const teams = await payload.find({
+    collection: 'teams',
+    where: { id: { in: id } },
+    limit: 1,
+    depth: 3,
+  })
+
+  return teams.docs
 }

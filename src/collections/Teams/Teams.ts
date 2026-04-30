@@ -25,7 +25,6 @@ export const Teams: CollectionConfig = {
         colorPickerField({
           name: 'color',
           label: 'Renk Seç',
-
           required: true,
           description: 'Bi renk seç',
         }),
@@ -34,6 +33,7 @@ export const Teams: CollectionConfig = {
     {
       name: 'groups',
       type: 'join',
+      maxDepth: 1,
       collection: 'groups',
       admin: {
         hidden: true,
@@ -41,15 +41,16 @@ export const Teams: CollectionConfig = {
       on: 'team',
     },
     {
-      name: 'parentModules',
-      label: 'Takıma ait Üst Modüller',
+      name: 'experts',
+      label: 'Takıma ait Üst Uzmanlıklar',
       type: 'relationship',
-      relationTo: 'parentModules',
+      relationTo: 'experts',
+      maxDepth: 3,
       admin: {
         position: 'sidebar', // İlişki alanlarını genelde sağ menüde (sidebar) tutmak daha şıktır: true,
-        description: 'Takıma göre alınması zorunlu modüller',
+        description: 'Bu takıma ait uzmanlıklar',
       },
-      hasMany: true, // Bir takımın birden fazla modülü olabilir
+      hasMany: true,
     },
   ],
 }
