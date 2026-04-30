@@ -4,7 +4,7 @@ import { getAllLessonsDepth0 } from '@/actions/server/lessons'
 import { getAllTeams } from '@/actions/server/teams'
 import FilterTab from '@/components/filters/filter-tab'
 import FilterLoading from '@/components/filters/filterLoading'
-import ModulesList from '@/components/modules/modules-list'
+import ModulesList from '@/components/pages/modules/modules-list'
 import { getSortOptions, ModuleFilterParams } from '@/types/filters'
 import { Suspense } from 'react'
 const mySortOptions = getSortOptions([
@@ -40,7 +40,6 @@ export default async function ModulesPage({
         <FilterTab
           layoutOptions={['grid', 'kanban', 'gant', 'table', 'calender']}
           lessons={lessons}
-          search
           groups={groups}
           sortOptions={mySortOptions}
           levels

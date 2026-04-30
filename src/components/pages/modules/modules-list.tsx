@@ -1,8 +1,8 @@
 import { NotFoundItem } from '@/components/not-found-item'
 import { ModuleFilterParams } from '@/types/filters'
 import { fetchModules } from '@/actions/server/modules'
-import LoadMoreButton from '../load-more-button'
 import { ModuleCard } from './module-card'
+import LoadMoreButton from '@/components/load-more-button'
 
 const ModulesList = async (props: ModuleFilterParams) => {
   const currentPage = props.page ? Number(props.page) : 1
