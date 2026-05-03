@@ -1,4 +1,4 @@
-import { getGroupById } from '@/actions/server/groups'
+import { getGroupById } from '@/actions/groups'
 import GroupDetails from '@/components/pages/groups/group-details'
 import { notFound } from 'next/navigation'
 

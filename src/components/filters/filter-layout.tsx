@@ -11,11 +11,11 @@ import {
   Table,
   Kanban,
   ChartArea,
+  Puzzle,
 } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { Command, CommandGroup, CommandItem, CommandList } from '@/components/ui/command'
-import { Label } from '@/components/ui/label'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
 
@@ -27,13 +27,16 @@ interface SortConfig {
 const sortConfigs: Record<string, SortConfig> = {
   grid: {
     icon: <Grip size={16} />,
-    label: 'Moduler',
+    label: 'Grid',
   },
   chart: {
     icon: <ChartArea size={16} />,
     label: 'Grafikler',
   },
-
+  notCompletedModulesUsers: {
+    icon: <Puzzle size={16} />,
+    label: 'Modüller',
+  },
   table: {
     icon: <Table size={16} />,
     label: 'Tablo',

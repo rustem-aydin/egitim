@@ -1,6 +1,6 @@
 'use client'
 
-import { AddLessonRequest, deleteLessonRequest, isRequest } from '@/actions/server/lessonRequests'
+import { AddLessonRequest, deleteLessonRequest, isRequest } from '@/actions/lessonRequests'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,

@@ -111,3 +111,19 @@ export const getTeamByIds = async (id: string): Promise<Team[]> => {
 
   return teams.docs
 }
+
+export const getTeamsByExpertIds = async (expertIds: number[]): Promise<Team[]> => {
+  const payload = await getPayload({ config })
+
+  const teams = await payload.find({
+    collection: 'teams',
+    where: {
+      experts: {
+        in: expertIds,
+      },
+    },
+    depth: 0,
+  })
+
+  return teams.docs
+}

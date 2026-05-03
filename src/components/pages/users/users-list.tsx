@@ -1,27 +1,30 @@
 import { NotFoundItem } from '../../not-found-item'
 import LoadMoreButton from '../../load-more-button'
-import { UsersFilterParams } from '@/types/filters'
-import { fetchUsers } from '@/actions/server/users'
+import { User } from '@/payload-types'
 import { UsersCard } from './user-card'
 
-const UsersList = async (props: UsersFilterParams) => {
-  const currentPage = props.page ? Number(props.page) : 1
-  const pages = Array.from({ length: currentPage }, (_, i) => i + 1)
-  const results = await Promise.all(pages.map((page) => fetchUsers({ ...props, page })))
-
-  const allUsers = results.flatMap((result) => result?.data || [])
-  console.log(JSON.stringify(allUsers[0], null, 2))
-
+const UsersList = async ({
+  users,
+  currentPage,
+  hasNextPage,
+}: {
+  users: User[]
+  currentPage?: number
+  hasNextPage?: boolean
+}) => {
+  if (!users?.length && currentPage === 1) {
+    return <NotFoundItem title="Ders Bulunamadı" description="" />
+  }
   return (
     <div className="mx-auto relative z-10">
-      {!allUsers.length && <NotFoundItem title="Personel Bulunamadı" description="" />}
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 pt-2 gap-6">
-        {allUsers?.map((user: any) => {
+      {!users?.length && <NotFoundItem title="Personel Bulunamadı" description="" />}
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 pt-4 gap-4">
+        {users?.map((user: any) => {
           return <UsersCard key={user.id} user={user} />
         })}
       </div>
 
-      {results[0].hasNextPage && <LoadMoreButton nextPage={currentPage + 1} />}
+      {hasNextPage && currentPage && <LoadMoreButton nextPage={currentPage + 1} />}
     </div>
   )
 }

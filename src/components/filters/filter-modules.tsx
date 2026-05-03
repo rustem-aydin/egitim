@@ -12,23 +12,30 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command'
-import { Label } from '@/components/ui/label'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Module } from '@/payload-types'
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
+import BadgeModule from '../pages/modules/modules-badge-code'
 
 interface FiltermodulsProps {
+  title?: string
+  urlParams?: string
   modules: Module[]
   startTransition: React.TransitionStartFunction
 }
 
-export default function FilterModules({ modules, startTransition }: FiltermodulsProps) {
+export default function FilterModules({
+  modules,
+  urlParams = 'modules',
+  startTransition,
+  title = 'Modül',
+}: FiltermodulsProps) {
   const id = useId()
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
-  const currentValue = searchParams.get('modules') || ''
+  const currentValue = searchParams.get(urlParams) || ''
 
   const [open, setOpen] = useState<boolean>(false)
   const [tooltipOpen, setTooltipOpen] = useState(false)
@@ -40,9 +47,9 @@ export default function FilterModules({ modules, startTransition }: Filtermoduls
     const finalName = selectedItem?.name || selectedValue
 
     if (currentValue === finalName) {
-      params.delete('modules')
+      params.delete(urlParams)
     } else {
-      params.set('modules', finalName)
+      params.set(urlParams, finalName)
     }
 
     setOpen(false)
@@ -53,8 +60,7 @@ export default function FilterModules({ modules, startTransition }: Filtermoduls
   }
 
   return (
-    <div className="*:not-first:mt-2 min-w-[200px]">
-      <Label htmlFor={id}>Modüller</Label>
+    <div className="*:not-first:mt-2 w-full min-w-25 max-w-25">
       <Popover open={open} onOpenChange={setOpen}>
         <Tooltip open={tooltipOpen || currentValue !== ''} onOpenChange={setTooltipOpen}>
           <TooltipTrigger asChild>
@@ -64,38 +70,49 @@ export default function FilterModules({ modules, startTransition }: Filtermoduls
                 variant="outline"
                 role="combobox"
                 aria-expanded={open}
-                className="border-input w-full justify-between px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]"
+                className="bg-background hover:bg-background border-input w-full justify-between px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]"
               >
                 {currentValue ? (
-                  modules?.find((l) => l.name?.toLowerCase() === currentValue.toLowerCase())
-                    ?.name || currentValue
+                  <div className="flex items-center min-w-0 flex-1 gap-2">
+                    <BadgeModule
+                      code={
+                        modules?.find((g) => g.name?.toLowerCase() === currentValue.toLowerCase())
+                          ?.code
+                      }
+                    />
+                    <span className="truncate">
+                      {modules?.find((g) => g.name?.toLowerCase() === currentValue.toLowerCase())
+                        ?.name || currentValue}
+                    </span>
+                  </div>
                 ) : (
-                  <span className="text-muted-foreground">Modül seçin...</span>
+                  <span className="text-muted-foreground truncate">{title}</span>
                 )}
                 <ChevronDownIcon
                   size={16}
-                  className="text-muted-foreground/80 shrink-0 ml-2"
+                  className="text-muted-foreground/80 shrink-0"
                   aria-hidden="true"
                 />
               </Button>
             </PopoverTrigger>
           </TooltipTrigger>
           <TooltipContent>
-            <p>Modül Seçin</p>
+            <p>{title}</p>
           </TooltipContent>
         </Tooltip>
         <PopoverContent
-          className="border-input w-full min-w-[var(--radix-popper-anchor-width)] p-0"
+          className="border-input w-full min-w-(--radix-popper-anchor-width) p-0"
           align="start"
         >
           <Command>
             <CommandInput placeholder="Modül ara..." />
 
-            <CommandList className="max-h-[250px] overflow-y-auto scrollbar-thin">
+            <CommandList className="max-h-62.5 overflow-y-auto scrollbar-thin">
               <CommandGroup>
                 {modules?.map((modul) => (
                   <CommandItem key={modul.id} value={String(modul.name)} onSelect={handleSelect}>
-                    <div className="flex w-full items-center justify-between">
+                    <div className="flex w-full items-center gap-1">
+                      <BadgeModule code={modul?.code}></BadgeModule>
                       <span>{modul.name}</span>
                     </div>
                     {currentValue === modul.name && <CheckIcon size={16} className="ml-auto" />}

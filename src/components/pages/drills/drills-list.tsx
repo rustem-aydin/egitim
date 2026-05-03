@@ -1,7 +1,7 @@
 // components/pages/_drills/drills-list.tsx
 import { NotFoundItem } from '@/components/not-found-item'
 import DrillCard from './drill-card'
-import { fetchDrills } from '@/actions/server/drills'
+import { fetchDrills } from '@/actions/drills'
 
 interface DrillsListProps {
   search?: string

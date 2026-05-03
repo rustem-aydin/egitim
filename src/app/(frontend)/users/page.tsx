@@ -1,10 +1,11 @@
-import { getAllGroups } from '@/actions/server/groups'
-import { getAllLessonsDepth0 } from '@/actions/server/lessons'
-import { getAllModules } from '@/actions/server/modules'
-import { getAllTeams } from '@/actions/server/teams'
+import { getAllExperts } from '@/actions/experts'
+import { getAllGroups } from '@/actions/groups'
+import { getAllLessons } from '@/actions/lessons'
+import { getAllModules } from '@/actions/modules'
+import { getAllTeams } from '@/actions/teams'
 import FilterTab from '@/components/filters/filter-tab'
 import FilterLoading from '@/components/filters/filterLoading'
-import UsersList from '@/components/pages/users/users-list'
+import { UsersTab } from '@/components/pages/users/layouts/users-tab'
 import { getSortOptions, UsersFilterParams } from '@/types/filters'
 import { Suspense } from 'react'
 const mySortOptions = getSortOptions([
@@ -23,8 +24,9 @@ export default async function UsersPage({
 }) {
   const filter = await searchParams
   const groups = await getAllGroups()
-  const lessons = await getAllLessonsDepth0()
+  const lessons = await getAllLessons(1)
   const teams = await getAllTeams()
+  const experts = await getAllExperts()
   const modules = await getAllModules()
   return (
     <div className="min-h-screen  py-6 px-4 relative overflow-hidden">
@@ -38,18 +40,16 @@ export default async function UsersPage({
           </div>
         </div>
         <FilterTab
-          layoutOptions={['grid']}
+          completedModule={modules}
+          experts={experts}
+          layoutOptions={['grid', 'notCompletedModulesUsers']}
           lessons={lessons}
-          completedModules={modules}
-          inCompletedModules={modules}
-          requiredButInCompletedModules={modules}
           groups={groups}
-          edu_levels
           sortOptions={mySortOptions}
           teams={teams}
         />
         <Suspense fallback={<FilterLoading />}></Suspense>
-        <UsersList {...filter} />
+        <UsersTab {...filter} />
       </div>
     </div>
   )

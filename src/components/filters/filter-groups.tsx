@@ -6,15 +6,12 @@ import { CheckIcon, ChevronDownIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   Command,
-  CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
 } from '@/components/ui/command'
-import { Label } from '@/components/ui/label'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { useQuery } from '@tanstack/react-query'
 import { Group } from '@/payload-types'
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
 
@@ -47,12 +44,13 @@ export default function FilterGroups({ groups, startTransition }: FilterGroupsPr
     }
 
     setOpen(false)
-
-    router.push(`${pathname}?${params.toString()}`, { scroll: false })
+    startTransition(() => {
+      router.push(`${pathname}?${params.toString()}`, { scroll: false })
+    })
   }
 
   return (
-    <div className="*:not-first:mt-2 min-w-25">
+    <div className="*:not-first:mt-2 w-full min-w-25 max-w-25">
       <Popover open={open} onOpenChange={setOpen}>
         <Tooltip open={tooltipOpen || currentGroupValue !== ''} onOpenChange={setTooltipOpen}>
           <TooltipTrigger asChild>
@@ -62,17 +60,22 @@ export default function FilterGroups({ groups, startTransition }: FilterGroupsPr
                 variant="outline"
                 role="combobox"
                 aria-expanded={open}
-                className="border-input w-full justify-between px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]"
+                className="bg-background hover:bg-background border-input w-full justify-between px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]"
               >
                 {currentGroupValue ? (
-                  groups?.find((g) => g.name?.toLowerCase() === currentGroupValue.toLowerCase())
-                    ?.name || currentGroupValue
+                  <div className="flex items-center truncate gap-2">
+                    <span className="truncate">
+                      {groups?.find(
+                        (g) => g.name?.toLowerCase() === currentGroupValue.toLowerCase(),
+                      )?.name || currentGroupValue}
+                    </span>
+                  </div>
                 ) : (
                   <span className="text-muted-foreground">Kadro</span>
                 )}
                 <ChevronDownIcon
                   size={16}
-                  className="text-muted-foreground/80 shrink-0 ml-2"
+                  className="text-muted-foreground/80 shrink-0"
                   aria-hidden="true"
                 />
               </Button>

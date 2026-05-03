@@ -3,7 +3,7 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import { IEvent } from '@/types/interfaces'
 import { TEventColor } from '@/types/types'
-import { Lesson } from '@/payload-types'
+import { Lesson, Module, Team } from '@/payload-types'
 import type { Sort, Where } from 'payload'
 import { revalidatePath } from 'next/cache'
 import { headers } from 'next/headers'
@@ -124,14 +124,13 @@ export async function getAllLessonsAction(): Promise<IEvent[]> {
   }
 }
 
-export const getAllLessons = async (): Promise<Lesson[]> => {
+export const getAllLessons = async (depth: number = 0): Promise<Lesson[]> => {
   const payload = await getPayload({ config })
 
   const cats = await payload.find({
     collection: 'lessons',
-    depth: 3,
+    depth: depth,
   })
-
   return cats.docs
 }
 
@@ -140,129 +139,222 @@ export const fetchLessons = async (filters: LessonFilterParams) => {
 
   const page = filters.page || 1
   const and: Where[] = []
+  const join: Where[] = []
   let sort: Sort = '-date_from'
 
-  if (filters.search) and.push({ name: { like: filters.search } })
-  if (filters.category) and.push({ 'category.name': { equals: filters.category } })
-  if (filters.location) and.push({ 'location.name': { equals: filters.location } })
+  if (filters.search?.trim()) {
+    const searchTerm = filters.search.trim()
+    and.push({
+      or: [
+        { name: { like: searchTerm } },
+        { description: { like: searchTerm } },
+        { instructor: { like: searchTerm } },
+      ],
+    })
+  }
 
-  if (filters.dateFrom)
-    and.push({ date_from: { greater_than_equal: `${filters.dateFrom}T00:00:00.000Z` } })
-  if (filters.dateTo)
-    and.push({ date_from: { less_than_equal: `${filters.dateTo}T23:59:59.000Z` } })
+  // ─── KATEGORİ FİLTRESİ ───
+  if (filters.category) {
+    if (typeof filters.category === 'number' || /^\d+$/.test(String(filters.category))) {
+      and.push({ category: { equals: Number(filters.category) } })
+    } else {
+      and.push({ 'category.name': { equals: filters.category } })
+    }
+  }
 
-  if (filters.status) and.push({ status: { equals: filters.status } })
+  // ─── LOKASYON FİLTRESİ ───
+  if (filters.location) {
+    if (typeof filters.location === 'number' || /^\d+$/.test(String(filters.location))) {
+      and.push({ location: { equals: Number(filters.location) } })
+    } else {
+      and.push({ 'location.name': { equals: filters.location } })
+    }
+  }
 
-  if (filters.by_generate) and.push({ 'by_generate.name': { equals: filters.by_generate } })
+  // ─── TARİH ARALIĞI ───
+  if (filters.dateFrom) {
+    and.push({
+      date_from: { greater_than_equal: new Date(filters.dateFrom).toISOString() },
+    })
+  }
+  if (filters.dateTo) {
+    and.push({
+      date_from: { less_than_equal: new Date(filters.dateTo).toISOString() },
+    })
+  }
 
+  // ─── STATÜ ───
+  if (filters.status) {
+    const statuses = filters.status.split(',').map((s) => s.trim())
+    if (statuses.length === 1) {
+      and.push({ status: { equals: statuses[0] } })
+    } else {
+      and.push({ status: { in: statuses } })
+    }
+  }
+
+  // ─── EĞİTMEN ───
+  if (filters.by_generate) {
+    if (typeof filters.by_generate === 'number' || /^\d+$/.test(String(filters.by_generate))) {
+      and.push({ by_generate: { equals: Number(filters.by_generate) } })
+    } else {
+      and.push({ 'by_generate.name': { equals: filters.by_generate } })
+    }
+  }
+
+  // ─── SEVİYE (module.code harfi) ───
   if (filters.level) {
     const levelMap: Record<string, string> = { Başlangıç: 'A', Orta: 'B', İleri: 'C' }
     const letter = levelMap[filters.level]
     if (letter) and.push({ 'module.code': { contains: letter } })
   }
+
+  // ─── MODÜL KODU ───
   if (filters.modules) {
     const codes = filters.modules.split(',').map((c) => c.trim())
-    and.push({ 'module.code': { in: codes } })
-  }
-
-  // if (filters.group) {
-  //   // 1. Group'u bul ve parentModules ID'lerini al
-  //   const groupResult = await payload.find({
-  //     collection: 'groups',
-  //     where: { name: { equals: filters.group } },
-  //     limit: 1,
-  //   })
-
-  //   const parentModuleIds =
-  //     groupResult?.docs[0]?.parentModules?.map((m: any) => {
-  //       if (typeof m === 'object' && m !== null) return m.id || m
-  //       return m
-  //     }) || []
-
-  //   if (parentModuleIds.length === 0) {
-  //     and.push({ id: { equals: -1 } })
-  //   } else {
-  //     // 2. TÜM parentModules'ları al (limit: 1 kaldır!)
-  //     const parentModulesResult = await payload.find({
-  //       collection: 'parentModules',
-  //       where: {
-  //         id: {
-  //           in: parentModuleIds,
-  //         },
-  //       },
-  //       limit: 100, // veya parentModuleIds.length
-  //     })
-
-  //     // 3. Tüm parentModules'lardaki modules ID'lerini topla
-  //     const moduleIds: string[] = []
-  //     parentModulesResult.docs.forEach((pm: any) => {
-  //       const mods =
-  //         pm?.modules?.map((m: any) => {
-  //           if (typeof m === 'object' && m !== null) return m.id?.toString?.() || m.toString()
-  //           return m.toString()
-  //         }) || []
-  //       moduleIds.push(...mods)
-  //     })
-
-  //     if (moduleIds.length === 0) {
-  //       and.push({ id: { equals: -1 } })
-  //     } else {
-  //       and.push({
-  //         id: {
-  //           in: moduleIds,
-  //         },
-  //       })
-  //     }
-  //   }
-  // }
-  if (filters.sort) {
-    const sortValue = String(filters.sort)
-    const isAsc = sortValue.startsWith('-')
-
-    const sortPrefix = isAsc ? '+' : '-'
-
-    const field = isAsc ? sortValue.substring(1) : sortValue
-
-    if (field === 'level') {
-      sort = `${sortPrefix}parent-module.code`
+    if (codes.length === 1) {
+      and.push({ 'module.code': { equals: codes[0] } })
     } else {
-      sort = `${sortPrefix}${field}`
+      and.push({ 'module.code': { in: codes } })
     }
   }
 
-  if (filters.team) {
-    const teamNames = filters.team.split(',').map((t) => t.trim())
-    const teamsResult = await payload.find({
-      collection: 'teams',
-      where: { name: { in: teamNames } },
-      select: { parentModules: true },
-      limit: 1000,
+  // ─── MODÜL ID ───
+  if (filters.modules) {
+    const moduleIds = String(filters.modules)
+      .split(',')
+      .map((id) => id.trim())
+    if (moduleIds.length === 1) {
+      and.push({ module: { equals: Number(moduleIds[0]) } })
+    } else {
+      and.push({ module: { in: moduleIds.map(Number) } })
+    }
+  }
+  if (filters.expert) {
+    const names = filters.expert.split(',').map((t) => t.trim())
+
+    const experts = await payload.find({
+      collection: 'experts',
+      where: {
+        name: {
+          in: names,
+        },
+      },
+      depth: 1,
+      limit: 100,
     })
-    const teamModuleIds = teamsResult.docs.flatMap(
-      (t: any) => t.parentModules?.map((m: any) => (typeof m === 'object' ? m.id : m)) || [],
-    )
-    const ParentModulesResult = await payload.find({
-      collection: 'parentModules',
-      where: { id: { in: teamModuleIds } },
-      select: { modules: true },
-      limit: 1000,
+    const moduleIds = [
+      ...new Set(
+        experts.docs
+          .flatMap((expert) => expert.modules || [])
+          .filter((m): m is Module => typeof m === 'object' && m !== null)
+          .map((m) => m.id),
+      ),
+    ]
+    and.push({ module: { in: moduleIds } })
+  }
+  // ─── GRUP FİLTRESİ ───
+  if (filters.group) {
+    const teamNames = filters.group.split(',').map((t) => t.trim())
+
+    const experts = await payload.find({
+      collection: 'experts',
+      where: {
+        'groups.name': {
+          in: teamNames,
+        },
+      },
+      depth: 1,
+      limit: 100,
     })
-    const moduleIds = ParentModulesResult.docs.flatMap(
-      (pm: any) => pm.modules?.docs.map((m: any) => (typeof m === 'object' ? m.id : m)) || [],
-    )
+    const moduleIds = [
+      ...new Set(
+        experts.docs
+          .flatMap((expert) => expert.modules || [])
+          .filter((m): m is Module => typeof m === 'object' && m !== null)
+          .map((m) => m.id),
+      ),
+    ]
     and.push({ module: { in: moduleIds } })
   }
 
+  // ─── TAKIM FİLTRESİ ───
+  if (filters.team) {
+    const teamNames = filters.team.split(',').map((t) => t.trim())
+
+    const experts = await payload.find({
+      collection: 'experts',
+      where: {
+        'teams.name': {
+          in: teamNames,
+        },
+      },
+      depth: 1,
+      limit: 100,
+    })
+
+    // Tüm modülleri tek bir array'de birleştir
+    const moduleIds = [
+      ...new Set(
+        experts.docs
+          .flatMap((expert) => expert.modules || [])
+          .filter((m): m is Module => typeof m === 'object' && m !== null)
+          .map((m) => m.id),
+      ),
+    ]
+    // Query'de kullanmak için:
+    and.push({ module: { in: moduleIds } })
+  }
+  // ─── KATILIMCI ───
+  if (filters.user) {
+    const userIds = filters.user.split(',').map((id) => id.trim())
+    if (userIds.length === 1) {
+      and.push({ 'users.id': { equals: Number(userIds[0]) } })
+    } else {
+      and.push({ 'users.id': { in: userIds.map(Number) } })
+    }
+  }
+
+  // ─── SIRALAMA ───
+  if (filters.sort) {
+    const sortValue = String(filters.sort)
+    const isDesc = sortValue.startsWith('-')
+    const sortPrefix = isDesc ? '-' : ''
+    const field = isDesc ? sortValue.substring(1) : sortValue
+
+    const sortFieldMap: Record<string, string> = {
+      name: 'name',
+      description: 'description',
+      status: 'status',
+      students: 'students',
+      duration: 'duration',
+      instructor: 'instructor',
+      rating: 'rating',
+      date_from: 'date_from',
+      date_to: 'date_to',
+      createdAt: 'createdAt',
+      updatedAt: 'updatedAt',
+      category: 'category',
+      location: 'location',
+      module: 'module',
+      by_generate: 'by_generate',
+      level: 'module',
+    }
+
+    const mappedField = sortFieldMap[field] || field
+    sort = `${sortPrefix}${mappedField}`
+  }
+
+  // ─── LİMİT ───
+  const limit = filters.limit === 'Hepsi' ? undefined : filters.limit ? Number(filters.limit) : 12
+
+  // ─── SORGUYU ÇALIŞTIR ───
   const result = await payload.find({
     collection: 'lessons',
     where: and.length > 0 ? { and } : {},
     sort: sort || '-date_from',
     page,
-    ...(filters.limit === 'Hepsi'
-      ? {}
-      : {
-          limit: filters.limit ? Number(filters.limit) : 12,
-        }),
+    ...(limit !== undefined ? { limit } : {}),
     depth: 2,
     overrideAccess: true,
   })
@@ -275,6 +367,7 @@ export const fetchLessons = async (filters: LessonFilterParams) => {
     nextPage: result.hasNextPage ? page + 1 : undefined,
   }
 }
+
 export const getLessonById = async (id: string): Promise<Lesson> => {
   const payload = await getPayload({ config })
 
@@ -286,17 +379,6 @@ export const getLessonById = async (id: string): Promise<Lesson> => {
   })
 
   return drill.docs[0] // ✅ sadece ilk kaydı döndür
-}
-
-export const getAllLessonsDepth0 = async (): Promise<Lesson[]> => {
-  const payload = await getPayload({ config })
-
-  const cats = await payload.find({
-    collection: 'lessons',
-    depth: 0,
-  })
-
-  return cats.docs
 }
 
 export async function onSubmit(values: Lesson) {

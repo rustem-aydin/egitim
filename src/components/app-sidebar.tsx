@@ -1,20 +1,17 @@
 'use client'
 import * as React from 'react'
 import {
-  Atom,
   BookOpen,
-  Calendar,
-  GanttChart,
+  Flag,
+  FlaskConical,
   LayoutDashboard,
   Network,
   Puzzle,
-  ShieldUser,
   Swords,
   Users,
 } from 'lucide-react'
 import { NavMain } from '@/components/nav-main'
 import { NavUser } from '@/components/nav-user'
-
 import {
   Sidebar,
   SidebarContent,
@@ -38,18 +35,24 @@ const data = {
     {
       title: 'Takımlar',
       url: '/teams',
-      icon: ShieldUser,
-    },
-    {
-      title: 'Kadrolar',
-      url: '/groups',
-      icon: Network,
+      icon: Flag,
     },
     {
       title: 'Personeller',
       icon: Users,
       url: '/users',
     },
+    {
+      title: 'Uzmanlıklar',
+      icon: FlaskConical,
+      url: '/experts',
+    },
+    {
+      title: 'Kadrolar',
+      url: '/groups',
+      icon: Network,
+    },
+
     {
       title: 'Modüller',
       url: '/modules',
@@ -59,13 +62,6 @@ const data = {
       title: 'Eğitimler',
       url: '/lessons',
       icon: BookOpen,
-      items: [
-        {
-          title: 'Eğitim İstekleri',
-          icon: Atom,
-          url: '/lessons/requests',
-        },
-      ],
     },
 
     {

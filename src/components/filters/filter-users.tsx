@@ -6,13 +6,11 @@ import { CheckIcon, ChevronDownIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   Command,
-  CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
 } from '@/components/ui/command'
-import { Label } from '@/components/ui/label'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { User } from '@/payload-types'
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
@@ -28,7 +26,7 @@ export default function FilterUsers({ users, startTransition }: FilterUsersProps
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
-  const currentValue = searchParams.get('users') || ''
+  const currentValue = searchParams.get('user') || ''
 
   const [open, setOpen] = useState<boolean>(false)
   const [tooltipOpen, setTooltipOpen] = useState(false)
@@ -40,9 +38,9 @@ export default function FilterUsers({ users, startTransition }: FilterUsersProps
     const finalName = selectedItem?.name || selectedValue
 
     if (currentValue === finalName) {
-      params.delete('users')
+      params.delete('user')
     } else {
-      params.set('users', finalName)
+      params.set('user', finalName)
     }
 
     setOpen(false)
@@ -53,7 +51,7 @@ export default function FilterUsers({ users, startTransition }: FilterUsersProps
   }
 
   return (
-    <div className="*:not-first:mt-2 min-w-[200px]">
+    <div className="*:not-first:mt-2 w-full min-w-25 max-w-25">
       <Popover open={open} onOpenChange={setOpen}>
         <Tooltip open={tooltipOpen || currentValue !== ''} onOpenChange={setTooltipOpen}>
           <TooltipTrigger asChild>
@@ -63,17 +61,21 @@ export default function FilterUsers({ users, startTransition }: FilterUsersProps
                 variant="outline"
                 role="combobox"
                 aria-expanded={open}
-                className="border-input w-full justify-between px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]"
+                className="bg-background hover:bg-background border-input w-full justify-between px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]"
               >
                 {currentValue ? (
-                  users?.find((l) => l.name?.toLowerCase() === currentValue.toLowerCase())?.name ||
-                  currentValue
+                  <div className="flex items-center min-w-0 flex-1 gap-2">
+                    <span className="truncate">
+                      {users?.find((l) => l.name?.toLowerCase() === currentValue.toLowerCase())
+                        ?.name || currentValue}
+                    </span>
+                  </div>
                 ) : (
-                  <span className="text-muted-foreground">Kullanıcı seçin...</span>
+                  <span className="text-muted-foreground">Personel </span>
                 )}
                 <ChevronDownIcon
                   size={16}
-                  className="text-muted-foreground/80 shrink-0 ml-2"
+                  className="text-muted-foreground/80 shrink-0"
                   aria-hidden="true"
                 />
               </Button>

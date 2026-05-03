@@ -121,7 +121,7 @@ export const Users: CollectionConfig = {
       label: 'Personelin Aldığı Dersler',
       type: 'relationship',
       relationTo: 'lessons',
-      maxDepth: 1,
+      maxDepth: 3,
       hasMany: true,
       required: false,
       admin: {

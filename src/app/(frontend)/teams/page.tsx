@@ -1,5 +1,5 @@
-import { getAllModules } from '@/actions/server/modules'
-import { getAllTeams } from '@/actions/server/teams'
+import { getAllModules } from '@/actions/modules'
+import { getAllTeams } from '@/actions/teams'
 import FilterTab from '@/components/filters/filter-tab'
 import FilterLoading from '@/components/filters/filterLoading'
 import TeamList from '@/components/teams/teams-list'
@@ -26,9 +26,9 @@ const TeamsPage = async ({
           </div>
         </div>
         <FilterTab
+          layoutOptions={['modular']}
           sortOptions={mySortOptions}
           modules={modules} // Modül filtresini aktif eder
-          search // Arama filtresini aktif eder
         />
         <Suspense fallback={<FilterLoading />}></Suspense>
         <TeamList {...filter} />

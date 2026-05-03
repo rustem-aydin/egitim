@@ -47,7 +47,7 @@ export const Teams: CollectionConfig = {
       relationTo: 'experts',
       maxDepth: 3,
       admin: {
-        position: 'sidebar', // İlişki alanlarını genelde sağ menüde (sidebar) tutmak daha şıktır: true,
+        position: 'sidebar',
         description: 'Bu takıma ait uzmanlıklar',
       },
       hasMany: true,

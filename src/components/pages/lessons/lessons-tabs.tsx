@@ -1,10 +1,10 @@
 import { AnimatedTabsContent, Tabs } from '@/components/ui/tabs'
 import { LessonFilterParams } from '@/types/filters'
-import { fetchLessons } from '@/actions/server/lessons'
+import { fetchLessons } from '@/actions/lessons'
 import LessonKanban from './layouts/kanban/kanban'
 import LessonsList from './layouts/grid/lessons-list'
 import { CategoryGanttChart } from './layouts/gant/gant'
-import { getAllDrills } from '@/actions/server/drills'
+import { getAllDrills } from '@/actions/drills'
 import Main from './layouts/chart/main'
 
 export async function LessonsTabs(props: LessonFilterParams) {

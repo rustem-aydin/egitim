@@ -1,4 +1,3 @@
-import React from 'react'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip'
 import Link from 'next/link'
 import { Layers } from 'lucide-react'
@@ -14,9 +13,9 @@ const DetailLink = ({ route, id, color }: LinkProps) => {
         <TooltipTrigger className="z-10" asChild>
           <Link
             href={`${'/' + route + '/' + id}`}
-            className="p-2  rounded-md  border border-sidebar"
+            className="p-2  rounded-md   border border-white/20"
           >
-            <Layers className={color} />
+            <Layers className={`${color} text-white/20`} />
           </Link>
         </TooltipTrigger>
         <TooltipContent>

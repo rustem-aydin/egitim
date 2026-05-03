@@ -78,7 +78,7 @@ export default function FilterDate({ startTransition }: FilterLevelsProps) {
   }
 
   return (
-    <div className="*:not-first:mt-2 min-w-[350px] ">
+    <div className="*:not-first:mt-2  min-w-30 ">
       <div className="flex gap-2">
         <Popover>
           <Tooltip
@@ -90,7 +90,7 @@ export default function FilterDate({ startTransition }: FilterLevelsProps) {
                 <Button
                   id={id}
                   variant="outline"
-                  className="group bg-background hover:bg-background border-input flex-1 justify-between px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]"
+                  className="group w-30 bg-background hover:bg-background border-input flex-1 justify-between px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]"
                 >
                   <span className={cn('truncate', !dateValue && 'text-muted-foreground')}>
                     {dateValue?.from ? (

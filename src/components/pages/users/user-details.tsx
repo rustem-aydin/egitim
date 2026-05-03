@@ -3,14 +3,21 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import UserModuleProgress from './user-module-progress'
 import { Button } from '@/components/ui/button'
 import { BookOpen, Layers, GraduationCap, Award, Calendar } from 'lucide-react'
-import { Lesson, User } from '@/payload-types'
+import { Expert, Lesson, Team, User } from '@/payload-types'
 import Fallback from '../../fallback'
-import { getTeamByGroupId } from '@/actions/server/teams'
 import UserModules from './user-modules'
 import UserLessons from './user-lessons'
 interface UserDetailsProps {
   user: User
 }
+function isTeam(value: unknown): value is Team {
+  return typeof value === 'object' && value !== null && 'color' in value
+}
+
+function isExpert(value: unknown): value is Expert {
+  return typeof value === 'object' && value !== null && 'id' in value
+}
+
 const UserDetails = async ({ user }: UserDetailsProps) => {
   const {
     id,
@@ -27,8 +34,9 @@ const UserDetails = async ({ user }: UserDetailsProps) => {
   const groupObj = typeof group === 'object' && group !== null ? group : null
   const groupId = groupObj?.id
   const groupName = groupObj?.name || 'Grup Atanmamış'
-  const groupModules = groupObj?.modules || []
-  const team = await getTeamByGroupId(Number(groupId))
+
+  const team = isTeam(groupObj?.team) ? groupObj.team : null
+  const teamColor = team?.color || '#6b7280'
 
   return (
     <div className="max-w-4xl w-full mx-auto p-4">
@@ -54,7 +62,7 @@ const UserDetails = async ({ user }: UserDetailsProps) => {
           </div>
         </CardHeader>
 
-        <CardContent>
+        {/* <CardContent>
           <div className="space-y-6">
             <UserModuleProgress
               requiredModules={groupModules}
@@ -81,7 +89,6 @@ const UserDetails = async ({ user }: UserDetailsProps) => {
                 <UserModules lessons={lessons as Lesson[]} modules={team?.modules || []} />
               </div>
             </div>
-            {/* Eğitimler Bölümü */}
             <div className="space-y-3">
               <div className="flex items-center gap-2 pb-2 border-b">
                 <BookOpen className="w-5 h-5 text-gray-600" />
@@ -95,7 +102,6 @@ const UserDetails = async ({ user }: UserDetailsProps) => {
               </div>
             </div>
 
-            {/* Eğitim Bilgileri Bölümü */}
             <div className="space-y-4">
               <div className="flex items-center gap-2 pb-2 border-b">
                 <GraduationCap className="w-5 h-5 text-gray-600" />
@@ -108,7 +114,6 @@ const UserDetails = async ({ user }: UserDetailsProps) => {
                   <p className="text-lg font-semibold">{education_levels}</p>
                 </div>
 
-                {/* Üniversiteler */}
                 <div className="space-y-2 p-4 rounded-lg border">
                   <h5 className="text-sm font-medium text-gray-500">Üniversiteler</h5>
                   <div className="flex flex-wrap gap-2">
@@ -120,7 +125,6 @@ const UserDetails = async ({ user }: UserDetailsProps) => {
                   </div>
                 </div>
 
-                {/* YDS Notu */}
                 <div className="space-y-2 p-4 rounded-lg border">
                   <h5 className="text-sm font-medium text-gray-500">YDS Notu</h5>
                   <p className="text-lg font-semibold">{yds_score}</p>
@@ -134,7 +138,6 @@ const UserDetails = async ({ user }: UserDetailsProps) => {
                   <div className="flex flex-wrap gap-2">
                     {certificates?.map((cer: any, index: number) => (
                       <Badge variant={'secondary'} key={cer.id || index}>
-                        {/* Change {cer} to the specific text property, e.g., cer.name */}
                         {cer.certificate_name}
                       </Badge>
                     ))}
@@ -143,7 +146,7 @@ const UserDetails = async ({ user }: UserDetailsProps) => {
               </div>
             </div>
           </div>
-        </CardContent>
+        </CardContent> */}
       </Card>
     </div>
   )

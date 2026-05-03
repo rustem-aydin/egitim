@@ -8,6 +8,7 @@ interface MotionProps {
 const MotionCard = ({ children }: MotionProps) => {
   return (
     <motion.div
+      className="relative"
       initial={{ y: 10, opacity: 0 }}
       whileInView={{ y: 0, opacity: 1 }}
       viewport={{ once: true }}

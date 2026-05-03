@@ -4,12 +4,12 @@ import config from '@payload-config'
 import { Group } from '@/payload-types'
 import { GroupsFilterParams } from '@/types/filters'
 
-export const getAllGroups = async (): Promise<Group[]> => {
+export const getAllGroups = async (depth: number = 0): Promise<Group[]> => {
   const payload = await getPayload({ config })
 
   const cats = await payload.find({
     collection: 'groups',
-    depth: 0,
+    depth: depth,
   })
 
   return cats.docs // ✅ sadece array'i döndür
@@ -49,18 +49,53 @@ export const fetchGroups = async (
 
   // --- Lesson (lesson_name üzerinden grup bul) ---
   if (filters.lesson) {
-    and.push({
-      'modules.lessons.lesson_name': { equals: filters.lesson },
+    const experts = await payload.find({
+      collection: 'experts',
+      where: {
+        'modules.lessons.name': {
+          equals: filters.lesson,
+        },
+      },
+      depth: 0,
+      limit: 100,
     })
+    const moduleIds = [
+      ...new Set(
+        experts.docs
+          .flatMap((expert) => expert.groups?.docs || [])
+          .filter((m): m is number => typeof m === 'number'),
+      ),
+    ]
+    and.push({ id: { in: moduleIds } }) // and.push({
+    //   'modules.lessons.name': { equals: filters.lesson },
+    // })
   }
-
+  if (filters?.user) {
+    and.push({ 'users.name': { equals: filters?.user } })
+  }
+  if (filters?.expert) {
+    and.push({ 'experts.name': { equals: filters?.expert } })
+  }
   // --- Modules (code üzerinden grup bul) ---
   if (filters.modules) {
-    const moduleCodes = filters.modules.split(',')
-
-    and.push({
-      'modules.code': { in: moduleCodes },
+    const experts = await payload.find({
+      collection: 'experts',
+      where: {
+        'modules.name': {
+          in: filters.modules,
+        },
+      },
+      depth: 0,
+      limit: 100,
     })
+    const moduleIds = [
+      ...new Set(
+        experts.docs
+          .flatMap((expert) => expert.groups?.docs || [])
+          .filter((m): m is number => typeof m === 'number'),
+      ),
+    ]
+    and.push({ id: { in: moduleIds } })
   }
 
   // --- Sort ---

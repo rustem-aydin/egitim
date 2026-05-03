@@ -1,17 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { useQuery } from '@tanstack/react-query'
-import {
-  GraduationCap,
-  Users,
-  Shield,
-  Briefcase,
-  KeyRound,
-  FlaskConical,
-  ShieldBan,
-  Flag,
-} from 'lucide-react'
+import { GraduationCap, FlaskConical, Flag, Puzzle } from 'lucide-react'
 import Link from 'next/link'
 
 import DetailLink from '@/components/detail-link'
@@ -78,7 +68,7 @@ export function ModuleCard({ module }: ModulesCardProps) {
   return (
     <MotionCard>
       <div className="rounded-2xl  p-0.5 shadow-2xl" style={{ background: cardStyle.borderBg }}>
-        <div className="relative  rounded-2xl   bg-linear-to-br from-background via-background/95 to-muted/100 min-h-56 overflow-hidden">
+        <div className="relative  rounded-2xl   bg-linear-to-br from-background via-background/95 to-muted/100 min-h-36 overflow-hidden">
           <div
             className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500"
             style={{ background: cardStyle.radialGradient }}
@@ -133,6 +123,7 @@ export function ModuleCard({ module }: ModulesCardProps) {
             </div>
           </div>
         </div>
+        <Puzzle size={128} className="absolute bottom-0 right-0 opacity-1 hidden sm:block" />
       </div>
     </MotionCard>
   )

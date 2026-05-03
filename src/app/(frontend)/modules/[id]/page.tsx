@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
-import { getModuleById } from '@/actions/server/modules'
-import ModuleDetails from '@/components/pages/modules/module-details'
+import { getModuleById } from '@/actions/modules'
+import ModuleSwappy from '@/components/pages/modules/swappy/main'
 interface Props {
   params: Promise<{ id: number }>
 }
@@ -10,5 +10,5 @@ export default async function ModuleDetailCard({ params }: Props) {
   if (isNaN(id)) {
     notFound()
   }
-  return <ModuleDetails module={module} />
+  return <ModuleSwappy module={module} />
 }

@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import Link from 'next/link'
-import { getAllLessonsRequests } from '@/actions/server/lessonRequests'
+import { getAllLessonsRequests } from '@/actions/lessonRequests'
 import { Lesson, User } from '@/payload-types'
 import {
   Carousel,

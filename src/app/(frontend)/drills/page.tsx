@@ -1,5 +1,5 @@
-import { getAllDrillCategories } from '@/actions/server/drills'
-import { getAllUsers } from '@/actions/server/users'
+import { getAllDrillCategories } from '@/actions/drills'
+import { getAllUsers } from '@/actions/users'
 import DrillsList from '@/components/pages/drills/drills-list'
 import FilterTab from '@/components/filters/filter-tab'
 import FilterLoading from '@/components/filters/filterLoading'

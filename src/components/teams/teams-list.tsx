@@ -1,5 +1,5 @@
 import { TeamsFilterParams } from '@/types/filters'
-import { fetchTeams } from '@/actions/server/teams'
+import { fetchTeams } from '@/actions/teams'
 import { TeamCard } from './team-card'
 import { NotFoundItem } from '../not-found-item'
 import LoadMoreButton from '../load-more-button'

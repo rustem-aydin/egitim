@@ -5,26 +5,23 @@ import type { Where } from 'payload'
 
 import type { Team, User } from '@/payload-types'
 import { UsersFilterParams } from '@/types/filters'
-export const getAllUsers = async (): Promise<User[]> => {
+import { filter } from 'lodash'
+export const getAllUsers = async (depth: number = 0): Promise<User[]> => {
   const payload = await getPayload({ config })
 
   const users = await payload.find({
     collection: 'users',
-    depth: 0,
+    depth: depth,
   })
 
   return users.docs
 }
-
-const PAGE_SIZE = 16
 
 export const fetchUsers = async (
   filters: UsersFilterParams,
 ): Promise<{ data: any[]; nextCursor: number | undefined; hasNextPage: boolean }> => {
   const payload = await getPayload({ config })
 
-  // HATA BURADAYDI: +1 eklendiği için veriler boş geliyordu.
-  // fetchModules ile birebir aynı mantığa çekildi:
   const page = filters.page ? Number(filters.page) : 1
 
   const and: Where[] = []
@@ -34,69 +31,35 @@ export const fetchUsers = async (
     and.push({ name: { like: filters.search } })
   }
 
-  // --- Education level ---
-  if (filters.education_level) {
-    and.push({ education_levels: { equals: filters.education_level } })
-  }
-
   // --- Group (Yeni Nesil Sorgu) ---
   if (filters.group) {
     and.push({
       'group.name': { equals: filters.group },
     })
   }
-
+  if (filters.expert) {
+    and.push({
+      'group.experts.name': { equals: filters.expert },
+    })
+  }
   // --- Lesson (Yeni Nesil Sorgu) ---
   if (filters.lesson) {
     and.push({
-      'lessons.lesson_name': { equals: filters.lesson },
+      'lessons.name': { equals: filters.lesson },
     })
   }
 
   // --- Team ---
   if (filters.team) {
-    const { docs } = await payload.find({
-      collection: 'teams',
-      where: { name: { equals: filters.team } },
-      limit: 1,
-      depth: 0,
+    and.push({
+      'group.team.name': { equals: filters.team },
     })
-
-    const team = docs[0]
-    const groupIds = team?.groups
-
-    if (groupIds && Array.isArray(groupIds) && groupIds.length > 0) {
-      and.push({ group: { in: groupIds } })
-    } else {
-      and.push({ id: { equals: -1 } })
-    }
   }
 
   // --- Required but NOT completed modules ---
-  if (filters.requiredButNotCompletedModules) {
-    const moduleCodes = filters.requiredButNotCompletedModules.split(',')
-
+  if (filters.completedModule) {
     and.push({
-      'group.modules.code': { in: moduleCodes },
-      'lessons.module.code': { not_in: moduleCodes },
-    })
-  }
-
-  // --- Completed modules ---
-  if (filters.completedModules) {
-    const moduleCodes = filters.completedModules.split(',')
-
-    and.push({
-      'lessons.module.code': { in: moduleCodes },
-    })
-  }
-
-  // --- Incomplete modules ---
-  if (filters.inCompletedModules) {
-    const moduleCodes = filters.inCompletedModules.split(',')
-
-    and.push({
-      'lessons.module.code': { not_in: moduleCodes },
+      'lessons.module.name': { equals: filters.completedModule },
     })
   }
 
@@ -116,7 +79,7 @@ export const fetchUsers = async (
           limit: filters.limit ? Number(filters.limit) : 12,
         }),
     sort: sortField,
-    depth: 2,
+    depth: 3,
     overrideAccess: true,
   })
 

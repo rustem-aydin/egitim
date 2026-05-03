@@ -1,4 +1,4 @@
-import { getLessonById } from '@/actions/server/lessons'
+import { getLessonById } from '@/actions/lessons'
 import LessonDetails from '@/components/pages/lessons/details/lesson-details'
 import { notFound } from 'next/navigation'
 interface Props {

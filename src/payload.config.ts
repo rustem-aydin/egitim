@@ -21,8 +21,10 @@ import { Levels } from './collections/Lessons/Levels'
 import { LessonsRequests } from './collections/Lessons/LessonsRequests'
 import { Teams } from './collections/Teams/Teams'
 import { DrillCategories } from './collections/Drills/DrillCategories'
-import { seedData } from './actions/server/seed'
+import { seedData } from './actions/seed'
 import { Expert } from './collections/Experts/Experts'
+import { importExportPlugin } from '@payloadcms/plugin-import-export'
+import { Filters } from './collections/Filters'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -82,6 +84,7 @@ export default buildConfig({
     Feedbacks,
     Locations,
     Drills,
+    Filters,
     Expert,
     Categories,
     Levels,
@@ -112,6 +115,10 @@ export default buildConfig({
           enabled: true,
         },
       },
+    }),
+    importExportPlugin({
+      collections: [{ slug: 'modules' }],
+      // see below for a list of available options
     }),
     s3Storage({
       collections: {

@@ -47,3 +47,10 @@ export interface LayoutOption {
 export interface LessonsProps {
   lessons: Lesson[]
 }
+
+export interface SwappyProps {
+  id: string
+  title: string
+  widgets: React.ReactNode
+  className?: string
+}

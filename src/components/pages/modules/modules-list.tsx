@@ -1,6 +1,6 @@
 import { NotFoundItem } from '@/components/not-found-item'
 import { ModuleFilterParams } from '@/types/filters'
-import { fetchModules } from '@/actions/server/modules'
+import { fetchModules } from '@/actions/modules'
 import { ModuleCard } from './module-card'
 import LoadMoreButton from '@/components/load-more-button'
 

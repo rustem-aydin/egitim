@@ -1,0 +1,270 @@
+[
+  {
+    "id": 1,
+    "name": "Ağ Güvenliği Temelleri",
+    "description": "TCP/IP protokolleri, ağ topolojileri, güvenlik duvarları ve ağ izleme tekniklerini kapsayan temel ağ güvenliği eğitimi.",
+    "code": "SG101.1",
+    "lessons": {
+      "docs": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "hasNextPage": false,
+      "totalDocs": 5
+    },
+    "experts": {
+      "docs": [
+        1
+      ],
+      "hasNextPage": false,
+      "totalDocs": 1
+    },
+    "folder": null,
+    "updatedAt": "2026-04-30T15:42:55.498985Z",
+    "createdAt": "2026-04-30T15:42:55.498985Z"
+  },
+  {
+    "id": 2,
+    "name": "Etik Hacking ve Penetrasyon Testi",
+    "description": "Sistem zafiyetlerinin tespiti, penetrasyon testi metodolojileri ve etik hacking araçlarının kullanımı.",
+    "code": "SG102.1",
+    "lessons": {
+      "docs": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "hasNextPage": false,
+      "totalDocs": 6
+    },
+    "experts": {
+      "docs": [
+        2
+      ],
+      "hasNextPage": false,
+      "totalDocs": 1
+    },
+    "folder": null,
+    "updatedAt": "2026-04-30T15:42:55.498985Z",
+    "createdAt": "2026-04-30T15:42:55.498985Z"
+  },
+  {
+    "id": 3,
+    "name": "Web Uygulama Güvenliği",
+    "description": "OWASP Top 10, SQL Injection, XSS, CSRF gibi web uygulama zafiyetleri ve koruma yöntemleri.",
+    "code": "SG103.1",
+    "lessons": {
+      "docs": [
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "hasNextPage": false,
+      "totalDocs": 5
+    },
+    "experts": {
+      "docs": [
+        3
+      ],
+      "hasNextPage": false,
+      "totalDocs": 1
+    },
+    "folder": null,
+    "updatedAt": "2026-04-30T15:42:55.498985Z",
+    "createdAt": "2026-04-30T15:42:55.498985Z"
+  },
+  {
+    "id": 4,
+    "name": "Kriptografi ve Şifreleme",
+    "description": "Simetrik ve asimetrik şifreleme algoritmaları, hash fonksiyonları, dijital imzalar ve PKI altyapısı.",
+    "code": "SG104.1",
+    "lessons": {
+      "docs": [
+        17,
+        18,
+        19,
+        20
+      ],
+      "hasNextPage": false,
+      "totalDocs": 4
+    },
+    "experts": {
+      "docs": [
+        4
+      ],
+      "hasNextPage": false,
+      "totalDocs": 1
+    },
+    "folder": null,
+    "updatedAt": "2026-04-30T15:42:55.498985Z",
+    "createdAt": "2026-04-30T15:42:55.498985Z"
+  },
+  {
+    "id": 5,
+    "name": "Malware Analizi ve Tersine Mühendislik",
+    "description": "Virüs, trojan, ransomware gibi zararlı yazılımların analizi ve tersine mühendislik teknikleri.",
+    "code": "SG105.1",
+    "lessons": {
+      "docs": [
+        21,
+        22,
+        23,
+        24,
+        25
+      ],
+      "hasNextPage": false,
+      "totalDocs": 5
+    },
+    "experts": {
+      "docs": [
+        5
+      ],
+      "hasNextPage": false,
+      "totalDocs": 1
+    },
+    "folder": null,
+    "updatedAt": "2026-04-30T15:42:55.498985Z",
+    "createdAt": "2026-04-30T15:42:55.498985Z"
+  },
+  {
+    "id": 6,
+    "name": "Siber Olay Müdahale ve Adli Bilişim",
+    "description": "Güvenlik olaylarına müdahale süreçleri, dijital kanıt toplama ve adli bilişim metodolojileri.",
+    "code": "SG106.1",
+    "lessons": {
+      "docs": [
+        26,
+        27,
+        28,
+        29,
+        30
+      ],
+      "hasNextPage": false,
+      "totalDocs": 5
+    },
+    "experts": {
+      "docs": [
+        6
+      ],
+      "hasNextPage": false,
+      "totalDocs": 1
+    },
+    "folder": null,
+    "updatedAt": "2026-04-30T15:42:55.498985Z",
+    "createdAt": "2026-04-30T15:42:55.498985Z"
+  },
+  {
+    "id": 7,
+    "name": "Bulut Güvenliği",
+    "description": "AWS, Azure ve GCP ortamlarında güvenlik yapılandırmaları, IAM, veri şifreleme ve uyumluluk.",
+    "code": "SG107.1",
+    "lessons": {
+      "docs": [
+        31,
+        32,
+        33,
+        34
+      ],
+      "hasNextPage": false,
+      "totalDocs": 4
+    },
+    "experts": {
+      "docs": [
+        7
+      ],
+      "hasNextPage": false,
+      "totalDocs": 1
+    },
+    "folder": null,
+    "updatedAt": "2026-04-30T15:42:55.498985Z",
+    "createdAt": "2026-04-30T15:42:55.498985Z"
+  },
+  {
+    "id": 8,
+    "name": "Sosyal Mühendislik ve İnsan Faktörü",
+    "description": "Phishing, pretexting, baiting gibi sosyal mühendislik saldırıları ve farkındalık eğitimi stratejileri.",
+    "code": "SG108.1",
+    "lessons": {
+      "docs": [
+        35,
+        36,
+        37,
+        38
+      ],
+      "hasNextPage": false,
+      "totalDocs": 4
+    },
+    "experts": {
+      "docs": [
+        8
+      ],
+      "hasNextPage": false,
+      "totalDocs": 1
+    },
+    "folder": null,
+    "updatedAt": "2026-04-30T15:42:55.498985Z",
+    "createdAt": "2026-04-30T15:42:55.498985Z"
+  },
+  {
+    "id": 9,
+    "name": "Güvenlik Operasyon Merkezi (SOC) ve SIEM",
+    "description": "SOC yapılanması, SIEM araçları, log yönetimi, olay korelasyonu ve tehdit istihbaratı.",
+    "code": "SG109.1",
+    "lessons": {
+      "docs": [
+        39,
+        40,
+        41,
+        42,
+        43
+      ],
+      "hasNextPage": false,
+      "totalDocs": 5
+    },
+    "experts": {
+      "docs": [
+        9
+      ],
+      "hasNextPage": false,
+      "totalDocs": 1
+    },
+    "folder": null,
+    "updatedAt": "2026-04-30T15:42:55.498985Z",
+    "createdAt": "2026-04-30T15:42:55.498985Z"
+  },
+  {
+    "id": 10,
+    "name": "Kırmızı Takım Operasyonları (Red Teaming)",
+    "description": "Gelişmiş kalıcılık teknikleri, APT simülasyonu, sosyal mühendislik ve fiziksel güvenlik testleri.",
+    "code": "SG110.1",
+    "lessons": {
+      "docs": [
+        44,
+        45,
+        46,
+        47,
+        48
+      ],
+      "hasNextPage": false,
+      "totalDocs": 5
+    },
+    "experts": {
+      "docs": [
+        10
+      ],
+      "hasNextPage": false,
+      "totalDocs": 1
+    },
+    "folder": null,
+    "updatedAt": "2026-04-30T15:42:55.498985Z",
+    "createdAt": "2026-04-30T15:42:55.498985Z"
+  }
+]

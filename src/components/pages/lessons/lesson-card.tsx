@@ -5,6 +5,7 @@ import { Lesson } from '@/payload-types'
 import { getStatusLessonColor } from './lessons-color'
 import BadgeModule from './lesson-badge-module'
 import { LessonStatusBadge } from './lesson-status-badge'
+import { Book, BookOpen } from 'lucide-react'
 
 interface LessonsCardProps {
   lesson: Lesson
@@ -38,49 +39,8 @@ const LessonsCard = ({ lesson }: LessonsCardProps) => {
               </div>
             </div>
           </div>
-
-          {/* <div className="p-6">
-            <div className="grid grid-cols-2 gap-4 mb-2">
-              <div className="flex items-center">
-                <Calendar className="w-4 h-4 mr-2 text-cyan-400" />
-                <div>
-                  <div className="text-xs">Tarih</div>
-                  <div className="text-sm font-medium">
-                    {lesson?.date_from ? formatDate(lesson.date_from) : 'Belirtilmemiş'}
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-center">
-                <Clock className="w-4 h-4 mr-2 text-purple-400" />
-                <div>
-                  <div className="text-xs">Saat</div>
-                  <div className="text-sm font-medium">
-                    {lesson?.date_from
-                      ? formatTimeWithDateObject(lesson.date_from)
-                      : 'Belirtilmemiş'}
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-center">
-                <MapPin className="w-4 h-4 mr-2 text-pink-400" />
-                <div>
-                  <div className="text-xs">Konum</div>
-                  <div className="text-sm font-medium">{location?.name ?? 'Belirtilmemiş'}</div>
-                </div>
-              </div>
-
-              <div className="flex items-center">
-                <Users className="w-4 h-4 mr-2 text-emerald-400" />
-                <div>
-                  <div className="text-xs">Katılımcı</div>
-                  <div className="text-sm font-medium">{lesson?.students ?? 0} kişi</div>
-                </div>
-              </div>
-            </div>
-          </div> */}
         </div>
+        <BookOpen size={128} className="absolute bottom-0 right-0 opacity-2 hidden sm:block" />
       </div>
     </MotionCard>
   )

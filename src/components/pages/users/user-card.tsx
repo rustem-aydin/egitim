@@ -4,7 +4,8 @@ import Link from 'next/link'
 import MotionCard from '@/components/motion-card'
 import { User, Team, Expert, Lesson } from '@/payload-types'
 import { Badge } from '@/components/ui/badge'
-import UserModuleProgress from './user-expert-badge'
+import { User as Us } from 'lucide-react'
+import BestExpert from './best-user-expert-badge'
 
 function isTeam(value: unknown): value is Team {
   return typeof value === 'object' && value !== null && 'color' in value
@@ -15,7 +16,7 @@ function isExpert(value: unknown): value is Expert {
 }
 
 export async function UsersCard({ user }: { user: User }) {
-  const { id, name, rank, group, lessons } = user
+  const { id, name, group, lessons } = user
 
   const groupObj = typeof group === 'object' && group !== null ? group : null
   const groupId = groupObj?.id
@@ -29,7 +30,7 @@ export async function UsersCard({ user }: { user: User }) {
   return (
     <MotionCard>
       <Card
-        className="w-full max-w-md transition-all duration-300 hover:shadow-lg border-l-4"
+        className="w-full relative max-w-md transition-all duration-300 hover:shadow-lg border-l-4"
         style={{ borderLeftColor: teamColor }}
       >
         <CardHeader className="space-y-2">
@@ -51,15 +52,18 @@ export async function UsersCard({ user }: { user: User }) {
             </div>
             <DetailLink route="users" id={Number(id)} />
           </div>
-          <div className="flex justify-between text-sm text-gray-600">
-            <span>{rank}</span>
-            {team && <span style={{ color: teamColor }}>{team.name}</span>}
-          </div>
+          <Us
+            size={128}
+            className="absolute -bottom-3 right-0 opacity-3 hidden sm:block"
+            style={{
+              color: `${teamColor}`,
+            }}
+          />
         </CardHeader>
 
         <CardContent>
           <div className="space-y-3">
-            <UserModuleProgress
+            <BestExpert
               experts={experts}
               completedLessons={(Array.isArray(lessons) ? lessons : []) as Lesson[]}
             />

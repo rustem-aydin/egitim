@@ -3,8 +3,10 @@ export interface CommonFilterParams {
   search?: string
   by_generate: string
   status?: string
+  completedModule?: string
   sort?: string
   user?: string
+  expert?: string
   layout: string
   drill_category?: string
   category?: string
@@ -14,9 +16,6 @@ export interface CommonFilterParams {
   dateFrom?: string
   dateTo?: string
   modules?: string
-  requiredButNotCompletedModules?: string
-  completedModules?: string
-  inCompletedModules?: string
   team?: string
   lesson?: string
   group?: string
@@ -24,6 +23,7 @@ export interface CommonFilterParams {
   limit?: string
 }
 export interface LessonFilterParams extends CommonFilterParams {}
+export interface ExpertFilterParams extends CommonFilterParams {}
 // Tatbikatlara özel ek filtreler gerekirse
 export interface DrillFilterParams extends CommonFilterParams {}
 export interface ModuleFilterParams extends CommonFilterParams {}

@@ -1,13 +1,14 @@
-import { getAllCategories } from '@/actions/server/categories'
-import { getAllGroups } from '@/actions/server/groups'
-import { getAllLocations } from '@/actions/server/locations'
-import { getAllTeams } from '@/actions/server/teams'
+import { getAllCategories } from '@/actions/categories'
+import { getAllGroups } from '@/actions/groups'
+import { getAllLocations } from '@/actions/locations'
+import { getAllTeams } from '@/actions/teams'
 import FilterTab from '@/components/filters/filter-tab'
 import FilterLoading from '@/components/filters/filterLoading'
 import { LessonsTabs } from '@/components/pages/lessons/lessons-tabs'
 import { getSortOptions, LessonFilterParams } from '@/types/filters'
 import { Suspense } from 'react'
 import { AddLessons } from '@/components/pages/lessons/add-lessons-modal'
+import { getAllExperts } from '@/actions/experts'
 const mySortOptions = getSortOptions([
   'DATE_FROM_DESC',
   'DATE_FROM_ASC',
@@ -27,6 +28,7 @@ export default async function LessonsPage({
   const groups = await getAllGroups()
   const categories = await getAllCategories()
   const teams = await getAllTeams()
+  const experts = await getAllExperts(0)
 
   return (
     <div className="min-h-screen  py-6 px-4 relative overflow-hidden">
@@ -48,6 +50,7 @@ export default async function LessonsPage({
           locations={locations}
           categories={categories}
           teams={teams}
+          experts={experts}
           groups={groups}
           levels
         />

@@ -4,8 +4,8 @@ import { Separator } from '@/components/ui/separator'
 import Fallback from '@/components/fallback'
 import Link from 'next/link'
 import { Team } from '@/payload-types'
-import BadgeModule from '../modules/modules-badge-code'
-import { getUserByIds } from '@/actions/server/users'
+import { getUserByIds } from '@/actions/users'
+import BadgeModule from '../pages/modules/modules-badge-code'
 
 export async function TeamDetails({ team }: { team: Team }) {
   const groups = team.groups?.docs ?? []

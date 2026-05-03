@@ -4,7 +4,7 @@ import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/s
 import { Star } from 'lucide-react'
 import config from '@payload-config'
 
-import { getFeedbacksByLessonId, getFeedbackStatsAction } from '@/actions/server/feedbacks'
+import { getFeedbacksByLessonId, getFeedbackStatsAction } from '@/actions/feedbacks'
 import { FeedbackCard } from './feedback-card'
 import { getPayload } from 'payload'
 import { headers } from 'next/headers'

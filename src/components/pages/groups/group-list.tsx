@@ -1,4 +1,4 @@
-import { fetchGroups } from '@/actions/server/groups'
+import { fetchGroups } from '@/actions/groups'
 import { NotFoundItem } from '@/components/not-found-item'
 import { GroupsFilterParams } from '@/types/filters'
 import LoadMoreButton from '../../load-more-button'

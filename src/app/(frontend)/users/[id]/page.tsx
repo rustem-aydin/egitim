@@ -1,4 +1,4 @@
-import { getUserById } from '@/actions/server/users'
+import { getUserById } from '@/actions/users'
 import UserDetails from '@/components/pages/users/user-details'
 import { notFound } from 'next/navigation'
 

@@ -4,18 +4,16 @@ import config from '@payload-config'
 import { Module, User } from '@/payload-types'
 import { ModuleFilterParams } from '@/types/filters'
 
-export const getAllModules = async (): Promise<Module[]> => {
+export const getAllModules = async (depth: number = 0): Promise<Module[]> => {
   const payload = await getPayload({ config })
 
   const cats = await payload.find({
     collection: 'modules',
-    depth: 0,
+    depth: depth,
   })
 
   return cats.docs // ✅ sadece array'i döndür
 }
-
-const PAGE_SIZE = 12
 
 export const fetchModules = async (
   filters: ModuleFilterParams,
@@ -25,29 +23,67 @@ export const fetchModules = async (
 
   const and: Where[] = []
 
-  // --- Search ---
   if (filters.search) {
     and.push({ name: { like: filters.search } })
   }
 
-  // --- Level ---
   if (filters.level) {
     const levelMap: Record<string, string> = { Başlangıç: 'A', Orta: 'B', İleri: 'C' }
     const letter = levelMap[filters.level]
     if (letter) and.push({ code: { contains: letter } })
   }
 
-  // --- Teams (Yeni Nesil Sorgu) ---
   if (filters.team) {
-    and.push({
-      'teams.name': { equals: filters.team },
+    const experts = await payload.find({
+      collection: 'experts',
+      where: {
+        'teams.name': {
+          in: filters.team,
+        },
+      },
+      depth: 1,
+      limit: 100,
     })
+
+    const moduleIds = [
+      ...new Set(
+        experts.docs
+          .flatMap((expert) => expert.modules || [])
+          .filter((m): m is Module => typeof m === 'object' && m !== null)
+          .map((m) => m.id),
+      ),
+    ]
+    and.push({ id: { in: moduleIds } })
   }
-  // --- Group (Yeni Nesil Sorgu) ---
+  if (filters.expert) {
+    and.push({ 'experts.name': { equals: filters.expert } })
+  }
   if (filters.group) {
+    const experts = await payload.find({
+      collection: 'experts',
+      where: {
+        'groups.name': {
+          in: filters.group,
+        },
+      },
+      depth: 1,
+      limit: 100,
+    })
+
+    const moduleIds = [
+      ...new Set(
+        experts.docs
+          .flatMap((expert) => expert.modules || [])
+          .filter((m): m is Module => typeof m === 'object' && m !== null)
+          .map((m) => m.id),
+      ),
+    ]
+    and.push({ id: { in: moduleIds } })
+  }
+  if (filters.lesson) {
     // Group ismiyle filtrelemek istiyorsan nested path kullanabilirsin
     and.push({
-      'groups.name': { equals: filters.group },
+      'lessons.name': { equals: filters.lesson },
     })
   }
 
@@ -120,4 +156,17 @@ export const getUsersWhoTookModule = async (moduleId: number) => {
   })
 
   return usersRes.docs
+}
+
+export const getModuleByIds = async (ids: number[]): Promise<Module> => {
+  const payload = await getPayload({ config })
+
+  const drill = await payload.find({
+    collection: 'modules',
+    where: { id: { in: ids } },
+    limit: 1,
+    depth: 3,
+  })
+
+  return drill.docs[0]
 }

@@ -1,7 +1,8 @@
-import { getAllCategories } from '@/actions/server/categories'
-import { getAllGroups } from '@/actions/server/groups'
-import { getAllLessonsDepth0 } from '@/actions/server/lessons'
-import { getAllTeams } from '@/actions/server/teams'
+import { getAllExperts } from '@/actions/experts'
+import { getAllGroups } from '@/actions/groups'
+import { getAllLessons } from '@/actions/lessons'
+import { getAllModules } from '@/actions/modules'
+import { getAllTeams } from '@/actions/teams'
 import FilterTab from '@/components/filters/filter-tab'
 import FilterLoading from '@/components/filters/filterLoading'
 import ModulesList from '@/components/pages/modules/modules-list'
@@ -19,13 +20,14 @@ const mySortOptions = getSortOptions([
 export default async function ModulesPage({
   searchParams,
 }: {
-  searchParams: Promise<ModuleFilterParams> // ← Promise
+  searchParams: Promise<ModuleFilterParams>
 }) {
   const filter = await searchParams
   const groups = await getAllGroups()
-  const categories = await getAllCategories()
-  const lessons = await getAllLessonsDepth0()
+  const lessons = await getAllLessons()
   const teams = await getAllTeams()
+  const experts = await getAllExperts(0)
+
   return (
     <div className="min-h-screen  py-6 px-4 relative overflow-hidden">
       <div className=" mx-auto relative z-10">
@@ -38,6 +40,7 @@ export default async function ModulesPage({
           </div>
         </div>
         <FilterTab
+          experts={experts}
           layoutOptions={['grid', 'kanban', 'gant', 'table', 'calender']}
           lessons={lessons}
           groups={groups}

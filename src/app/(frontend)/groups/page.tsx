@@ -1,7 +1,8 @@
-import { getAllGroups } from '@/actions/server/groups'
-import { getAllLessonsDepth0 } from '@/actions/server/lessons'
-import { getAllModules } from '@/actions/server/modules'
-import { getAllTeams } from '@/actions/server/teams'
+import { getAllExperts } from '@/actions/experts'
+import { getAllLessons } from '@/actions/lessons'
+import { getAllModules } from '@/actions/modules'
+import { getAllTeams } from '@/actions/teams'
+import { getAllUsers } from '@/actions/users'
 import FilterTab from '@/components/filters/filter-tab'
 import FilterLoading from '@/components/filters/filterLoading'
 import GroupsList from '@/components/pages/groups/group-list'
@@ -14,9 +15,11 @@ const GroupsPage = async ({
 }: {
   searchParams: Promise<GroupsFilterParams> // ← Promise
 }) => {
-  const lessons = await getAllLessonsDepth0()
+  const lessons = await getAllLessons()
   const teams = await getAllTeams()
   const modules = await getAllModules()
+  const users = await getAllUsers()
+  const experts = await getAllExperts()
   const filter = await searchParams
 
   return (
@@ -31,11 +34,13 @@ const GroupsPage = async ({
           </div>
         </div>
         <FilterTab
+          experts={experts}
+          users={users}
+          layoutOptions={['modular']}
           teams={teams}
           sortOptions={mySortOptions}
           modules={modules}
           lessons={lessons}
-          search
         />
         <Suspense fallback={<FilterLoading />}></Suspense>
         <GroupsList {...filter} />

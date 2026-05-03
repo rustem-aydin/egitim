@@ -13,6 +13,7 @@ import FilterDrillCategory from './filter-drill-category'
 import {
   Category,
   DrillCategory,
+  Expert,
   Group,
   Lesson,
   Location,
@@ -38,16 +39,20 @@ import FilterLessonsStatus from './filter-lesson-status'
 import FilterLimit from './filter-limit'
 import { date } from 'zod/v4'
 import FilterDate from './filter-date'
+import FilterExpert from './filter-expert'
+import { FilterLove } from './filter-love'
+import FilterModules from './filter-modules'
 
 interface FilterProps {
   levels?: boolean
   dates?: boolean
   edu_levels?: boolean
   status?: boolean
-  completedModules?: Module[]
+  completedModule?: Module[]
   inCompletedModules?: Module[]
   requiredButInCompletedModules?: Module[]
   groups?: Group[]
+  experts?: Expert[]
   categories?: Category[]
   lessons?: Lesson[]
   users?: User[]
@@ -61,7 +66,8 @@ interface FilterProps {
 const FilterTab = ({
   drillCategories,
   sortOptions,
-  completedModules,
+  completedModule,
+  experts,
   dates,
   inCompletedModules,
   requiredButInCompletedModules,
@@ -94,14 +100,23 @@ const FilterTab = ({
 
   return (
     <div className="relative">
-      <div className="flex h-auto min-h-5 items-end space-x-2 -mr-4 text-sm">
+      <div className="flex h-auto min-h-5 items-end space-x-2   text-sm">
         <FilterLimit startTransition={startTransition} />
         <div className="flex-1 min-w-80">
           <SearchInput startTransition={startTransition} />
         </div>
         {users && <FilterUsers users={users || []} startTransition={startTransition} />}
         {teams && <FilterTeams teams={teams || []} startTransition={startTransition} />}
-        {modules && <FilterModuls modules={modules || []} startTransition={startTransition} />}
+        {modules && <FilterModules modules={modules || []} startTransition={startTransition} />}
+        {completedModule && (
+          <FilterModules
+            title="Tamamlanan Modüller"
+            urlParams="completedModule"
+            modules={completedModule || []}
+            startTransition={startTransition}
+          />
+        )}
+
         {locations && (
           <FilterLocation locations={locations || []} startTransition={startTransition} />
         )}
@@ -117,13 +132,9 @@ const FilterTab = ({
           />
         )}
         {groups && <FilterGroups groups={groups || []} startTransition={startTransition} />}
+        {experts && <FilterExpert experts={experts || []} startTransition={startTransition} />}
         {lessons && <FilterLessons lessons={lessons || []} startTransition={startTransition} />}
-        {completedModules && (
-          <FilterCompletedModules
-            modules={completedModules || []}
-            startTransition={startTransition}
-          />
-        )}
+
         {inCompletedModules && (
           <FilterInCompletedModules
             modules={inCompletedModules || []}
@@ -140,6 +151,8 @@ const FilterTab = ({
         {dates && <FilterDate startTransition={startTransition} />}
         <SortSelect sortOptions={sortOptions} startTransition={startTransition} />
         <Layout options={layoutOptions} startTransition={startTransition} />
+        <FilterLove />
+
         <Button
           className="min-w-10"
           disabled={!hasParams}
@@ -149,7 +162,6 @@ const FilterTab = ({
         >
           <X />
         </Button>
-        <Separator orientation="vertical" />
       </div>
 
       {isPending ? <FilterLoading /> : <div className="h-1 bg-gray-500 mt-2 rounded-4xl"></div>}

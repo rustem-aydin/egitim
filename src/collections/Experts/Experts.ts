@@ -29,23 +29,24 @@ export const Expert: CollectionConfig = {
     {
       name: 'modules',
       type: 'relationship',
-      label: 'Alt Modüller',
+      label: 'Modüller',
       relationTo: 'modules',
       hasMany: true,
       admin: {
         position: 'sidebar',
       },
     },
-    // {
-    //   name: 'groups',
-    //   type: 'join',
-    //   collection: 'groups',
-    //   label: 'Bu Modülü Zorunlu Alaması Gereken Gruplar',
-    //   admin: {
-    //     position: 'sidebar',
-    //   },
-    //   on: 'parentModules',
-    // },
+    {
+      name: 'groups',
+      type: 'join',
+      collection: 'groups',
+      label: 'Bu Modülü Zorunlu Alaması Gereken Gruplar',
+      maxDepth: 5,
+      admin: {
+        position: 'sidebar',
+      },
+      on: 'experts',
+    },
     {
       name: 'teams',
       type: 'join',

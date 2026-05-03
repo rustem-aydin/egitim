@@ -2,7 +2,7 @@ import { Card } from '@/components/ui/card'
 
 import StarRating from '@/components/ui/rating'
 import AddComment from './add-feedback'
-import { getFeedbacksByLessonId, getFeedbackStatsAction } from '@/actions/server/feedbacks'
+import { getFeedbacksByLessonId, getFeedbackStatsAction } from '@/actions/feedbacks'
 import { MiniBarChart } from './mini-chart'
 
 export async function LessonReviewSummary({ user_id, id }: { user_id: number; id: number }) {

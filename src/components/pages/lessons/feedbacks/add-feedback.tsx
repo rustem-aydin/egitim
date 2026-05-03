@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import FormStars from './form-stars'
 import { Feedback } from '@/payload-types'
 import FormSheet from './form-sheet'
-import { onSubmit } from '@/actions/server/feedbacks'
+import { onSubmit } from '@/actions/feedbacks'
 import { Button } from '@/components/ui/button'
 import FormTextarea from './form-textarea'
 

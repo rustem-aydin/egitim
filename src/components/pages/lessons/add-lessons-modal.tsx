@@ -16,7 +16,7 @@ import FormInput from './feedbacks/form-input'
 import FormTextarea from './feedbacks/form-textarea'
 import { lessonSchema } from '@/types/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { onSubmit } from '@/actions/server/lessons'
+import { onSubmit } from '@/actions/lessons'
 import React from 'react'
 import { Lesson } from '@/payload-types'
 
