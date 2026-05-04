@@ -8,6 +8,8 @@ import FilterLoading from '@/components/filters/filterLoading'
 import GroupsList from '@/components/pages/groups/group-list'
 import { getSortOptions, GroupsFilterParams } from '@/types/filters'
 import { Suspense } from 'react'
+export const dynamic = 'force-dynamic'
+
 const mySortOptions = getSortOptions(['CREATED_AT_ASC', 'CREATED_AT_DESC', 'NAME_ASC', 'NAME_DESC'])
 
 const GroupsPage = async ({

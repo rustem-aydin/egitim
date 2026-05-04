@@ -8,6 +8,7 @@ import FilterLoading from '@/components/filters/filterLoading'
 import { ExpertsTab } from '@/components/pages/experts/expert-tabs'
 import { getSortOptions, GroupsFilterParams } from '@/types/filters'
 import { Suspense } from 'react'
+export const dynamic = 'force-dynamic'
 const mySortOptions = getSortOptions(['CREATED_AT_ASC', 'CREATED_AT_DESC', 'NAME_ASC', 'NAME_DESC'])
 
 const ExpertsPage = async ({ searchParams }: { searchParams: Promise<GroupsFilterParams> }) => {

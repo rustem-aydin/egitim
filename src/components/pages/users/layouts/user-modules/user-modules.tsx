@@ -340,9 +340,6 @@ export async function UsersCard({ user }: { user: User }) {
               )}
 
               <h3 className="text-xl font-semibold leading-tight">{name}</h3>
-              <p className="text-sm text-gray-500">
-                {groupName} / {teamName}
-              </p>
             </div>
             <DetailLink route="users" id={Number(id)} />
           </div>

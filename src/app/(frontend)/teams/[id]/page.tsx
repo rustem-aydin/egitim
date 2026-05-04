@@ -1,9 +1,7 @@
 import { getTeamById } from '@/actions/teams'
-import { getUserById } from '@/actions/users'
-import { TeamDetails } from '@/components/teams/team-details'
-import UserDetails from '@/components/pages/users/user-details'
-import { get } from 'http'
+import { TeamDetails } from '@/components/pages/teams/team-details'
 import { notFound } from 'next/navigation'
+export const dynamic = 'force-dynamic'
 
 interface Props {
   params: Promise<{ id: number }>

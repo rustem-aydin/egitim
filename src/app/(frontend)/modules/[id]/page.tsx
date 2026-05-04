@@ -1,6 +1,8 @@
 import { notFound } from 'next/navigation'
 import { getModuleById } from '@/actions/modules'
 import ModuleSwappy from '@/components/pages/modules/swappy/main'
+export const dynamic = 'force-dynamic'
+
 interface Props {
   params: Promise<{ id: number }>
 }

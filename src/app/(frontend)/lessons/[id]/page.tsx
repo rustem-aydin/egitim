@@ -1,6 +1,8 @@
 import { getLessonById } from '@/actions/lessons'
 import LessonDetails from '@/components/pages/lessons/details/lesson-details'
 import { notFound } from 'next/navigation'
+export const dynamic = 'force-dynamic'
+
 interface Props {
   params: Promise<{ id: number }>
 }

@@ -1,6 +1,7 @@
 import { getGroupById } from '@/actions/groups'
 import GroupDetails from '@/components/pages/groups/group-details'
 import { notFound } from 'next/navigation'
+export const dynamic = 'force-dynamic'
 
 interface Props {
   params: Promise<{ id: number }>

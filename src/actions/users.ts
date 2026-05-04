@@ -3,9 +3,10 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import type { Where } from 'payload'
 
-import type { Team, User } from '@/payload-types'
+import type { Module, Team, User } from '@/payload-types'
 import { UsersFilterParams } from '@/types/filters'
 import { filter } from 'lodash'
+import { no } from 'zod/v4/locales'
 export const getAllUsers = async (depth: number = 0): Promise<User[]> => {
   const payload = await getPayload({ config })
 
@@ -49,7 +50,15 @@ export const fetchUsers = async (
     })
   }
 
-  // --- Team ---
+  if (filters.requiredInCompletedModules) {
+    const codes = filters.requiredInCompletedModules.split(',').map((c) => c.trim())
+
+    // Sadece uzmanlık filtresini and.push ile ekle
+    and.push({
+      or: [{ 'group.team.experts.modules.code': { in: codes } }],
+    })
+  }
+
   if (filters.team) {
     and.push({
       'group.team.name': { equals: filters.team },
@@ -68,7 +77,11 @@ export const fetchUsers = async (
     const [field, direction] = filters.sort.split('-')
     sortField = direction === 'desc' ? `-${field}` : field
   }
-
+  if (filters.education_level) {
+    and.push({
+      education_levels: { equals: filters.education_level },
+    })
+  }
   const result = await payload.find({
     collection: 'users',
     where: and.length > 0 ? { and } : {},

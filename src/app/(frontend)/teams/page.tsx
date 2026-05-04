@@ -2,10 +2,11 @@ import { getAllModules } from '@/actions/modules'
 import { getAllTeams } from '@/actions/teams'
 import FilterTab from '@/components/filters/filter-tab'
 import FilterLoading from '@/components/filters/filterLoading'
-import TeamList from '@/components/teams/teams-list'
+import TeamList from '@/components/pages/teams/teams-list'
 import { getSortOptions, TeamsFilterParams } from '@/types/filters'
 import { Suspense } from 'react'
 const mySortOptions = getSortOptions(['CREATED_AT_ASC', 'CREATED_AT_DESC', 'NAME_ASC', 'NAME_DESC'])
+export const dynamic = 'force-dynamic'
 
 const TeamsPage = async ({
   searchParams,

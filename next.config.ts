@@ -10,6 +10,8 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
+  output: 'standalone',
+
   webpack: (webpackConfig) => {
     webpackConfig.resolve.extensionAlias = {
       '.cjs': ['.cts', '.cjs'],

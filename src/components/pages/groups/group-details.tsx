@@ -14,9 +14,6 @@ interface GroupDetailsProps {
 
 const GroupDetails = ({ group }: GroupDetailsProps) => {
   const team = group.team as Team
-  const modules = Array.isArray(group.modules)
-    ? (group.modules.filter((m) => typeof m === 'object') as Module[])
-    : []
 
   const users = Array.isArray(group.users?.docs)
     ? (group.users.docs.filter((u) => typeof u === 'object') as PayloadUser[])
@@ -68,7 +65,7 @@ const GroupDetails = ({ group }: GroupDetailsProps) => {
         <CardContent className="p-6 pt-0">
           <Separator className="my-6" style={{ backgroundColor: `${cardColor}30` }} />
 
-          <div className="grid grid-cols-2 gap-6 mb-8 text-center">
+          {/* <div className="grid grid-cols-2 gap-6 mb-8 text-center">
             <div>
               <p className="text-sm text-muted-foreground font-medium uppercase">Zorunlu Modül</p>
               <p className="text-4xl font-bold tracking-tighter" style={{ color: cardColor }}>
@@ -81,7 +78,7 @@ const GroupDetails = ({ group }: GroupDetailsProps) => {
                 {users.length}
               </p>
             </div>
-          </div>
+          </div> */}
           <div className="mb-4">
             <h4 className="font-semibold mb-4 flex items-center gap-2">
               <User className="h-5 w-5 text-muted-foreground" />
@@ -106,7 +103,7 @@ const GroupDetails = ({ group }: GroupDetailsProps) => {
                 <ClipboardList className="h-5 w-5 text-muted-foreground" />
                 Gruba Ait Modüller
               </h4>
-              <div>
+              {/* <div>
                 {modules.length > 0 ? (
                   modules.map((mod) => (
                     <Link key={mod.id} href={`/modules/${mod.id}`}>
@@ -122,7 +119,7 @@ const GroupDetails = ({ group }: GroupDetailsProps) => {
                 ) : (
                   <p className="text-sm text-muted-foreground">Atanmış modül yok.</p>
                 )}
-              </div>
+              </div> */}
             </div>
 
             {/* Takım Modülleri */}
@@ -131,7 +128,7 @@ const GroupDetails = ({ group }: GroupDetailsProps) => {
                 <ClipboardList className="h-5 w-5 text-muted-foreground" />
                 Takıma Ait Modülleri
               </h4>
-              <div className="space-y-2 max-h-60 overflow-y-auto pr-2">
+              {/* <div className="space-y-2 max-h-60 overflow-y-auto pr-2">
                 {(team?.modules as Module[]).length > 0 ? (
                   (team?.modules as Module[]).map((mod) => (
                     <Link key={mod.id} href={`/modules/${mod.id}`}>
@@ -147,7 +144,7 @@ const GroupDetails = ({ group }: GroupDetailsProps) => {
                 ) : (
                   <p className="text-sm text-muted-foreground">Atanmış modül yok.</p>
                 )}
-              </div>
+              </div> */}
             </div>
           </div>
         </CardContent>

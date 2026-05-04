@@ -23,7 +23,6 @@ import { Teams } from './collections/Teams/Teams'
 import { DrillCategories } from './collections/Drills/DrillCategories'
 import { seedData } from './actions/seed'
 import { Expert } from './collections/Experts/Experts'
-import { importExportPlugin } from '@payloadcms/plugin-import-export'
 import { Filters } from './collections/Filters'
 
 const filename = fileURLToPath(import.meta.url)
@@ -116,10 +115,7 @@ export default buildConfig({
         },
       },
     }),
-    importExportPlugin({
-      collections: [{ slug: 'modules' }],
-      // see below for a list of available options
-    }),
+
     s3Storage({
       collections: {
         media: true,

@@ -1,6 +1,8 @@
 import { getDrillById } from '@/actions/drills'
 import DrillDetails from '@/components/pages/drills/drill-details'
 import { notFound } from 'next/navigation'
+export const dynamic = 'force-dynamic'
+
 interface Props {
   params: Promise<{ id: number }>
 }

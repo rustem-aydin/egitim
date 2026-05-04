@@ -4,6 +4,7 @@ export interface CommonFilterParams {
   by_generate: string
   status?: string
   completedModule?: string
+  requiredInCompletedModules?: string
   sort?: string
   user?: string
   expert?: string

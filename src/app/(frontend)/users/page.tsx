@@ -8,6 +8,8 @@ import FilterLoading from '@/components/filters/filterLoading'
 import { UsersTab } from '@/components/pages/users/layouts/users-tab'
 import { getSortOptions, UsersFilterParams } from '@/types/filters'
 import { Suspense } from 'react'
+export const dynamic = 'force-dynamic'
+
 const mySortOptions = getSortOptions([
   'CREATED_AT_ASC',
   'CREATED_AT_DESC',
@@ -40,6 +42,8 @@ export default async function UsersPage({
           </div>
         </div>
         <FilterTab
+          edu_levels
+          requiredButInCompletedModules={modules}
           completedModule={modules}
           experts={experts}
           layoutOptions={['grid', 'notCompletedModulesUsers']}

@@ -1,8 +1,8 @@
 import { TeamsFilterParams } from '@/types/filters'
 import { fetchTeams } from '@/actions/teams'
 import { TeamCard } from './team-card'
-import { NotFoundItem } from '../not-found-item'
-import LoadMoreButton from '../load-more-button'
+import { NotFoundItem } from '../../not-found-item'
+import LoadMoreButton from '../../load-more-button'
 
 const TeamList = async (props: TeamsFilterParams) => {
   const currentPage = props.page ? Number(props.page) : 1

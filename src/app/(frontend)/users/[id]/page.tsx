@@ -1,6 +1,7 @@
 import { getUserById } from '@/actions/users'
 import UserDetails from '@/components/pages/users/user-details'
 import { notFound } from 'next/navigation'
+export const dynamic = 'force-dynamic'
 
 interface Props {
   params: Promise<{ id: number }>

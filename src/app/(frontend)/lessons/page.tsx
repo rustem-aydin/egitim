@@ -9,6 +9,8 @@ import { getSortOptions, LessonFilterParams } from '@/types/filters'
 import { Suspense } from 'react'
 import { AddLessons } from '@/components/pages/lessons/add-lessons-modal'
 import { getAllExperts } from '@/actions/experts'
+export const dynamic = 'force-dynamic'
+
 const mySortOptions = getSortOptions([
   'DATE_FROM_DESC',
   'DATE_FROM_ASC',

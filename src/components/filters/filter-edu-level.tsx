@@ -50,8 +50,7 @@ export default function FilterEduLevel({ startTransition }: FilterLevelsProps) {
   }
 
   return (
-    <div className="*:not-first:mt-2 w-full min-w-[100px] max-w-[120px]">
-      <Label htmlFor={id}>Zorluk Seviyesi</Label>
+    <div className="*:not-first:mt-2 w-full min-w-25 max-w-25">
       <Popover open={open} onOpenChange={setOpen}>
         <Tooltip open={tooltipOpen || currentValue !== ''} onOpenChange={setTooltipOpen}>
           <TooltipTrigger asChild>
@@ -64,9 +63,14 @@ export default function FilterEduLevel({ startTransition }: FilterLevelsProps) {
                 className="bg-background hover:bg-background border-input w-full justify-between px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]"
               >
                 {currentValue ? (
-                  levels.find((l) => l.name === currentValue)?.name
+                  <div className="flex items-center truncate gap-2">
+                    <span className="truncate">
+                      {levels?.find((l) => l.name?.toLowerCase() === currentValue.toLowerCase())
+                        ?.name || currentValue}
+                    </span>
+                  </div>
                 ) : (
-                  <span className="text-muted-foreground">Zorluk seçin...</span>
+                  <span className="text-muted-foreground truncate">Eğitim Seviyesi</span>
                 )}
                 <ChevronDownIcon
                   size={16}
@@ -77,7 +81,7 @@ export default function FilterEduLevel({ startTransition }: FilterLevelsProps) {
             </PopoverTrigger>
           </TooltipTrigger>
           <TooltipContent>
-            <p>Eğitim Seviyesi Seçin</p>
+            <p>Eğitim Seviyesi</p>
           </TooltipContent>
         </Tooltip>
         <PopoverContent

@@ -1,9 +1,9 @@
 import { Team } from '@/payload-types'
-import MotionCard from '../motion-card'
-import { Card, CardContent, CardHeader } from '../ui/card'
+import MotionCard from '../../motion-card'
+import { Card, CardContent, CardHeader } from '../../ui/card'
 import { Building, Flag, Users } from 'lucide-react'
-import DetailLink from '../detail-link'
-import { Badge } from '../ui/badge'
+import DetailLink from '../../detail-link'
+import { Badge } from '../../ui/badge'
 
 export const TeamCard = ({ team }: { team: Team }) => {
   const groups = team.groups?.docs ?? []

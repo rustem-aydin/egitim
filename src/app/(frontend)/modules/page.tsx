@@ -1,13 +1,14 @@
 import { getAllExperts } from '@/actions/experts'
 import { getAllGroups } from '@/actions/groups'
 import { getAllLessons } from '@/actions/lessons'
-import { getAllModules } from '@/actions/modules'
 import { getAllTeams } from '@/actions/teams'
 import FilterTab from '@/components/filters/filter-tab'
 import FilterLoading from '@/components/filters/filterLoading'
 import ModulesList from '@/components/pages/modules/modules-list'
 import { getSortOptions, ModuleFilterParams } from '@/types/filters'
 import { Suspense } from 'react'
+export const dynamic = 'force-dynamic'
+
 const mySortOptions = getSortOptions([
   'CREATED_AT_ASC',
   'CREATED_AT_DESC',

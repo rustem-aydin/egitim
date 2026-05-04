@@ -5,11 +5,11 @@ import Fallback from '@/components/fallback'
 import Link from 'next/link'
 import { Team } from '@/payload-types'
 import { getUserByIds } from '@/actions/users'
-import BadgeModule from '../pages/modules/modules-badge-code'
+import BadgeModule from '../modules/modules-badge-code'
 
 export async function TeamDetails({ team }: { team: Team }) {
   const groups = team.groups?.docs ?? []
-  const requiredModules = team.modules ?? []
+  // const requiredModules = team.modules ?? []
 
   // Tüm group'ların users.docs'larını tek array'e topla
   const users = await getUserByIds(groups.flatMap((group: any) => group.users?.docs ?? []))
@@ -106,7 +106,7 @@ export async function TeamDetails({ team }: { team: Team }) {
             </div>
 
             {/* Modüller */}
-            <div>
+            {/* <div>
               <h4 className="font-semibold mb-4 flex items-center gap-2">
                 <ClipboardList className="h-5 w-5 text-muted-foreground" />
                 Takım İçin Zorunlu Modüller ({requiredModules.length})
@@ -129,7 +129,7 @@ export async function TeamDetails({ team }: { team: Team }) {
                   </p>
                 )}
               </div>
-            </div>
+            </div> */}
           </div>
         </CardContent>
       </Card>

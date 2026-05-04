@@ -8,6 +8,8 @@ import { Providers } from './provider'
 import { getPayload } from 'payload'
 import config from '@/payload.config'
 import { headers } from 'next/headers'
+export const dynamic = 'force-dynamic'
+
 export default async function RootLayout(props: { children: React.ReactNode }) {
   const { children } = props
   const payload = await getPayload({ config })

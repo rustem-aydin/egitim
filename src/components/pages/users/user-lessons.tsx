@@ -12,7 +12,7 @@ const UserLessons = ({ lesson }: Props) => {
       className="flex items-center gap-2  hover:underline text-sm"
     >
       <BadgeModule code={(lesson?.module as Module).code} />
-      <span className=" text-md text-muted-foreground">{lesson?.lesson_name}</span>
+      <span className=" text-md text-muted-foreground">{lesson?.name}</span>
     </Link>
   )
 }

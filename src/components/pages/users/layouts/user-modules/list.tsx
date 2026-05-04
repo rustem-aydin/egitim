@@ -1,8 +1,7 @@
 import { User } from '@/payload-types'
-import { NotCompletedModulesUsersCard } from './not-completed-modules-users-card'
 import { NotFoundItem } from '@/components/not-found-item'
 import LoadMoreButton from '@/components/load-more-button'
-import { UsersCard } from '../user-modules/user-modules'
+import { UsersCard } from './user-modules'
 
 const NotCompletedModulesUsersList = async ({
   users,

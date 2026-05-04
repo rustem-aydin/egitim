@@ -1,7 +1,7 @@
 import { AnimatedTabsContent, Tabs } from '@/components/ui/tabs'
 import { UsersFilterParams } from '@/types/filters'
 import UsersList from '../users-list'
-import NotCompletedModulesUsersList from './not-completed-users/list'
+import NotCompletedModulesUsersList from './user-modules/list'
 import { fetchUsers } from '@/actions/users'
 
 export async function UsersTab(props: UsersFilterParams) {
@@ -11,7 +11,6 @@ export async function UsersTab(props: UsersFilterParams) {
   const results = await Promise.all(pages.map((page) => fetchUsers({ ...props, page })))
   const allUsers = results.flatMap((result) => result?.data || [])
   const hasNextPage = results[results.length - 1]?.hasNextPage || false
-
   return (
     <div className="flex w-full  items-center">
       <Tabs value={activeTab || 'grid'}>

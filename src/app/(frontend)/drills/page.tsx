@@ -5,6 +5,8 @@ import FilterTab from '@/components/filters/filter-tab'
 import FilterLoading from '@/components/filters/filterLoading'
 import { DrillFilterParams, getSortOptions } from '@/types/filters'
 import { Suspense } from 'react'
+export const dynamic = 'force-dynamic'
+
 const mySortOptions = getSortOptions(['CREATED_AT_DESC', 'CREATED_AT_ASC', 'NAME_DESC', 'NAME_ASC'])
 
 const DrillsPage = async ({ searchParams }: { searchParams: Promise<DrillFilterParams> }) => {

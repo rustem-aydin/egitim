@@ -3,7 +3,6 @@
 import { Label } from '@/components/ui/label'
 import MultipleSelector, { Option } from '@/components/ui/multiselect'
 import { useSearchParams, useRouter, usePathname } from 'next/navigation'
-import { useTransition } from 'react'
 import { Module } from '@/payload-types'
 
 interface FilterModulesProps {
