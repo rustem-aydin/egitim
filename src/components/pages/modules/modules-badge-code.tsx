@@ -27,6 +27,12 @@ const BadgeModule = ({ code }: any) => {
         <span className="text-primary-foreground text-sm font-semibold">{code}</span>
       </Badge>
     )
+  } else if (char === 'K') {
+    return (
+      <Badge className="bg-linear-to-r from-blue-500 via-purple-600 rounded-md border-0">
+        <span className=" text-sm font-semibold">{code}</span>
+      </Badge>
+    )
   } else {
     return (
       <Badge className="bg-gray-500 rounded-md">

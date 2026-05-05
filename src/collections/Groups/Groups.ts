@@ -27,14 +27,14 @@ export const Groups: CollectionConfig = {
       },
     },
     {
-      name: 'experts',
+      name: 'modules',
       type: 'relationship',
-      label: 'Gruba Ait Uzmanlıklar',
-      relationTo: 'experts',
+      label: 'Gruba Ait Modüller',
+      relationTo: 'modules',
       hasMany: true,
       admin: {
         position: 'sidebar',
-        description: 'Gruba ait uzmanlıklar',
+        description: 'Gruba ait modüller',
       },
     },
     {

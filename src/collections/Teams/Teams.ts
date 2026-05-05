@@ -1,10 +1,12 @@
+// src/collections/Teams.ts
 import type { CollectionConfig } from 'payload'
 import { colorPickerField } from '../custom/ColorPicker'
+import { validateModules } from '../_hooks/Teams'
 
 export const Teams: CollectionConfig = {
   slug: 'teams',
   admin: {
-    useAsTitle: 'name', // Admin panelinde takımlar listelenirken takım adı görünsün
+    useAsTitle: 'name',
     group: 'Takımlar',
   },
   labels: {
@@ -19,8 +21,7 @@ export const Teams: CollectionConfig = {
           name: 'name',
           type: 'text',
           label: 'Takım Adı',
-
-          required: true, // SQL'deki "not null" kısıtlamasının tam karşılığı
+          required: true,
         },
         colorPickerField({
           name: 'color',
@@ -35,22 +36,21 @@ export const Teams: CollectionConfig = {
       type: 'join',
       maxDepth: 1,
       collection: 'groups',
-      admin: {
-        hidden: true,
-      },
+      admin: { hidden: true },
       on: 'team',
     },
     {
-      name: 'experts',
-      label: 'Takıma ait Üst Uzmanlıklar',
+      name: 'modules',
+      label: 'Takıma ait Modüller',
       type: 'relationship',
-      relationTo: 'experts',
+      relationTo: 'modules',
       maxDepth: 3,
+      hasMany: true,
       admin: {
         position: 'sidebar',
-        description: 'Bu takıma ait uzmanlıklar',
+        description: 'Bu takıma ait modüller',
       },
-      hasMany: true,
+      validate: validateModules as any,
     },
   ],
 }

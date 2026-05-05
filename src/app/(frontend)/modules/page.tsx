@@ -1,4 +1,3 @@
-import { getAllExperts } from '@/actions/experts'
 import { getAllGroups } from '@/actions/groups'
 import { getAllLessons } from '@/actions/lessons'
 import { getAllTeams } from '@/actions/teams'
@@ -27,7 +26,6 @@ export default async function ModulesPage({
   const groups = await getAllGroups()
   const lessons = await getAllLessons()
   const teams = await getAllTeams()
-  const experts = await getAllExperts(0)
 
   return (
     <div className="min-h-screen  py-6 px-4 relative overflow-hidden">
@@ -41,7 +39,6 @@ export default async function ModulesPage({
           </div>
         </div>
         <FilterTab
-          experts={experts}
           layoutOptions={['grid', 'kanban', 'gant', 'table', 'calender']}
           lessons={lessons}
           groups={groups}

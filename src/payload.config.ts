@@ -22,7 +22,6 @@ import { LessonsRequests } from './collections/Lessons/LessonsRequests'
 import { Teams } from './collections/Teams/Teams'
 import { DrillCategories } from './collections/Drills/DrillCategories'
 import { seedData } from './actions/seed'
-import { Expert } from './collections/Experts/Experts'
 import { Filters } from './collections/Filters'
 
 const filename = fileURLToPath(import.meta.url)
@@ -84,7 +83,6 @@ export default buildConfig({
     Locations,
     Drills,
     Filters,
-    Expert,
     Categories,
     Levels,
     DrillGroups,

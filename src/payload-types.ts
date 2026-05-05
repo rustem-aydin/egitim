@@ -79,7 +79,6 @@ export interface Config {
     locations: Location;
     drills: Drill;
     filters: Filter;
-    experts: Expert;
     categories: Category;
     levels: Level;
     'drill-groups': DrillGroup;
@@ -96,8 +95,9 @@ export interface Config {
       users: 'users';
     };
     modules: {
+      teams: 'teams';
+      groups: 'groups';
       lessons: 'lessons';
-      experts: 'experts';
     };
     lessons: {
       users: 'users';
@@ -106,10 +106,6 @@ export interface Config {
     };
     teams: {
       groups: 'groups';
-    };
-    experts: {
-      groups: 'groups';
-      teams: 'teams';
     };
     folders: {
       documentsAndFolders: 'folders' | 'modules';
@@ -127,7 +123,6 @@ export interface Config {
     locations: LocationsSelect<false> | LocationsSelect<true>;
     drills: DrillsSelect<false> | DrillsSelect<true>;
     filters: FiltersSelect<false> | FiltersSelect<true>;
-    experts: ExpertsSelect<false> | ExpertsSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     levels: LevelsSelect<false> | LevelsSelect<true>;
     'drill-groups': DrillGroupsSelect<false> | DrillGroupsSelect<true>;
@@ -435,66 +430,26 @@ export interface Module {
   id: number;
   name: string;
   description?: string | null;
-  /**
-   *  (Örn: C103.1, A101.2)
-   */
-  code?: string | null;
-  lessons?: {
-    docs?: (number | Lesson)[];
+  teams: {
+    docs?: (number | Team)[];
     hasNextPage?: boolean;
     totalDocs?: number;
   };
-  experts?: {
-    docs?: (number | Expert)[];
-    hasNextPage?: boolean;
-    totalDocs?: number;
-  };
-  folder?: (number | null) | FolderInterface;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "experts".
- */
-export interface Expert {
-  id: number;
-  name?: string | null;
-  description?: string | null;
-  modules?: (number | Module)[] | null;
   groups?: {
     docs?: (number | Group)[];
     hasNextPage?: boolean;
     totalDocs?: number;
   };
-  teams?: {
-    docs?: (number | Team)[];
+  /**
+   *  (Örn: C103.1, A101.2)
+   */
+  code: string;
+  lessons?: {
+    docs?: (number | Lesson)[];
     hasNextPage?: boolean;
     totalDocs?: number;
   };
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "groups".
- */
-export interface Group {
-  id: number;
-  name?: string | null;
-  /**
-   * Gruba ait takım
-   */
-  team?: (number | null) | Team;
-  /**
-   * Gruba ait uzmanlıklar
-   */
-  experts?: (number | Expert)[] | null;
-  users?: {
-    docs?: (number | User)[];
-    hasNextPage?: boolean;
-    totalDocs?: number;
-  };
+  folder?: (number | null) | FolderInterface;
   updatedAt: string;
   createdAt: string;
 }
@@ -515,9 +470,32 @@ export interface Team {
     totalDocs?: number;
   };
   /**
-   * Bu takıma ait uzmanlıklar
+   * Bu takıma ait modüller
    */
-  experts?: (number | Expert)[] | null;
+  modules?: (number | Module)[] | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "groups".
+ */
+export interface Group {
+  id: number;
+  name?: string | null;
+  /**
+   * Gruba ait takım
+   */
+  team?: (number | null) | Team;
+  /**
+   * Gruba ait modüller
+   */
+  modules?: (number | Module)[] | null;
+  users?: {
+    docs?: (number | User)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -731,10 +709,6 @@ export interface PayloadLockedDocument {
         value: number | Filter;
       } | null)
     | ({
-        relationTo: 'experts';
-        value: number | Expert;
-      } | null)
-    | ({
         relationTo: 'categories';
         value: number | Category;
       } | null)
@@ -887,7 +861,7 @@ export interface MediaSelect<T extends boolean = true> {
 export interface GroupsSelect<T extends boolean = true> {
   name?: T;
   team?: T;
-  experts?: T;
+  modules?: T;
   users?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -899,9 +873,10 @@ export interface GroupsSelect<T extends boolean = true> {
 export interface ModulesSelect<T extends boolean = true> {
   name?: T;
   description?: T;
+  teams?: T;
+  groups?: T;
   code?: T;
   lessons?: T;
-  experts?: T;
   folder?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -939,7 +914,7 @@ export interface TeamsSelect<T extends boolean = true> {
   name?: T;
   color?: T;
   groups?: T;
-  experts?: T;
+  modules?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1000,19 +975,6 @@ export interface FiltersSelect<T extends boolean = true> {
   is_star?: T;
   order?: T;
   users?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "experts_select".
- */
-export interface ExpertsSelect<T extends boolean = true> {
-  name?: T;
-  description?: T;
-  modules?: T;
-  groups?: T;
-  teams?: T;
   updatedAt?: T;
   createdAt?: T;
 }

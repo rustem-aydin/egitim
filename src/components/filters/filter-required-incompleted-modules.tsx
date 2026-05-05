@@ -145,7 +145,7 @@ export default function FilterInCompletedModules({
                     )}
                   </>
                 ) : (
-                  <span className="text-muted-foreground mt-0.5">Modül seçin...</span>
+                  <span className="text-muted-foreground mx-2 mt-0.5">Modüller</span>
                 )}
               </div>
               <ChevronsUpDownIcon

@@ -1,5 +1,6 @@
 import { getLessonById } from '@/actions/lessons'
 import LessonDetails from '@/components/pages/lessons/details/lesson-details'
+import LessonSwappy from '@/components/pages/lessons/swappy/main'
 import { notFound } from 'next/navigation'
 export const dynamic = 'force-dynamic'
 
@@ -12,7 +13,7 @@ const LessonDetailsePage = async ({ params }: Props) => {
   if (isNaN(id)) {
     notFound()
   }
-  return <LessonDetails lesson={lesson} />
+  return <LessonSwappy lesson={lesson} />
 }
 
 export default LessonDetailsePage

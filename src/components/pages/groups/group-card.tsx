@@ -15,7 +15,7 @@ const GroupsCard = ({ group }: GroupCardProps) => {
   const teamData = typeof team === 'object' && team !== null ? team : null
   const cardColor = teamData?.color ?? '#A9A9A9'
   const userCount = Array.isArray(group.users?.docs) ? group.users.docs.length : 0
-  const moduleCount = Array.isArray(group.experts) ? group.experts.length : 0
+  const moduleCount = Array.isArray(group.modules) ? group.modules.length : 0
 
   return (
     <MotionCard>
@@ -62,7 +62,7 @@ const GroupsCard = ({ group }: GroupCardProps) => {
             </Badge>
             <Badge variant="secondary" className="gap-2">
               <FlaskConical className="h-3 w-3" />
-              <span>{moduleCount} Uzmanlık</span>
+              <span>{moduleCount} Modül</span>
             </Badge>
           </div>
         </div>

@@ -7,9 +7,9 @@ import Feedbacks from '../feedbacks/feedbacks'
 import { LessonStatusBadge } from '../lesson-status-badge'
 import { LessonCompletedUser } from '../lesson-completed-users'
 import LessonRequestCardList from '../lesson-request/lesson-reques-card-list'
-import { LessonsModulesDetails } from '../lesson-modules-details'
+import { LessonsModulesDetails } from '../swappy/components/lesson-modules-details'
 import LessonRequest from '../lesson-request/lessons-request'
-import { FileList } from './lesson-files'
+import { FileList } from '../swappy/components/lesson-files'
 
 const sampleFiles: any[] = [
   {

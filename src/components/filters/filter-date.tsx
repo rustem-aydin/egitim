@@ -78,7 +78,7 @@ export default function FilterDate({ startTransition }: FilterLevelsProps) {
   }
 
   return (
-    <div className="*:not-first:mt-2  min-w-30 ">
+    <div className="*:not-first:mt-2 min-w-30">
       <div className="flex gap-2">
         <Popover>
           <Tooltip
@@ -103,7 +103,7 @@ export default function FilterDate({ startTransition }: FilterLevelsProps) {
                         format(dateValue.from, 'dd/MM/yyyy')
                       )
                     ) : (
-                      'Tarih aralığı seçin'
+                      'Tarih aralığı'
                     )}
                   </span>
                   <CalendarIcon
@@ -118,8 +118,9 @@ export default function FilterDate({ startTransition }: FilterLevelsProps) {
               <p>Tarih Aralığı </p>
             </TooltipContent>
           </Tooltip>
-          <PopoverContent className="w-auto p-2" align="start">
+          <PopoverContent className="w-auto p-0" align="start">
             <Calendar
+              className="w-auto"
               locale={tr}
               mode="range"
               selected={dateValue}
@@ -128,7 +129,7 @@ export default function FilterDate({ startTransition }: FilterLevelsProps) {
               // disabled={(date) => date > new Date()}
             />
             {dateValue && (
-              <div className="p-2 border-t mt-2">
+              <div className="p-2 border-t">
                 <Button
                   variant="ghost"
                   size="sm"

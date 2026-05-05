@@ -88,3 +88,19 @@ export const validateDatesHook: CollectionBeforeValidateHook = ({ data, operatio
 
   return data
 }
+
+export const validateDateTo = (
+  value: string | undefined,
+  { siblingData }: { siblingData: Record<string, unknown> },
+): string | true => {
+  if (!value || !siblingData?.date_from) return true
+
+  const dateFrom = new Date(siblingData.date_from as string)
+  const dateTo = new Date(value)
+
+  if (dateFrom > dateTo) {
+    return 'Ders başlangıç tarihi bitiş tarihinden  sonra olamaz.'
+  }
+
+  return true
+}

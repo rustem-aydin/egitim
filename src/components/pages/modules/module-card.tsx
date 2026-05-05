@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { GraduationCap, FlaskConical, Flag, Puzzle } from 'lucide-react'
+import { GraduationCap, FlaskConical, Flag, Puzzle, Users, BookOpen } from 'lucide-react'
 import Link from 'next/link'
 
 import DetailLink from '@/components/detail-link'
@@ -14,24 +14,14 @@ interface ModulesCardProps {
 }
 export function ModuleCard({ module }: ModulesCardProps) {
   const lessons = module.lessons?.docs as Lesson[]
-  const experts = module.experts?.docs as Group[]
-  const teams = React.useMemo(() => {
-    const allTeams = (module.experts?.docs || []).flatMap(
-      (expert) => (expert as any).teams?.docs || [],
-    ) as Team[]
-
-    const uniqueTeams = allTeams.filter(
-      (team, index, self) => index === self.findIndex((t) => t.id === team.id),
-    )
-
-    return uniqueTeams
-  }, [module.experts])
+  const allTeams = module.teams?.docs as Team[]
+  const allGroups = module.groups?.docs as Group[]
   const lessonCount = lessons.length || 0
-  const expertsCount = experts?.length || 0
+  const teamCount = allTeams?.length || 0
   const cardStyle = React.useMemo(() => {
     const defaultColor = '#888888'
 
-    if (!teams || teams.length === 0) {
+    if (!allTeams || allTeams.length === 0) {
       return {
         isGradient: false,
         borderBg: defaultColor,
@@ -42,8 +32,8 @@ export function ModuleCard({ module }: ModulesCardProps) {
       }
     }
 
-    if (teams.length === 1) {
-      const color = teams[0].color
+    if (allTeams.length === 1) {
+      const color = allTeams[0].color
       return {
         isGradient: false,
         borderBg: color,
@@ -54,7 +44,7 @@ export function ModuleCard({ module }: ModulesCardProps) {
       }
     }
 
-    const colors = teams?.map((t) => t.color)
+    const colors = allTeams?.map((t) => t.color)
     return {
       isGradient: true,
       borderBg: `linear-gradient(135deg, ${colors.join(', ')})`,
@@ -63,38 +53,43 @@ export function ModuleCard({ module }: ModulesCardProps) {
       pillColor: 'var(--foreground)',
       radialGradient: `radial-gradient(circle at 30% 20%, ${colors[0]}, transparent 60%)`,
     }
-  }, [teams])
+  }, [allTeams])
 
   return (
     <MotionCard>
-      <div className="rounded-2xl  p-0.5 shadow-2xl" style={{ background: cardStyle.borderBg }}>
-        <div className="relative  rounded-2xl   bg-linear-to-br from-background via-background/95 to-muted/100 min-h-36 overflow-hidden">
+      <div
+        className="relative rounded-2xl p-0.5 shadow-2xl"
+        style={{ background: cardStyle.borderBg }}
+      >
+        <div className="relative rounded-2xl bg-linear-to-br from-background via-background/95 to-muted/100 min-h-36 overflow-hidden">
           <div
             className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500"
             style={{ background: cardStyle.radialGradient }}
           />
 
-          <div className="relative z-10 p-4 ">
-            <div className="flex  justify-between items-center ">
-              <div className="flex gap-1">
+          <div className="relative z-10 p-4 min-w-0">
+            <div className="flex justify-between items-center">
+              <div className="flex gap-1 min-w-0">
                 <BadgeModule code={module?.code} />
-                {teams?.map((team) => (
+                {allTeams?.map((team) => (
                   <Link
                     href={`/teams/${team.id}`}
                     key={team.id}
-                    className="flex items-center border  p-0.5 px-1 rounded-sm"
+                    className="flex items-center border p-0.5 px-1 rounded-sm shrink-0"
                     style={{ backgroundColor: team?.color }}
                   >
                     <Flag color="#000" size={14}></Flag>
-                    <span className="text-xs text-black ml-1 font-semibold">{team.name}</span>
+                    <span className="text-xs text-black ml-1 font-semibold truncate">
+                      {team.name}
+                    </span>
                   </Link>
                 ))}
               </div>
               <DetailLink route="modules" id={module?.id} />
             </div>
 
-            <h3 className="text-2xl font-bold  ">{module.name}</h3>
-            <p className="text-muted-foreground text-sm mb-4">{module.description}</p>
+            <h3 className="text-2xl font-bold truncate">{module.name}</h3>
+            <p className="text-muted-foreground text-sm mb-4 truncate">{module.description}</p>
 
             <div className="flex gap-3">
               <div
@@ -105,7 +100,7 @@ export function ModuleCard({ module }: ModulesCardProps) {
                   color: cardStyle.pillColor,
                 }}
               >
-                <GraduationCap className="h-4 w-4" />
+                <BookOpen className="h-4 w-4" />
                 <span className="text-sm font-semibold">{lessonCount} Eğitim</span>
               </div>
 
@@ -117,13 +112,13 @@ export function ModuleCard({ module }: ModulesCardProps) {
                   color: cardStyle.pillColor,
                 }}
               >
-                <FlaskConical className="h-4 w-4" />
-                <span className="text-sm font-semibold">{expertsCount} Uzmanlık</span>
+                <Users className="h-4 w-4" />
+                <span className="text-sm font-semibold">{allGroups?.length} Kadro</span>
               </div>
             </div>
           </div>
         </div>
-        <Puzzle size={128} className="absolute bottom-0 right-0 opacity-1 hidden sm:block" />
+        <Puzzle size={128} className="absolute bottom-0 right-0 opacity-10 hidden sm:block" />
       </div>
     </MotionCard>
   )

@@ -2,20 +2,14 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import DetailLink from '@/components/detail-link'
 import Link from 'next/link'
 import MotionCard from '@/components/motion-card'
-import { User, Team, Expert, Lesson, Module } from '@/payload-types'
+import { User, Team, Lesson, Module } from '@/payload-types'
 import { Badge } from '@/components/ui/badge'
-import { Network, Flag, Layers, CircleDot } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { User as Us } from 'lucide-react'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 
 function isTeam(value: unknown): value is Team {
   return typeof value === 'object' && value !== null && 'color' in value
-}
-
-function isExpert(value: unknown): value is Expert {
-  return typeof value === 'object' && value !== null && 'id' in value
 }
 
 // ─── SERVER FUNCTION ─────────────────────────────────────────────
@@ -33,14 +27,6 @@ export const getModuleByIds = async (ids: number[], depth: number = 0): Promise<
   })
 
   return (drill.docs || []) as Module[]
-}
-
-// ─── HELPER FUNCTIONS ────────────────────────────────────────────
-
-function getModuleIds(modules: number[] | Module[] | undefined): number[] {
-  if (!modules || !Array.isArray(modules) || modules.length === 0) return []
-  if (typeof modules[0] === 'number') return modules as number[]
-  return (modules as Module[]).map((m) => m.id)
 }
 
 // ─── BADGE COMPONENT ─────────────────────────────────────────────
@@ -76,88 +62,49 @@ const BadgeModule = ({ code, completed }: { code: string; completed: boolean }) 
   )
 }
 
-// ─── EXPERT CARD COMPONENT ───────────────────────────────────────
+// ─── MODULE GROUP CARD ───────────────────────────────────────────
 
-interface ExpertCardProps {
-  expert: Expert
+interface ModuleGroupCardProps {
+  title: string
+  modules: Module[]
   completedModuleIds: Set<number>
-  isCommon: boolean
-  source: 'group' | 'team'
-  resolvedModules: Module[]
+  type: 'group' | 'team'
 }
 
-const ExpertCard = ({
-  expert,
-  completedModuleIds,
-  isCommon,
-  source,
-  resolvedModules,
-}: ExpertCardProps) => {
-  const completedCount = resolvedModules.filter((mod) => completedModuleIds.has(mod.id)).length
-  const totalCount = resolvedModules.length
+const ModuleGroupCard = ({ title, modules, completedModuleIds, type }: ModuleGroupCardProps) => {
+  const completedCount = modules.filter((mod) => completedModuleIds.has(mod.id)).length
+  const totalCount = modules.length
   const percentage = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0
 
-  return (
-    <div className={cn('relative rounded-lg border p-2 transition-all')}>
-      <div className="flex items-center gap-2 mb-2">
-        <Badge variant={'outline'}>%{percentage}</Badge>
+  // Tamamlananları önce sırala, sonra tamamlanmayanları
+  const sortedModules = [...modules].sort((a, b) => {
+    const aCompleted = completedModuleIds.has(a.id)
+    const bCompleted = completedModuleIds.has(b.id)
+    if (aCompleted === bCompleted) return 0
+    return aCompleted ? -1 : 1
+  })
 
-        <h4 className={cn('text-sm font-semibold')}>{expert.name}</h4>
-        <span className="text-xs text-gray-400 ml-auto">
-          {isCommon ? 'Ortak' : source === 'group' ? 'Kadro' : 'Takım'}
+  return (
+    <div className={cn('relative rounded-lg border p-3 transition-all')}>
+      {/* Header */}
+      <div className="flex items-center gap-2 mb-3">
+        <Badge variant={'outline'}>%{percentage}</Badge>
+        <h4 className={cn('text-sm font-semibold')}>{title}</h4>
+        <span
+          className={cn(
+            'text-xs ml-auto font-medium',
+            type === 'group' ? 'text-blue-500' : 'text-orange-500',
+          )}
+        >
+          {type === 'group' ? 'Kadro' : 'Takım'}
         </span>
       </div>
 
-      {resolvedModules.length > 0 ? (
-        <>
-          <div className="flex flex-wrap gap-2">
-            {resolvedModules.map((mod) => {
-              const isCompleted = completedModuleIds.has(mod.id)
-              return (
-                <div key={mod.id} className="group relative">
-                  <BadgeModule code={String(mod.code)} completed={isCompleted} />
-                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
-                    {mod.name}
-                    {isCompleted && <span className="text-green-300 ml-1">✓ Tamamlandı</span>}
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        </>
-      ) : (
+      {modules.length === 0 ? (
         <p className="text-xs text-gray-400 italic">Modül atanmamış</p>
-      )}
-    </div>
-  )
-}
-
-interface OtherExpertCardProps {
-  expert: Expert
-  resolvedModules: Module[]
-  completedModuleIds: Set<number>
-}
-
-const OtherExpertCard = ({ expert, resolvedModules, completedModuleIds }: OtherExpertCardProps) => {
-  const completedCount = resolvedModules.filter((mod) => completedModuleIds.has(mod.id)).length
-  const totalCount = resolvedModules.length
-  const percentage = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0
-  return (
-    <div className={cn('relative rounded-lg border p-2 transition-all ')}>
-      <div className="flex items-center gap-2 mb-2">
-        <Badge variant={'outline'} className="">
-          %{percentage}
-        </Badge>
-
-        <h4 className={cn('text-sm font-semibold text-purple-800 dark:text-purple-200')}>
-          {expert.name}
-        </h4>
-        <span className="text-xs text-purple-500 ml-auto font-medium">Diğer</span>
-      </div>
-
-      {resolvedModules.length > 0 ? (
+      ) : (
         <div className="flex flex-wrap gap-2">
-          {resolvedModules.map((mod) => {
+          {sortedModules.map((mod) => {
             const isCompleted = completedModuleIds.has(mod.id)
             return (
               <div key={mod.id} className="group relative">
@@ -170,8 +117,6 @@ const OtherExpertCard = ({ expert, resolvedModules, completedModuleIds }: OtherE
             )
           })}
         </div>
-      ) : (
-        <p className="text-xs text-gray-400 italic">Modül atanmamış</p>
       )}
     </div>
   )
@@ -189,142 +134,40 @@ export async function UsersCard({ user }: { user: User }) {
   const teamColor = team?.color || '#6b7280'
   const teamName = team?.name || 'Takım Atanmamış'
 
-  const groupExperts = Array.isArray(groupObj?.experts) ? groupObj.experts.filter(isExpert) : []
-  const teamExperts = Array.isArray(team?.experts) ? team.experts.filter(isExpert) : []
-
-  const groupExpertIds = new Set(groupExperts.map((e) => e.id))
-  const teamExpertIds = new Set(teamExperts.map((e) => e.id))
-  const commonExpertIds = new Set([...groupExpertIds].filter((id) => teamExpertIds.has(id)))
-
+  // Tamamlanan modül ID'lerini topla
   const completedModuleIds = new Set(
     (Array.isArray(lessons) ? (lessons as Lesson[]) : [])
       .map((lesson) => (typeof lesson.module === 'number' ? lesson.module : lesson.module?.id))
       .filter((id): id is number => typeof id === 'number'),
   )
 
-  // ─── TÜM ATANMIŞ MODÜL ID'LERİNİ TOPLA ────────────────────────
-  const assignedModuleIds = new Set<number>()
+  // Group modülleri
+  const groupModuleIds = Array.isArray(groupObj?.modules)
+    ? groupObj.modules
+        .map((m) => (typeof m === 'number' ? m : m.id))
+        .filter((id): id is number => typeof id === 'number')
+    : []
 
-  for (const expert of groupExperts) {
-    getModuleIds(expert.modules as Module[]).forEach((id) => assignedModuleIds.add(id))
-  }
-  for (const expert of teamExperts) {
-    getModuleIds(expert.modules as Module[]).forEach((id) => assignedModuleIds.add(id))
-  }
+  // Team modülleri
+  const teamModuleIds = Array.isArray(team?.modules)
+    ? team.modules
+        .map((m) => (typeof m === 'number' ? m : m.id))
+        .filter((id): id is number => typeof id === 'number')
+    : []
 
-  // ─── DİĞER MODÜLLERİ VE EXPERTLERİNİ BUL ──────────────────────
-  // lessons.module obje olarak geliyor, experts içeriyor
-  const otherExpertsMap = new Map<number, Expert>()
-  const otherExpertModuleIdsMap = new Map<number, Set<number>>()
-
-  for (const lesson of Array.isArray(lessons) ? (lessons as Lesson[]) : []) {
-    const mod = lesson.module
-    if (typeof mod === 'number') continue
-
-    const modId = mod?.id
-    if (!modId) continue
-
-    // FIX 1: experts {docs: [...]} formatını doğru handle et
-    const modExperts = mod.experts
-    let expertList: unknown[] = []
-
-    if (Array.isArray(modExperts)) {
-      expertList = modExperts
-    } else if (modExperts && typeof modExperts === 'object' && 'docs' in modExperts) {
-      expertList = (modExperts as { docs: unknown[] }).docs
-    }
-
-    for (const exp of expertList) {
-      if (!isExpert(exp)) continue
-
-      // Bu expert zaten group/team'de varsa atla
-      if (groupExpertIds.has(exp.id) || teamExpertIds.has(exp.id)) continue
-
-      // Expert'i daha önce map'e eklememişsek ekle
-      if (!otherExpertsMap.has(exp.id)) {
-        otherExpertsMap.set(exp.id, exp)
-
-        // FIX 2: Sadece bu dersin modülünü değil,
-        // Expert'in sahip olduğu TÜM modüllerin ID'lerini set'e ekle
-        const expertAllModuleIds = getModuleIds(exp.modules as number[] | Module[])
-        otherExpertModuleIdsMap.set(exp.id, new Set(expertAllModuleIds))
-      }
-    }
-  }
-
-  // ─── HER EXPERT İÇİN MODÜLLERİ FETCH ET ───────────────────────
-  const expertModulesMap = new Map<number, Module[]>()
-
-  for (const expert of groupExperts) {
-    const modIds = getModuleIds(expert.modules as Module[])
-    if (modIds.length > 0) {
-      const mods = await getModuleByIds(modIds)
-      expertModulesMap.set(expert.id, mods)
-    } else {
-      expertModulesMap.set(expert.id, [])
-    }
-  }
-
-  for (const expert of teamExperts) {
-    if (!commonExpertIds.has(expert.id)) {
-      const modIds = getModuleIds(expert.modules as Module[])
-      if (modIds.length > 0) {
-        const mods = await getModuleByIds(modIds)
-        expertModulesMap.set(expert.id, mods)
-      } else {
-        expertModulesMap.set(expert.id, [])
-      }
-    }
-  }
-
-  // Diğer expert'lerin modüllerini fetch et (depth: 1 ile experts de gelir ama gerek yok, zaten biliyoruz)
-  const otherExpertResolvedModules = new Map<number, Module[]>()
-  for (const [expId, modIdSet] of otherExpertModuleIdsMap) {
-    const modIds = Array.from(modIdSet)
-    if (modIds.length > 0) {
-      const mods = await getModuleByIds(modIds)
-      otherExpertResolvedModules.set(expId, mods)
-    } else {
-      otherExpertResolvedModules.set(expId, [])
-    }
-  }
-
-  // Expert'leri birleştir
-  const allExperts: Array<{
-    expert: Expert
-    source: 'group' | 'team'
-    isCommon: boolean
-    resolvedModules: Module[]
-  }> = []
-
-  for (const expert of groupExperts) {
-    const isCommon = commonExpertIds.has(expert.id)
-    allExperts.push({
-      expert,
-      source: 'group',
-      isCommon,
-      resolvedModules: expertModulesMap.get(expert.id) || [],
-    })
-  }
-
-  for (const expert of teamExperts) {
-    if (!commonExpertIds.has(expert.id)) {
-      allExperts.push({
-        expert,
-        source: 'team',
-        isCommon: false,
-        resolvedModules: expertModulesMap.get(expert.id) || [],
-      })
-    }
-  }
+  // Modülleri fetch et
+  const [groupModules, teamModules] = await Promise.all([
+    getModuleByIds(groupModuleIds),
+    getModuleByIds(teamModuleIds),
+  ])
 
   return (
     <MotionCard>
       <Card
-        className="w-full relative max-w-2xl  transition-all duration-300 hover:shadow-lg border-l-4"
+        className="w-full relative max-w-2xl transition-all duration-300 hover:shadow-lg border-l-4"
         style={{ borderLeftColor: teamColor }}
       >
-        <CardHeader className=" ">
+        <CardHeader className="">
           <div className="flex justify-between items-start w-full">
             <div className="space-y-2 flex-1">
               {groupId ? (
@@ -352,28 +195,29 @@ export async function UsersCard({ user }: { user: User }) {
           }}
           className="h-85 overflow-y-scroll z-10 scrollbar-hide"
         >
-          {/* Experts Grid */}
-          <div className="grid grid-cols-1  gap-3">
-            {allExperts.map(({ expert, source, isCommon, resolvedModules }) => (
-              <ExpertCard
-                key={`${source}-${expert.id}`}
-                expert={expert}
-                completedModuleIds={completedModuleIds}
-                isCommon={isCommon}
-                source={source}
-                resolvedModules={resolvedModules}
-              />
-            ))}
+          <div className="grid grid-cols-1 gap-3">
+            {/* Kadro Modülleri */}
+            <ModuleGroupCard
+              title={groupName}
+              modules={groupModules}
+              completedModuleIds={completedModuleIds}
+              type="group"
+            />
 
-            {/* Diğer Expert'ler - Her biri ayrı kart, başlık expert adı */}
-            {Array.from(otherExpertsMap.entries()).map(([expId, expert]) => (
-              <OtherExpertCard
-                key={`other-${expId}`}
-                expert={expert}
-                resolvedModules={otherExpertResolvedModules.get(expId) || []}
-                completedModuleIds={completedModuleIds}
-              />
-            ))}
+            {/* Takım Modülleri */}
+            <ModuleGroupCard
+              title={teamName}
+              modules={teamModules}
+              completedModuleIds={completedModuleIds}
+              type="team"
+            />
+
+            {/* Hiç modül yoksa */}
+            {groupModules.length === 0 && teamModules.length === 0 && (
+              <div className="rounded-lg border border-dashed p-4 text-center">
+                <p className="text-sm text-gray-400">Atanmış modül bulunmuyor</p>
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>

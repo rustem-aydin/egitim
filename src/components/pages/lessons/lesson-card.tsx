@@ -21,18 +21,18 @@ const LessonsCard = ({ lesson }: LessonsCardProps) => {
         />
         <div className="relative  rounded-lg overflow-hidden">
           <div
-            className={`relative p-6  bg-linear-to-r ${getStatusLessonColor(String(lesson?.status))} overflow-hidden`}
+            className={`relative p-3   bg-linear-to-r ${getStatusLessonColor(String(lesson?.status))} overflow-hidden`}
           >
             <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16" />
             <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-12 -translate-x-12" />
             <div className="flex flex-row justify-between">
-              <div className="relative z-10">
-                <div className="flex gap-1 mt-2">
+              <div className="relative z-10   p-1 w-52  min-w-0">
+                <div className="flex gap-1 min-w-0">
                   <BadgeModule module={module} />
-                  <LessonStatusBadge status={String(lesson?.status)}></LessonStatusBadge>
+                  <LessonStatusBadge status={String(lesson?.status)} />
                 </div>
-                <h3 className="text-xl font-bold">{lesson?.name}</h3>
-                <p className="text-sm min-h-8 leading-relaxed">{lesson?.description}</p>
+                <h3 className="text-md font-bold truncate">{lesson?.name}</h3>
+                <p className="text-xs leading-relaxed truncate">{lesson?.description}</p>
               </div>
               <div className="flex items-start justify-between">
                 <DetailLink route="lessons" id={lesson?.id} />
@@ -40,7 +40,7 @@ const LessonsCard = ({ lesson }: LessonsCardProps) => {
             </div>
           </div>
         </div>
-        <BookOpen size={128} className="absolute bottom-0 right-0 opacity-2 hidden sm:block" />
+        <BookOpen size={100} className="absolute bottom-0 right-0 opacity-5 " />
       </div>
     </MotionCard>
   )

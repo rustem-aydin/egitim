@@ -34,51 +34,13 @@ export const fetchModules = async (
   }
 
   if (filters.team) {
-    const experts = await payload.find({
-      collection: 'experts',
-      where: {
-        'teams.name': {
-          in: filters.team,
-        },
-      },
-      depth: 1,
-      limit: 100,
-    })
-
-    const moduleIds = [
-      ...new Set(
-        experts.docs
-          .flatMap((expert) => expert.modules || [])
-          .filter((m): m is Module => typeof m === 'object' && m !== null)
-          .map((m) => m.id),
-      ),
-    ]
-    and.push({ id: { in: moduleIds } })
+    and.push({ 'teams.name': { equals: filters.team } })
   }
   if (filters.expert) {
     and.push({ 'experts.name': { equals: filters.expert } })
   }
   if (filters.group) {
-    const experts = await payload.find({
-      collection: 'experts',
-      where: {
-        'groups.name': {
-          in: filters.group,
-        },
-      },
-      depth: 1,
-      limit: 100,
-    })
-
-    const moduleIds = [
-      ...new Set(
-        experts.docs
-          .flatMap((expert) => expert.modules || [])
-          .filter((m): m is Module => typeof m === 'object' && m !== null)
-          .map((m) => m.id),
-      ),
-    ]
-    and.push({ id: { in: moduleIds } })
+    and.push({ 'groups.name': { equals: filters.group } })
   }
   if (filters.lesson) {
     // Group ismiyle filtrelemek istiyorsan nested path kullanabilirsin

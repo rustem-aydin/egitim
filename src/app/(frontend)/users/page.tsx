@@ -1,4 +1,3 @@
-import { getAllExperts } from '@/actions/experts'
 import { getAllGroups } from '@/actions/groups'
 import { getAllLessons } from '@/actions/lessons'
 import { getAllModules } from '@/actions/modules'
@@ -28,7 +27,6 @@ export default async function UsersPage({
   const groups = await getAllGroups()
   const lessons = await getAllLessons(1)
   const teams = await getAllTeams()
-  const experts = await getAllExperts()
   const modules = await getAllModules()
   return (
     <div className="min-h-screen  py-6 px-4 relative overflow-hidden">
@@ -45,8 +43,7 @@ export default async function UsersPage({
           edu_levels
           requiredButInCompletedModules={modules}
           completedModule={modules}
-          experts={experts}
-          layoutOptions={['grid', 'notCompletedModulesUsers']}
+          layoutOptions={['grid', 'modules']}
           lessons={lessons}
           groups={groups}
           sortOptions={mySortOptions}

@@ -42,11 +42,7 @@ const data = {
       icon: Users,
       url: '/users',
     },
-    {
-      title: 'Uzmanlıklar',
-      icon: FlaskConical,
-      url: '/experts',
-    },
+
     {
       title: 'Kadrolar',
       url: '/groups',

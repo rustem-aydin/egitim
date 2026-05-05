@@ -8,7 +8,6 @@ import { LessonsTabs } from '@/components/pages/lessons/lessons-tabs'
 import { getSortOptions, LessonFilterParams } from '@/types/filters'
 import { Suspense } from 'react'
 import { AddLessons } from '@/components/pages/lessons/add-lessons-modal'
-import { getAllExperts } from '@/actions/experts'
 export const dynamic = 'force-dynamic'
 
 const mySortOptions = getSortOptions([
@@ -30,7 +29,6 @@ export default async function LessonsPage({
   const groups = await getAllGroups()
   const categories = await getAllCategories()
   const teams = await getAllTeams()
-  const experts = await getAllExperts(0)
 
   return (
     <div className="min-h-screen  py-6 px-4 relative overflow-hidden">
@@ -52,7 +50,6 @@ export default async function LessonsPage({
           locations={locations}
           categories={categories}
           teams={teams}
-          experts={experts}
           groups={groups}
           levels
         />

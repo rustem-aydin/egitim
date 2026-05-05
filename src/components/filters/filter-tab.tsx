@@ -52,7 +52,6 @@ interface FilterProps {
   inCompletedModules?: Module[]
   requiredButInCompletedModules?: Module[]
   groups?: Group[]
-  experts?: Expert[]
   categories?: Category[]
   lessons?: Lesson[]
   users?: User[]
@@ -67,7 +66,6 @@ const FilterTab = ({
   drillCategories,
   sortOptions,
   completedModule,
-  experts,
   dates,
   inCompletedModules,
   requiredButInCompletedModules,
@@ -132,7 +130,6 @@ const FilterTab = ({
           />
         )}
         {groups && <FilterGroups groups={groups || []} startTransition={startTransition} />}
-        {experts && <FilterExpert experts={experts || []} startTransition={startTransition} />}
         {lessons && <FilterLessons lessons={lessons || []} startTransition={startTransition} />}
 
         {inCompletedModules && (

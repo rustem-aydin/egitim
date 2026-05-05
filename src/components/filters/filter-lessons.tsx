@@ -16,17 +16,24 @@ import { Lesson } from '@/payload-types'
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
 
 interface FilteLessonsProps {
+  title?: string
+  url?: string
   lessons: Lesson[]
   startTransition: React.TransitionStartFunction
 }
 
-export default function FilterLessons({ lessons, startTransition }: FilteLessonsProps) {
+export default function FilterLessons({
+  lessons,
+  startTransition,
+  title = 'Dersler',
+  url = 'lesson',
+}: FilteLessonsProps) {
   const id = useId()
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
-  const currentLessonValue = searchParams.get('lesson') || ''
+  const currentLessonValue = searchParams.get(url) || ''
 
   const [open, setOpen] = useState<boolean>(false)
   const [tooltipOpen, setTooltipOpen] = useState(false)
@@ -40,9 +47,9 @@ export default function FilterLessons({ lessons, startTransition }: FilteLessons
     const finalName = selectedItem?.name || selectedValue
 
     if (currentLessonValue === finalName) {
-      params.delete('lesson')
+      params.delete(url)
     } else {
-      params.set('lesson', finalName)
+      params.set(url, finalName)
     }
 
     setOpen(false)
@@ -74,7 +81,7 @@ export default function FilterLessons({ lessons, startTransition }: FilteLessons
                     </span>
                   </div>
                 ) : (
-                  <span className="text-muted-foreground">Ders</span>
+                  <span className="text-muted-foreground">{title}</span>
                 )}
                 <ChevronDownIcon
                   size={16}
@@ -85,7 +92,7 @@ export default function FilterLessons({ lessons, startTransition }: FilteLessons
             </PopoverTrigger>
           </TooltipTrigger>
           <TooltipContent>
-            <p>Ders Seçin</p>
+            <p>{title}</p>
           </TooltipContent>
         </Tooltip>
         <PopoverContent

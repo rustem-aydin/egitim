@@ -17,7 +17,7 @@ export default function MainSwappy({ items }: { items: SwappyProps[] }) {
   return (
     <SwapyLayout
       id="swapy"
-      className="w-full container  mx-auto "
+      className="w-full container mx-auto"
       config={{
         swapMode: 'hover',
       }}
@@ -25,21 +25,17 @@ export default function MainSwappy({ items }: { items: SwappyProps[] }) {
         console.log('Swap detected!', event.newSlotItemMap.asArray)
       }}
     >
-      <div className="grid w-full  grid-cols-12 gap-2 md:gap-6 ">
+      <div className="grid w-full grid-cols-12 gap-4">
         {slottedItems.map(({ slotId, itemId }) => {
           const item = items.find((i) => i.id === itemId)
 
           return (
             <SwapySlot
               key={slotId}
-              className={`swapyItem rounded-lg h-64 ${item?.className}`}
+              className={`swapyItem rounded-lg ${item?.className}`}
               id={slotId}
             >
-              <SwapyItem
-                id={itemId}
-                className="relative rounded-lg w-full h-full 2xl:text-xl text-sm"
-                key={itemId}
-              >
+              <SwapyItem id={itemId} className="relative rounded-lg w-full h-full" key={itemId}>
                 {item?.widgets}
               </SwapyItem>
             </SwapySlot>

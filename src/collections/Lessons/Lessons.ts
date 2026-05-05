@@ -4,6 +4,7 @@ import {
   dynamicStatusReadHook,
   setCreatedByHook,
   validateDatesHook,
+  validateDateTo,
 } from '../_hooks/Lessons'
 
 export const Lessons: CollectionConfig = {
@@ -20,7 +21,6 @@ export const Lessons: CollectionConfig = {
     plural: 'Dersler',
   },
   hooks: {
-    beforeValidate: [validateDatesHook],
     beforeChange: [autoStatusHook, setCreatedByHook],
     afterRead: [dynamicStatusReadHook],
   },
@@ -149,9 +149,10 @@ export const Lessons: CollectionConfig = {
           name: 'date_to',
           label: 'Ders Bitiş Tarihi',
           type: 'date',
+          validate: validateDateTo as any,
           admin: {
             date: { pickerAppearance: 'dayAndTime' },
-            description: 'Dersin biteceği tarih ve saat. ',
+            description: 'Dersin biteceği tarih ve saat.',
           },
         },
       ],

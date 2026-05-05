@@ -8,12 +8,11 @@ const GroupsList = async (props: GroupsFilterParams) => {
   const currentPage = props.page ? Number(props.page) : 1
   const pages = Array.from({ length: currentPage }, (_, i) => i + 1)
   const results = await Promise.all(pages.map((page) => fetchGroups({ ...props, page })))
-
   const allGroups = results.flatMap((result) => result?.data || [])
   return (
     <div className="mx-auto relative z-10">
       {!allGroups?.length && <NotFoundItem title="Kadro Bulunamadı" description="" />}
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 pt-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 pt-4 gap-4">
         {allGroups?.map((group: any) => {
           return <GroupsCard key={group?.id} group={group} />
         })}

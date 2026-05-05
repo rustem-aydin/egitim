@@ -17,7 +17,7 @@ export async function UsersTab(props: UsersFilterParams) {
         <AnimatedTabsContent value="grid">
           <UsersList users={allUsers} currentPage={currentPage} hasNextPage={hasNextPage} />
         </AnimatedTabsContent>
-        <AnimatedTabsContent value="notCompletedModulesUsers">
+        <AnimatedTabsContent value="modules">
           <NotCompletedModulesUsersList
             users={allUsers}
             currentPage={currentPage}

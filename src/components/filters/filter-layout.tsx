@@ -33,7 +33,7 @@ const sortConfigs: Record<string, SortConfig> = {
     icon: <ChartArea size={16} />,
     label: 'Grafikler',
   },
-  notCompletedModulesUsers: {
+  modules: {
     icon: <Puzzle size={16} />,
     label: 'Modüller',
   },

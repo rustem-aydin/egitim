@@ -26,15 +26,51 @@ export const Modules: CollectionConfig = {
       label: 'Açıklama',
       type: 'textarea',
     },
-
+    {
+      name: 'teams',
+      type: 'join',
+      maxDepth: 3,
+      required: true,
+      collection: 'teams',
+      admin: {
+        hidden: true,
+      },
+      on: 'modules',
+    },
+    {
+      name: 'groups',
+      type: 'join',
+      maxDepth: 3,
+      collection: 'groups',
+      admin: {
+        hidden: true,
+      },
+      on: 'modules',
+    },
     {
       name: 'code',
       label: 'Modül Kodu',
       type: 'text',
+      required: true,
       unique: true,
       admin: {
         position: 'sidebar',
         description: ' (Örn: C103.1, A101.2)',
+      },
+      validate: (value: any) => {
+        if (!value) return true // required değilse boş geçebilir
+
+        const firstChar = value.charAt(0)
+        const validChars = ['A', 'B', 'C', 'K']
+
+        if (!validChars.includes(firstChar)) {
+          return `Modül kodu büyük harf A, B, C veya K ile başlamalıdır. Girilen: "${value}"`
+        }
+        if (value.length < 4) {
+          return `En az 4 karakter olmalıdır. Girilen: "${value}"`
+        }
+
+        return true
       },
     },
     {
@@ -44,17 +80,6 @@ export const Modules: CollectionConfig = {
       type: 'join',
       collection: 'lessons',
       on: 'module',
-    },
-    {
-      name: 'experts',
-      type: 'join',
-      collection: 'experts',
-      maxDepth: 3,
-      label: 'Bu Modülü Zorunlu Alaması Gereken Gruplar',
-      admin: {
-        position: 'sidebar',
-      },
-      on: 'modules',
     },
   ],
 }

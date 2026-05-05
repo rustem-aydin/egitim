@@ -44,31 +44,11 @@ export const fetchGroups = async (
   // --- Group (exact name match) ---
 
   if (filters.team) {
-    and.push({ name: { equals: filters.team } })
+    and.push({ 'team.name': { equals: filters.team } })
   }
 
-  // --- Lesson (lesson_name üzerinden grup bul) ---
   if (filters.lesson) {
-    const experts = await payload.find({
-      collection: 'experts',
-      where: {
-        'modules.lessons.name': {
-          equals: filters.lesson,
-        },
-      },
-      depth: 0,
-      limit: 100,
-    })
-    const moduleIds = [
-      ...new Set(
-        experts.docs
-          .flatMap((expert) => expert.groups?.docs || [])
-          .filter((m): m is number => typeof m === 'number'),
-      ),
-    ]
-    and.push({ id: { in: moduleIds } }) // and.push({
-    //   'modules.lessons.name': { equals: filters.lesson },
-    // })
+    and.push({ 'modules.lessons.name': { in: filters.lesson } }) // and.push({
   }
   if (filters?.user) {
     and.push({ 'users.name': { equals: filters?.user } })
@@ -78,24 +58,7 @@ export const fetchGroups = async (
   }
   // --- Modules (code üzerinden grup bul) ---
   if (filters.modules) {
-    const experts = await payload.find({
-      collection: 'experts',
-      where: {
-        'modules.name': {
-          in: filters.modules,
-        },
-      },
-      depth: 0,
-      limit: 100,
-    })
-    const moduleIds = [
-      ...new Set(
-        experts.docs
-          .flatMap((expert) => expert.groups?.docs || [])
-          .filter((m): m is number => typeof m === 'number'),
-      ),
-    ]
-    and.push({ id: { in: moduleIds } })
+    and.push({ 'modules.name': { in: filters.modules } })
   }
 
   // --- Sort ---

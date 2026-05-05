@@ -139,7 +139,6 @@ export const fetchLessons = async (filters: LessonFilterParams) => {
 
   const page = filters.page || 1
   const and: Where[] = []
-  const join: Where[] = []
   let sort: Sort = '-date_from'
 
   if (filters.search?.trim()) {
@@ -153,7 +152,7 @@ export const fetchLessons = async (filters: LessonFilterParams) => {
     })
   }
 
-  // ─── KATEGORİ FİLTRESİ ───
+  // ─── KATEGORİ ───
   if (filters.category) {
     if (typeof filters.category === 'number' || /^\d+$/.test(String(filters.category))) {
       and.push({ category: { equals: Number(filters.category) } })
@@ -162,7 +161,7 @@ export const fetchLessons = async (filters: LessonFilterParams) => {
     }
   }
 
-  // ─── LOKASYON FİLTRESİ ───
+  // ─── LOKASYON ───
   if (filters.location) {
     if (typeof filters.location === 'number' || /^\d+$/.test(String(filters.location))) {
       and.push({ location: { equals: Number(filters.location) } })
@@ -171,29 +170,18 @@ export const fetchLessons = async (filters: LessonFilterParams) => {
     }
   }
 
-  // ─── TARİH ARALIĞI ───
+  // ─── TARİH ───
   if (filters.dateFrom) {
-    and.push({
-      date_from: { greater_than_equal: new Date(filters.dateFrom).toISOString() },
-    })
+    and.push({ date_from: { greater_than_equal: new Date(filters.dateFrom).toISOString() } })
   }
   if (filters.dateTo) {
-    and.push({
-      date_from: { less_than_equal: new Date(filters.dateTo).toISOString() },
-    })
+    and.push({ date_from: { less_than_equal: new Date(filters.dateTo).toISOString() } })
   }
 
-  // ─── STATÜ ───
   if (filters.status) {
-    const statuses = filters.status.split(',').map((s) => s.trim())
-    if (statuses.length === 1) {
-      and.push({ status: { equals: statuses[0] } })
-    } else {
-      and.push({ status: { in: statuses } })
-    }
+    and.push({ status: { equals: filters.status } })
   }
 
-  // ─── EĞİTMEN ───
   if (filters.by_generate) {
     if (typeof filters.by_generate === 'number' || /^\d+$/.test(String(filters.by_generate))) {
       and.push({ by_generate: { equals: Number(filters.by_generate) } })
@@ -202,110 +190,46 @@ export const fetchLessons = async (filters: LessonFilterParams) => {
     }
   }
 
-  // ─── SEVİYE (module.code harfi) ───
   if (filters.level) {
     const levelMap: Record<string, string> = { Başlangıç: 'A', Orta: 'B', İleri: 'C' }
     const letter = levelMap[filters.level]
     if (letter) and.push({ 'module.code': { contains: letter } })
   }
 
-  // ─── MODÜL KODU ───
+  // ─── MODÜL ID (moduleIds ile ayrı parametre) ───
   if (filters.modules) {
-    const codes = filters.modules.split(',').map((c) => c.trim())
-    if (codes.length === 1) {
-      and.push({ 'module.code': { equals: codes[0] } })
-    } else {
-      and.push({ 'module.code': { in: codes } })
-    }
+    and.push({ module: { equals: filters.modules } })
   }
 
-  // ─── MODÜL ID ───
-  if (filters.modules) {
-    const moduleIds = String(filters.modules)
-      .split(',')
-      .map((id) => id.trim())
-    if (moduleIds.length === 1) {
-      and.push({ module: { equals: Number(moduleIds[0]) } })
-    } else {
-      and.push({ module: { in: moduleIds.map(Number) } })
-    }
-  }
-  if (filters.expert) {
-    const names = filters.expert.split(',').map((t) => t.trim())
-
-    const experts = await payload.find({
-      collection: 'experts',
-      where: {
-        name: {
-          in: names,
-        },
-      },
-      depth: 1,
-      limit: 100,
-    })
-    const moduleIds = [
-      ...new Set(
-        experts.docs
-          .flatMap((expert) => expert.modules || [])
-          .filter((m): m is Module => typeof m === 'object' && m !== null)
-          .map((m) => m.id),
-      ),
-    ]
-    and.push({ module: { in: moduleIds } })
-  }
-  // ─── GRUP FİLTRESİ ───
   if (filters.group) {
-    const teamNames = filters.group.split(',').map((t) => t.trim())
-
-    const experts = await payload.find({
-      collection: 'experts',
-      where: {
-        'groups.name': {
-          in: teamNames,
-        },
-      },
-      depth: 1,
-      limit: 100,
+    const groupModules = await payload.find({
+      collection: 'modules',
+      where: { 'groups.name': { equals: filters.group } },
+      depth: 0,
+      limit: 1000,
+      pagination: false,
     })
-    const moduleIds = [
-      ...new Set(
-        experts.docs
-          .flatMap((expert) => expert.modules || [])
-          .filter((m): m is Module => typeof m === 'object' && m !== null)
-          .map((m) => m.id),
-      ),
-    ]
+    const moduleIds = groupModules.docs.map((m) => m.id)
+
+    if (moduleIds.length === 0) {
+      return { data: [], totalDocs: 0, totalPages: 0, hasNextPage: false, nextPage: undefined }
+    }
     and.push({ module: { in: moduleIds } })
   }
 
-  // ─── TAKIM FİLTRESİ ───
   if (filters.team) {
-    const teamNames = filters.team.split(',').map((t) => t.trim())
-
-    const experts = await payload.find({
-      collection: 'experts',
-      where: {
-        'teams.name': {
-          in: teamNames,
-        },
-      },
-      depth: 1,
-      limit: 100,
+    const teamModules = await payload.find({
+      collection: 'modules',
+      where: { 'teams.name': { equals: filters.team } },
+      depth: 0,
+      limit: 1000,
+      pagination: false,
     })
+    const moduleIds = teamModules.docs.map((m) => m.id)
 
-    // Tüm modülleri tek bir array'de birleştir
-    const moduleIds = [
-      ...new Set(
-        experts.docs
-          .flatMap((expert) => expert.modules || [])
-          .filter((m): m is Module => typeof m === 'object' && m !== null)
-          .map((m) => m.id),
-      ),
-    ]
-    // Query'de kullanmak için:
     and.push({ module: { in: moduleIds } })
   }
-  // ─── KATILIMCI ───
+
   if (filters.user) {
     const userIds = filters.user.split(',').map((id) => id.trim())
     if (userIds.length === 1) {
@@ -315,7 +239,6 @@ export const fetchLessons = async (filters: LessonFilterParams) => {
     }
   }
 
-  // ─── SIRALAMA ───
   if (filters.sort) {
     const sortValue = String(filters.sort)
     const isDesc = sortValue.startsWith('-')
@@ -341,8 +264,7 @@ export const fetchLessons = async (filters: LessonFilterParams) => {
       level: 'module',
     }
 
-    const mappedField = sortFieldMap[field] || field
-    sort = `${sortPrefix}${mappedField}`
+    sort = `${sortPrefix}${sortFieldMap[field] || field}`
   }
 
   // ─── LİMİT ───
@@ -355,7 +277,7 @@ export const fetchLessons = async (filters: LessonFilterParams) => {
     sort: sort || '-date_from',
     page,
     ...(limit !== undefined ? { limit } : {}),
-    depth: 2,
+    depth: 3,
     overrideAccess: true,
   })
 

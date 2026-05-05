@@ -13,16 +13,7 @@ import {
   File,
   ExternalLink,
 } from 'lucide-react'
-
-// Dosya verisi tipi
-interface FileItem {
-  id: string
-  name: string
-  size: string
-  type: string
-  url: string
-  date?: string
-}
+import { Media } from '@/payload-types'
 
 // Dosya uzantısına göre ikon seçimi
 const getFileIcon = (fileName: string) => {
@@ -96,35 +87,37 @@ const getExtensionColor = (fileName: string) => {
   return colorMap[extension] || 'bg-gray-100 text-gray-600 border-gray-200'
 }
 
-const FileCard: React.FC<{ file: FileItem }> = ({ file }) => {
+const FileCard = ({ file }: { file: Media }) => {
   const handleOpen = () => {
-    window.open(file.url, '_blank')
+    window.open(file.url as string, '_blank')
   }
 
-  const extension = file.name.split('.').pop()?.toUpperCase() || 'FILE'
+  const extension = (file?.filename as string).split('.').pop()?.toUpperCase() || 'FILE'
 
   return (
     <Card className="group hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-gray-300">
-      <CardContent>
-        <div className="flex items-center gap-1 ">
-          <div className="flex-shrink-0  bg-gray-50 rounded-xl group-hover:bg-gray-100 transition-colors">
-            {getFileIcon(file.name)}
+      <CardContent className="p-4">
+        <div className="flex items-center gap-3">
+          <div className="flex-shrink-0 bg-gray-50 rounded-xl group-hover:bg-gray-100 transition-colors p-2">
+            {getFileIcon(file.filename as string)}
           </div>
 
-          <div className="flex-1 min-w-0 ">
-            <span className={`text-xs px-2 py-0.5 mb-2 rounded-full border font-medium `}>
+          <div className="flex-1 min-w-0">
+            <span
+              className={`text-xs px-2 py-0.5 mb-1 inline-block rounded-full border font-medium ${getExtensionColor(file.filename as string)}`}
+            >
               {extension}
             </span>
-            <h3 className="font-semibold text-gray-900 truncate" title={file.name}>
-              {file.name}
+            <h3 className="font-semibold text-gray-900 truncate" title={file.filename as string}>
+              {file.filename as string}
             </h3>
 
             <div className="flex items-center gap-3 text-sm text-gray-500">
-              <span>{file.size}</span>
-              {file.date && (
+              <span>{file?.filesize}</span>
+              {file.createdAt && (
                 <>
                   <span className="w-1 h-1 bg-gray-300 rounded-full" />
-                  <span>{file.date}</span>
+                  <span>{file.createdAt}</span>
                 </>
               )}
             </div>
@@ -150,7 +143,7 @@ const FileCard: React.FC<{ file: FileItem }> = ({ file }) => {
 
 // Dosya Listesi Bileşeni
 interface FileListProps {
-  files: FileItem[]
+  files: Media[]
   title?: string
 }
 
@@ -167,15 +160,15 @@ export const FileList: React.FC<FileListProps> = ({ files, title = 'Dosyalar' })
   }
 
   return (
-    <div className="group relative w-full mt-4 min-h-full transform shadow-2xl rounded-2xl transition-all duration-500">
-      <Card className="h-full border">
-        <CardHeader className=" relative">
+    <div className="group relative w-full transform shadow-2xl rounded-2xl transition-all duration-500">
+      <Card className="h-full border max-h-[400px] flex flex-col">
+        <CardHeader className="relative flex-shrink-0">
           <div className="flex items-center gap-2">
             <span className="h-5 w-1 rounded-full bg-linear-to-b from-primary to-primary/40" />
             <CardTitle className="text-lg font-semibold tracking-tight">{title}</CardTitle>
           </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="overflow-y-auto flex-1">
           <div className="grid gap-3">
             {files.map((file) => (
               <FileCard key={file.id} file={file} />

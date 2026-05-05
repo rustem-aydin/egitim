@@ -1,4 +1,3 @@
-import { getAllExperts } from '@/actions/experts'
 import { getAllLessons } from '@/actions/lessons'
 import { getAllModules } from '@/actions/modules'
 import { getAllTeams } from '@/actions/teams'
@@ -21,7 +20,6 @@ const GroupsPage = async ({
   const teams = await getAllTeams()
   const modules = await getAllModules()
   const users = await getAllUsers()
-  const experts = await getAllExperts()
   const filter = await searchParams
 
   return (
@@ -36,7 +34,6 @@ const GroupsPage = async ({
           </div>
         </div>
         <FilterTab
-          experts={experts}
           users={users}
           layoutOptions={['modular']}
           teams={teams}

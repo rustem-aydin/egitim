@@ -3,10 +3,8 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import type { Where } from 'payload'
 
-import type { Module, Team, User } from '@/payload-types'
+import type { User } from '@/payload-types'
 import { UsersFilterParams } from '@/types/filters'
-import { filter } from 'lodash'
-import { no } from 'zod/v4/locales'
 export const getAllUsers = async (depth: number = 0): Promise<User[]> => {
   const payload = await getPayload({ config })
 
@@ -27,23 +25,16 @@ export const fetchUsers = async (
 
   const and: Where[] = []
 
-  // --- Search ---
   if (filters.search) {
     and.push({ name: { like: filters.search } })
   }
 
-  // --- Group (Yeni Nesil Sorgu) ---
   if (filters.group) {
     and.push({
       'group.name': { equals: filters.group },
     })
   }
-  if (filters.expert) {
-    and.push({
-      'group.experts.name': { equals: filters.expert },
-    })
-  }
-  // --- Lesson (Yeni Nesil Sorgu) ---
+
   if (filters.lesson) {
     and.push({
       'lessons.name': { equals: filters.lesson },
@@ -53,10 +44,11 @@ export const fetchUsers = async (
   if (filters.requiredInCompletedModules) {
     const codes = filters.requiredInCompletedModules.split(',').map((c) => c.trim())
 
-    // Sadece uzmanlık filtresini and.push ile ekle
     and.push({
-      or: [{ 'group.team.experts.modules.code': { in: codes } }],
+      or: [{ 'group.team.modules.code': { in: codes } }, { 'group.modules.code': { in: codes } }],
     })
+
+    // lessons array'indeki hiçbir eleman bu kodlara eşit olmamalı
   }
 
   if (filters.team) {
