@@ -5,6 +5,7 @@ import { getAllUsers } from '@/actions/users'
 import UserDetails from './user-details'
 import { User } from '@/payload-types'
 import UserCompletersLessons from './users-completers-lessons'
+import { UserModuleChart } from '../layouts/charts/user-module-progress-chart'
 
 export const MainDetails = async ({ user }: { user: User }) => {
   const users = await getAllUsers(0)
@@ -35,6 +36,9 @@ export const MainDetails = async ({ user }: { user: User }) => {
         </div>
         <div style={{ gridColumn: 'span 4 / span 6' }}>
           <UserCompletersLessons user={user} />
+        </div>
+        <div style={{ gridColumn: 'span 4 / span 6' }}>
+          <UserModuleChart user={user} />
         </div>
       </div>
     </div>

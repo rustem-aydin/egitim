@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Lesson, User } from '@/payload-types'
 import MiniLessonCard from '../../lessons/mini-lesson-card'
 
@@ -6,7 +6,8 @@ const UserCompletersLessons = ({ user }: { user: User }) => {
   return (
     <Card className="h-full">
       <CardHeader>
-        <CardTitle>Deneme</CardTitle>
+        <CardTitle>Tamamlanan Dersler</CardTitle>
+        <CardDescription>Personelin Tamamladığı dersler</CardDescription>
       </CardHeader>
       <CardContent style={{ maxHeight: 280, overflowY: 'auto' }}>
         {(user?.lessons as Lesson[]).map((lesson) => {

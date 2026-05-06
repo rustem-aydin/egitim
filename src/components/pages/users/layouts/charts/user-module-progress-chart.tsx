@@ -10,6 +10,7 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from '@/components/ui/chart'
+import { Group, Module, Team, User } from '@/payload-types'
 
 interface UserModuleChartProps {
   user: any
@@ -55,7 +56,7 @@ const chartConfig = {
   takimKT: { label: 'Takım - Kadro (K)', color: categoryColors.K },
   takimKK: { label: 'Takım - Kadro (Kalan)', color: withOpacity(categoryColors.K, 0.1) },
 } satisfies ChartConfig
-export function UserModuleChart({ user }: UserModuleChartProps) {
+export function UserModuleChart({ user }: { user: User }) {
   const { groupData, teamData } = React.useMemo(() => {
     const completedModuleIds = new Set(
       (user.lessons || []).map((l: any) => l.module?.id).filter(Boolean),
@@ -126,8 +127,8 @@ export function UserModuleChart({ user }: UserModuleChartProps) {
     }
 
     return {
-      groupData: processModules(user.group?.modules, 'grup'),
-      teamData: processModules(user.group?.team?.modules, 'takim'),
+      groupData: processModules((user.group as Group)?.modules as Module[], 'grup'),
+      teamData: processModules(((user.group as Group)?.team as Team)?.modules as Module[], 'takim'),
     }
   }, [user])
 

@@ -193,7 +193,7 @@ export async function UsersCard({ user }: { user: User }) {
             scrollbarWidth: 'none',
             msOverflowStyle: 'none',
           }}
-          className="h-85 overflow-y-scroll z-10 scrollbar-hide"
+          className=" overflow-y-scroll z-10 scrollbar-hide"
         >
           <div className="grid grid-cols-1 gap-3">
             {/* Kadro Modülleri */}

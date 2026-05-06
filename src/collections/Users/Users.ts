@@ -195,7 +195,16 @@ export const Users: CollectionConfig = {
         condition: (_, siblingData) => Boolean(siblingData?.id),
       },
     },
-
+    {
+      type: 'upload',
+      label: 'Sertifikalar',
+      relationTo: 'media',
+      name: 'certificates',
+      hasMany: true,
+      admin: {
+        description: 'Personele ait sertifikalar.',
+      },
+    },
     {
       name: 'university_names',
       label: 'Üniversite Adları',
@@ -212,28 +221,6 @@ export const Users: CollectionConfig = {
         {
           name: 'university',
           label: 'Üniversite Adı',
-          type: 'text',
-          required: false,
-        },
-      ],
-    },
-    {
-      name: 'certificates',
-      label: 'Sertifikalar',
-
-      type: 'array',
-      labels: {
-        singular: 'Sertifika',
-        plural: 'Sertifikalar',
-      },
-      required: false,
-      admin: {
-        condition: (_, siblingData) => Boolean(siblingData?.id),
-      },
-      fields: [
-        {
-          name: 'certificate_name',
-          label: 'Sertifika Adı',
           type: 'text',
           required: false,
         },

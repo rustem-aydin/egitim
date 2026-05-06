@@ -1,10 +1,21 @@
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Award, BookOpen, Calendar, GraduationCap, Layers } from 'lucide-react'
-import { Lesson, Team, User } from '@/payload-types'
+import { Lesson, Media, Team, User } from '@/payload-types'
 import UserModuleProgress from '../user-module-progress'
 import UserModules from '../user-modules'
 import UserLessons from '../user-lessons'
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel'
+import Image from 'next/image'
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
+import { VisuallyHidden } from 'radix-ui'
+import ImageCarousel from './image-carousel'
 interface UserDetailsProps {
   user: User
 }
@@ -98,7 +109,7 @@ const UserDetails = async ({ user }: UserDetailsProps) => {
               <h4 className="text-lg font-semibold">Eğitim Bilgileri</h4>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="space-y-2 p-4 rounded-lg border">
                 <h5 className="text-sm font-medium text-gray-500">Eğitim Durumu</h5>
                 <p className="text-lg font-semibold">{education_levels}</p>
@@ -119,20 +130,14 @@ const UserDetails = async ({ user }: UserDetailsProps) => {
                 <h5 className="text-sm font-medium text-gray-500">YDS Notu</h5>
                 <p className="text-lg font-semibold">{yds_score}</p>
               </div>
-
-              <div className="space-y-2 p-4 rounded-lg border">
-                <div className="flex items-center gap-2 mb-2">
-                  <Award className="w-4 h-4 text-gray-600" />
-                  <h5 className="text-sm font-medium text-gray-500">Sertifikalar</h5>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {certificates?.map((cer: any, index: number) => (
-                    <Badge variant={'secondary'} key={cer.id || index}>
-                      {cer.certificate_name}
-                    </Badge>
-                  ))}
-                </div>
+            </div>
+            <div className="flex flex-col space-y-2 p-4 min-h-66 w-full rounded-lg border">
+              <div className="flex items-center gap-2 mb-2">
+                <Award className="w-4 h-4 text-gray-600" />
+                <h5 className="text-sm font-medium text-gray-500">Sertifikalar</h5>
               </div>
+
+              <ImageCarousel certificates={certificates as Media[]} />
             </div>
           </div>
         </div>

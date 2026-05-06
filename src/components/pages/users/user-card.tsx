@@ -2,17 +2,12 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import DetailLink from '@/components/detail-link'
 import Link from 'next/link'
 import MotionCard from '@/components/motion-card'
-import { User, Team, Expert, Lesson } from '@/payload-types'
+import { User, Team, Lesson } from '@/payload-types'
 import { Badge } from '@/components/ui/badge'
 import { User as Us } from 'lucide-react'
-import BestExpert from './best-user-expert-badge'
 
 function isTeam(value: unknown): value is Team {
   return typeof value === 'object' && value !== null && 'color' in value
-}
-
-function isExpert(value: unknown): value is Expert {
-  return typeof value === 'object' && value !== null && 'id' in value
 }
 
 export async function UsersCard({ user }: { user: User }) {
@@ -24,8 +19,6 @@ export async function UsersCard({ user }: { user: User }) {
 
   const team = isTeam(groupObj?.team) ? groupObj.team : null
   const teamColor = team?.color || '#6b7280'
-
-  const experts = Array.isArray(groupObj?.experts) ? groupObj.experts.filter(isExpert) : []
 
   return (
     <MotionCard>
@@ -60,15 +53,6 @@ export async function UsersCard({ user }: { user: User }) {
             }}
           />
         </CardHeader>
-
-        <CardContent>
-          <div className="space-y-3">
-            <BestExpert
-              experts={experts}
-              completedLessons={(Array.isArray(lessons) ? lessons : []) as Lesson[]}
-            />
-          </div>
-        </CardContent>
       </Card>
     </MotionCard>
   )

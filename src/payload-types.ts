@@ -217,15 +217,13 @@ export interface User {
   education_levels?: ('Önlisans' | 'Yüksek Lisans' | 'Doktora' | 'Lisans') | null;
   yds_score?: number | null;
   is_admin?: boolean | null;
+  /**
+   * Personele ait sertifikalar.
+   */
+  certificates?: (number | Media)[] | null;
   university_names?:
     | {
         university?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  certificates?:
-    | {
-        certificate_name?: string | null;
         id?: string | null;
       }[]
     | null;
@@ -796,16 +794,11 @@ export interface UsersSelect<T extends boolean = true> {
   education_levels?: T;
   yds_score?: T;
   is_admin?: T;
+  certificates?: T;
   university_names?:
     | T
     | {
         university?: T;
-        id?: T;
-      };
-  certificates?:
-    | T
-    | {
-        certificate_name?: T;
         id?: T;
       };
   join_date?: T;

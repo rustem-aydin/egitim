@@ -3,6 +3,7 @@ import MotionCard from '../../motion-card'
 import { Lesson } from '@/payload-types'
 import { getStatusLessonColor } from './lessons-color'
 import Link from 'next/link'
+import BadgeModule from './lesson-badge-module'
 
 const MiniLessonCard = ({ lesson }: { lesson: Lesson }) => {
   return (
@@ -17,7 +18,9 @@ const MiniLessonCard = ({ lesson }: { lesson: Lesson }) => {
           >
             <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16" />
             <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-12 -translate-x-12" />
-            <div className="flex flex-row justify-between">
+            <div className="flex flex-row gap-1">
+              <BadgeModule module={lesson?.module} />
+
               <div className="relative z-10  w-10">
                 <Link
                   href={`/lessons/${lesson?.id}`}
