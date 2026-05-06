@@ -3,14 +3,8 @@ import type {
   CollectionAfterReadHook,
   CollectionBeforeValidateHook,
 } from 'payload'
+import { ValidationError } from 'payload'
 
-/**
- * Otomatik status geçişleri:
- * 1. date_from yoksa → Taslak
- * 2. date_from var ama şu an date_from'dan önceyse → Planlanıyor
- * 3. date_from <= şu an <= date_to → İşleme Alındı
- * 4. date_to < şu an → Tamamlandı
- */
 export const autoStatusHook: CollectionBeforeChangeHook = ({ data, operation }) => {
   const now = new Date()
   const dateFrom = data.date_from ? new Date(data.date_from) : null
@@ -76,13 +70,24 @@ export const dynamicStatusReadHook: CollectionAfterReadHook = ({ doc }) => {
 /**
  * Validation hook: date_from, date_to'dan büyük olamaz
  */
-export const validateDatesHook: CollectionBeforeValidateHook = ({ data, operation }) => {
+export const validateDatesHook: CollectionBeforeValidateHook = ({ data, req }) => {
   if (data?.date_from && data.date_to) {
     const dateFrom = new Date(data.date_from)
     const dateTo = new Date(data.date_to)
 
     if (dateFrom > dateTo) {
-      throw new Error('Ders başlangıç tarihi (date_from), bitiş tarihinden (date_to) sonra olamaz.')
+      throw new ValidationError(
+        {
+          errors: [
+            {
+              message:
+                'Ders başlangıç tarihi (date_from), bitiş tarihinden (date_to) sonra olamaz.',
+              path: 'date_from',
+            },
+          ],
+        },
+        req.t,
+      )
     }
   }
 
@@ -99,8 +104,68 @@ export const validateDateTo = (
   const dateTo = new Date(value)
 
   if (dateFrom > dateTo) {
-    return 'Ders başlangıç tarihi bitiş tarihinden  sonra olamaz.'
+    return 'Ders başlangıç tarihi bitiş tarihinden sonra olamaz.'
   }
 
   return true
+}
+
+// ✅ YENİ: İşleme Alındı/Tamamlandı → Taslak/Planlanıyor geçişini engelle
+export const preventDowngradeIfAssignedHook: CollectionBeforeChangeHook = async ({
+  data,
+  req,
+  operation,
+  originalDoc,
+}) => {
+  if (operation !== 'update') return data
+
+  const oldStatus = originalDoc?.status as string
+  const newStatus = data.status as string
+
+  // Status değişmiyorsa kontrol etme
+  if (!newStatus || oldStatus === newStatus) return data
+
+  // Sadece "İşleme Alındı" veya "Tamamlandı" durumundan "Taslak" veya "Planlanıyor"a geçişi engelle
+  const activeStatuses = ['İşleme Alındı', 'Tamamlandı']
+  const inactiveStatuses = ['Taslak', 'Planlanıyor']
+
+  const isDowngrade = activeStatuses.includes(oldStatus) && inactiveStatuses.includes(newStatus)
+
+  if (!isDowngrade) return data
+
+  // Bu dersi alan personelleri bul
+  try {
+    const assignedUsers = await req.payload.find({
+      collection: 'users',
+      where: {
+        lessons: {
+          in: [originalDoc.id],
+        },
+      },
+      depth: 0,
+    })
+
+    if (assignedUsers.docs.length > 0) {
+      const userNames = assignedUsers.docs.map((u: any) => u.name || u.email || u.id).join(', ')
+      throw new ValidationError(
+        {
+          errors: [
+            {
+              message:
+                `Bu ders "${oldStatus}" durumundayken ${assignedUsers.docs.length} personele atanmıştır (${userNames}). ` +
+                `Durumu "${newStatus}" olarak değiştiremezsiniz. ` +
+                `Öncelikle bu dersi ilgili personellerden kaldırmanız gerekmektedir.`,
+              path: 'status',
+            },
+          ],
+        },
+        req.t,
+      )
+    }
+  } catch (error: any) {
+    if (error.message.includes('Bu ders')) throw error
+    console.error('Ders atama kontrolü sırasında hata:', error)
+  }
+
+  return data
 }

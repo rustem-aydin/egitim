@@ -60,7 +60,7 @@ export default function FilterModules({
   }
 
   return (
-    <div className="*:not-first:mt-2 w-full min-w-25 max-w-25">
+    <div className="*:not-first:mt-2 w-full min-w-25  max-w-25">
       <Popover open={open} onOpenChange={setOpen}>
         <Tooltip open={tooltipOpen || currentValue !== ''} onOpenChange={setTooltipOpen}>
           <TooltipTrigger asChild>

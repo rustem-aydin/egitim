@@ -1,4 +1,6 @@
 import type { CollectionConfig } from 'payload'
+import { ValidationError } from 'payload'
+import { preventKCodeForTeams } from '../_hooks/Modules'
 
 export const Modules: CollectionConfig = {
   slug: 'modules',
@@ -13,6 +15,9 @@ export const Modules: CollectionConfig = {
   labels: {
     singular: 'Modül',
     plural: 'Modüller',
+  },
+  hooks: {
+    beforeChange: [preventKCodeForTeams],
   },
   fields: [
     {
@@ -30,7 +35,6 @@ export const Modules: CollectionConfig = {
       name: 'teams',
       type: 'join',
       maxDepth: 3,
-      required: true,
       collection: 'teams',
       admin: {
         hidden: true,
@@ -53,12 +57,13 @@ export const Modules: CollectionConfig = {
       type: 'text',
       required: true,
       unique: true,
+
       admin: {
         position: 'sidebar',
         description: ' (Örn: C103.1, A101.2)',
       },
       validate: (value: any) => {
-        if (!value) return true // required değilse boş geçebilir
+        if (!value) return true
 
         const firstChar = value.charAt(0)
         const validChars = ['A', 'B', 'C', 'K']

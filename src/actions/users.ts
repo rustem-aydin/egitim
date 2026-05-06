@@ -77,6 +77,7 @@ export const fetchUsers = async (
   const result = await payload.find({
     collection: 'users',
     where: and.length > 0 ? { and } : {},
+
     page,
     ...(filters.limit === 'Hepsi'
       ? {}

@@ -4,14 +4,10 @@ import { Lesson } from '@/payload-types'
 import { getStatusLessonColor } from './lessons-color'
 import Link from 'next/link'
 
-interface LessonsCardProps {
-  lesson: Lesson
-}
-
-const MiniLessonCard = ({ lesson }: LessonsCardProps) => {
+const MiniLessonCard = ({ lesson }: { lesson: Lesson }) => {
   return (
     <MotionCard key={lesson?.id}>
-      <div className="group relative w-full mb-1 transform shadow-sm rounded-xl bg-sidebar h-full transition-all duration-500">
+      <div className="group relative w-full mb-1  transform shadow-sm rounded-xl bg-sidebar h-full transition-all duration-500">
         <div
           className={`absolute w-full -inset-1 ${getStatusLessonColor(String(lesson?.status))} rounded-2xl blur opacity-20 transition duration-1000`}
         />
@@ -25,7 +21,7 @@ const MiniLessonCard = ({ lesson }: LessonsCardProps) => {
               <div className="relative z-10  w-10">
                 <Link
                   href={`/lessons/${lesson?.id}`}
-                  className="text-xl truncate sm:text-sm font-bold"
+                  className="text-sm truncate sm:text-sm font-bold"
                 >
                   {lesson?.name}
                 </Link>

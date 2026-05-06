@@ -18,6 +18,7 @@ import { Button } from '@/components/ui/button'
 import { Command, CommandGroup, CommandItem, CommandList } from '@/components/ui/command'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
+import { TopLessonsCompleters } from '../pages/users/layouts/charts/topLessonsCompleters'
 
 interface SortConfig {
   icon: React.ReactNode
@@ -36,6 +37,14 @@ const sortConfigs: Record<string, SortConfig> = {
   modules: {
     icon: <Puzzle size={16} />,
     label: 'Modüller',
+  },
+  topLessonsCompleters: {
+    icon: <ChartArea size={16} />,
+    label: 'Ders Tamamlama',
+  },
+  moduleProgressChart: {
+    icon: <ChartArea size={16} />,
+    label: 'Modül Tamamlama',
   },
   table: {
     icon: <Table size={16} />,
@@ -77,9 +86,7 @@ export default function SortSelect({ options, startTransition }: SortSelectProps
 
     setOpen(false)
 
-    startTransition(() => {
-      router.push(`${pathname}?${params.toString()}`, { scroll: false })
-    })
+    router.push(`${pathname}?${params.toString()}`, { scroll: false })
   }
 
   const getSelectedIcon = () => {

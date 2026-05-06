@@ -11,9 +11,7 @@ import {
   CommandList,
   CommandEmpty,
 } from '@/components/ui/command'
-import { Label } from '@/components/ui/label'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { useQuery } from '@tanstack/react-query'
 import { Team } from '@/payload-types'
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
 

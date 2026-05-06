@@ -1,5 +1,3 @@
-import type { CollectionConfig } from 'payload'
-
 // Tüm sayısal alanların isimleri (overall_satisfaction hariç, ayrı hesaplanabilir)
 const RATING_FIELDS = [
   'content_meets_expectations',

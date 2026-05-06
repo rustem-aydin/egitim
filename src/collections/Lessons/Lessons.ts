@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 import {
   autoStatusHook,
   dynamicStatusReadHook,
+  preventDowngradeIfAssignedHook,
   setCreatedByHook,
   validateDatesHook,
   validateDateTo,
@@ -21,7 +22,7 @@ export const Lessons: CollectionConfig = {
     plural: 'Dersler',
   },
   hooks: {
-    beforeChange: [autoStatusHook, setCreatedByHook],
+    beforeChange: [autoStatusHook, setCreatedByHook, preventDowngradeIfAssignedHook],
     afterRead: [dynamicStatusReadHook],
   },
   fields: [

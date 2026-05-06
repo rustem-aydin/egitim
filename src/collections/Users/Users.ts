@@ -1,19 +1,5 @@
 import type { CollectionConfig, Field } from 'payload'
 
-// Ayrı bir factory fonksiyonu olarak da yazabilirsiniz
-const reminderButtonField = (): Field => ({
-  name: 'reminderButton',
-  type: 'ui',
-  admin: {
-    components: {
-      Field: {
-        path: '@/collections/custom/ReminderButton#ReminderButton',
-        exportName: 'ReminderButton',
-      },
-    },
-  },
-})
-
 export const Users: CollectionConfig = {
   slug: 'users',
   auth: true,
@@ -127,6 +113,37 @@ export const Users: CollectionConfig = {
       admin: {
         position: 'sidebar',
         condition: (_, siblingData) => Boolean(siblingData?.id),
+      },
+      validate: async (value, { req, event }) => {
+        const lessonIds = Array.isArray(value) ? value : [value]
+
+        try {
+          const lessons = await req.payload.find({
+            collection: 'lessons',
+            where: {
+              id: {
+                in: lessonIds,
+              },
+            },
+            depth: 0,
+          })
+
+          const invalidLessons = lessons.docs.filter((lesson: any) => {
+            const status = lesson.status
+            return status !== 'İşleme Alındı' && status !== 'Tamamlandı'
+          })
+
+          if (invalidLessons.length > 0) {
+            const invalidNames = invalidLessons
+              .map((l: any) => l.title || l.name || l.id)
+              .join(', ')
+            return `Şu dersler atanamaz (statüsü uygun değil): ${invalidNames}. Sadece "İşleme alındı" veya "Tamamlandı" statüsündeki dersler atanabilir.`
+          }
+
+          return true
+        } catch (err) {
+          return 'Ders durumları kontrol edilirken bir hata oluştu.'
+        }
       },
     },
     {

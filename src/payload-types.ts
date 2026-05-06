@@ -430,7 +430,7 @@ export interface Module {
   id: number;
   name: string;
   description?: string | null;
-  teams: {
+  teams?: {
     docs?: (number | Team)[];
     hasNextPage?: boolean;
     totalDocs?: number;

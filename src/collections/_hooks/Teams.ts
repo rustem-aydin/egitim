@@ -1,5 +1,6 @@
 // src/collections/Teams/validateModules.ts
 import type { PayloadRequest } from 'payload'
+import { ValidationError } from 'payload'
 
 export const validateModules = async (
   value: (string | number)[] | null | undefined,
@@ -26,7 +27,18 @@ export const validateModules = async (
   })
 
   if (invalidModule) {
-    return `Kod "K" ile başlayan modüller takıma atanamaz. Geçersiz modül: "${invalidModule.name}" (${invalidModule.code})`
+    throw new ValidationError(
+      {
+        errors: [
+          {
+            message: `Kod "K" ile başlayan modüller takıma atanamaz. Geçersiz modül: "${invalidModule.name}" (${invalidModule.code})`,
+            label: 'Takıma ait Modüller',
+            path: 'modules',
+          },
+        ],
+      },
+      req.t,
+    )
   }
 
   return true

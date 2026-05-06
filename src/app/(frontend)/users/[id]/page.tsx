@@ -1,5 +1,5 @@
 import { getUserById } from '@/actions/users'
-import UserDetails from '@/components/pages/users/user-details'
+import MainDetails from '@/components/pages/users/details/main'
 import { notFound } from 'next/navigation'
 export const dynamic = 'force-dynamic'
 
@@ -14,7 +14,7 @@ const UserDetailsPage = async ({ params }: Props) => {
   if (isNaN(id)) {
     notFound()
   }
-  return <UserDetails user={user} />
+  return <MainDetails user={user} />
 }
 
 export default UserDetailsPage

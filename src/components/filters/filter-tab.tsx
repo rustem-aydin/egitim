@@ -1,8 +1,6 @@
 'use client'
-import { Separator } from '../ui/separator'
-import { Label } from '../ui/label'
 import { Button } from '../ui/button'
-import { Filter, X } from 'lucide-react'
+import { X } from 'lucide-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useTransition } from 'react' // BUNU EKLİYORUZ
 import FilterLoading from './filterLoading' // BUNU EKLİYORUZ
@@ -13,7 +11,6 @@ import FilterDrillCategory from './filter-drill-category'
 import {
   Category,
   DrillCategory,
-  Expert,
   Group,
   Lesson,
   Location,
@@ -23,23 +20,19 @@ import {
 } from '@/payload-types'
 import FilterUsers from './filter-users'
 import FilterTeams from './filter-teams'
-import FilterModuls from './filter-modules'
 import FilterLocation from './filter-locations'
 import FilterLevel from './filter-levels'
 import FilterCategories from './filter-category'
 import FilterGroups from './filter-groups'
 import FilterLessons from './filter-lessons'
 import FilterEduLevel from './filter-edu-level'
-import FilterCompletedModules from './filter-completed-modules'
 import FilterInCompletedModules from './filter-incompleted-modules'
 import FilterRequiredIncompletedModules from './filter-required-incompleted-modules'
 import Layout from './filter-layout'
 import { SortOption } from '@/types/types'
 import FilterLessonsStatus from './filter-lesson-status'
 import FilterLimit from './filter-limit'
-import { date } from 'zod/v4'
 import FilterDate from './filter-date'
-import FilterExpert from './filter-expert'
 import { FilterLove } from './filter-love'
 import FilterModules from './filter-modules'
 

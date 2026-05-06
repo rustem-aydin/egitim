@@ -43,7 +43,7 @@ export default async function UsersPage({
           edu_levels
           requiredButInCompletedModules={modules}
           completedModule={modules}
-          layoutOptions={['grid', 'modules']}
+          layoutOptions={['grid', 'modules', 'topLessonsCompleters', 'moduleProgressChart']}
           lessons={lessons}
           groups={groups}
           sortOptions={mySortOptions}
