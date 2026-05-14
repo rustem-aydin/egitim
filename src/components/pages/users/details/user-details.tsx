@@ -1,20 +1,8 @@
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
-import { Award, BookOpen, Calendar, GraduationCap, Layers } from 'lucide-react'
-import { Lesson, Media, Team, User } from '@/payload-types'
+import { Award, Calendar, GraduationCap } from 'lucide-react'
+import { Media, Team, User } from '@/payload-types'
 import UserModuleProgress from '../user-module-progress'
-import UserModules from '../user-modules'
-import UserLessons from '../user-lessons'
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from '@/components/ui/carousel'
-import Image from 'next/image'
-import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
-import { VisuallyHidden } from 'radix-ui'
 import ImageCarousel from './image-carousel'
 interface UserDetailsProps {
   user: User
@@ -37,7 +25,6 @@ const UserDetails = async ({ user }: UserDetailsProps) => {
     certificates,
   } = user
   const groupObj = typeof group === 'object' && group !== null ? group : null
-  const groupModules = groupObj?.modules
   const groupName = groupObj?.name || 'Grup Atanmamış'
 
   const team = isTeam(groupObj?.team) ? groupObj.team : null
@@ -65,10 +52,6 @@ const UserDetails = async ({ user }: UserDetailsProps) => {
 
       <CardContent>
         <div className="space-y-6">
-          <UserModuleProgress
-            requiredModules={groupModules as []}
-            completedLessons={Array.isArray(lessons) ? lessons : []}
-          />
           {/* 
           <div className="space-y-3">
             <div className="flex items-center gap-2 pb-2 border-b">
@@ -109,13 +92,25 @@ const UserDetails = async ({ user }: UserDetailsProps) => {
               <h4 className="text-lg font-semibold">Eğitim Bilgileri</h4>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="space-y-2 p-4 rounded-lg border">
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: '1rem' }}>
+              <div
+                style={{ gridColumn: 'span 6 / span 6' }}
+                className="space-y-2 p-4 rounded-lg border"
+              >
                 <h5 className="text-sm font-medium text-gray-500">Eğitim Durumu</h5>
                 <p className="text-lg font-semibold">{education_levels}</p>
               </div>
-
-              <div className="space-y-2 p-4 rounded-lg border">
+              <div
+                style={{ gridColumn: 'span 6 / span 6' }}
+                className="space-y-2 p-4 rounded-lg border"
+              >
+                <h5 className="text-sm font-medium text-gray-500">YDS Notu</h5>
+                <p className="text-lg font-semibold">{yds_score}</p>
+              </div>
+              <div
+                style={{ gridColumn: 'span 12 / span 6' }}
+                className="space-y-2 p-4 rounded-lg border"
+              >
                 <h5 className="text-sm font-medium text-gray-500">Üniversiteler</h5>
                 <div className="flex flex-wrap gap-2">
                   {university_names?.map((uniObj: any, index: number) => (
@@ -124,11 +119,6 @@ const UserDetails = async ({ user }: UserDetailsProps) => {
                     </Badge>
                   ))}
                 </div>
-              </div>
-
-              <div className="space-y-2 p-4 rounded-lg border">
-                <h5 className="text-sm font-medium text-gray-500">YDS Notu</h5>
-                <p className="text-lg font-semibold">{yds_score}</p>
               </div>
             </div>
             <div className="flex flex-col space-y-2 p-4 min-h-66 w-full rounded-lg border">

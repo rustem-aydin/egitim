@@ -34,7 +34,7 @@ export const Teams: CollectionConfig = {
     {
       name: 'groups',
       type: 'join',
-      maxDepth: 1,
+      maxDepth: 3,
       collection: 'groups',
       admin: { hidden: true },
       on: 'team',

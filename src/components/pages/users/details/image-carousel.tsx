@@ -9,7 +9,6 @@ import Image from 'next/image'
 
 export default function ImageCarousel({ certificates }: { certificates: Media[] }) {
   const [selectedImage, setSelectedImage] = useState<Media | null>(null)
-
   return (
     <div className="flex-1 flex flex-col items-center justify-center min-h-0">
       {certificates?.length === 0 ? (
@@ -26,12 +25,7 @@ export default function ImageCarousel({ certificates }: { certificates: Media[] 
                       className="relative aspect-3/4 overflow-hidden border-0 p-0 cursor-pointer hover:opacity-90 transition-opacity"
                       onClick={() => setSelectedImage(cert)}
                     >
-                      <Image
-                        src={String(cert?.url)}
-                        alt={`Sertifika ${cert?.id}`}
-                        fill
-                        className="object-cover"
-                      />
+                      <Image fill src={String(cert?.url)} alt={`Sertifika ${cert?.id}`} />
                     </Card>
                   </div>
                 </CarouselItem>
@@ -43,16 +37,18 @@ export default function ImageCarousel({ certificates }: { certificates: Media[] 
 
       {/* Modal */}
       <Dialog open={!!selectedImage} onOpenChange={() => setSelectedImage(null)}>
-        <DialogClose className="text-red-500"></DialogClose>
-        <DialogContent className="max-w-4xl w-full p-0 border-0 bg-transparent shadow-none">
+        <DialogContent className="max-w-[90vw] w-auto h-auto p-0 border-0 bg-transparent shadow-none overflow-hidden">
+          <DialogTitle className="hidden">Sertifika</DialogTitle>
+
           {selectedImage && (
-            <div className="relative w-full aspect-[3/4] max-h-[85vh]">
+            <div className="relative w-auto h-auto max-w-[85vw] max-h-[85vh]">
               <Image
                 src={String(selectedImage.url)}
                 alt={`Sertifika ${selectedImage.id}`}
-                fill
-                className="object-contain rounded-lg"
-                sizes="(max-width: 768px) 100vw, 80vw"
+                width={selectedImage.width || 800}
+                height={selectedImage.height || 600}
+                className="object-contain rounded-lg w-auto h-auto max-w-full max-h-[85vh]"
+                sizes="85vw"
                 priority
               />
             </div>

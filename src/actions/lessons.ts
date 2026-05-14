@@ -290,14 +290,14 @@ export const fetchLessons = async (filters: LessonFilterParams) => {
   }
 }
 
-export const getLessonById = async (id: string): Promise<Lesson> => {
+export const getLessonById = async (id: number): Promise<Lesson> => {
   const payload = await getPayload({ config })
 
   const drill = await payload.find({
     collection: 'lessons',
     where: { id: { equals: id } },
     limit: 1,
-    depth: 2,
+    depth: 3,
   })
 
   return drill.docs[0] // ✅ sadece ilk kaydı döndür

@@ -14,7 +14,7 @@ export const TeamCard = ({ team }: { team: Team }) => {
   return (
     <MotionCard>
       <Card
-        className="w-full max-w-md relative overflow-hidden backdrop-blur-sm bg-linear-to-br from-background to-muted/20"
+        className="w-full max-w-md h-full flex flex-col relative overflow-hidden backdrop-blur-sm bg-linear-to-br from-background to-muted/20"
         style={{
           border: `2px solid ${team.color}`,
           boxShadow: `0 12px 40px ${team.color}20, 0 4px 12px ${team.color}10`,
@@ -27,18 +27,14 @@ export const TeamCard = ({ team }: { team: Team }) => {
           }}
         />
 
-        <CardHeader className="px-6 relative z-10">
+        <CardHeader className="px-6 relative z-10 flex-shrink-0">
+          {' '}
+          {/* flex-shrink-0 eklendi */}
           <div className="flex justify-between items-start">
             <div className="flex items-center gap-4">
-              {/* <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center"
-                style={{ backgroundColor: `${team.color}20` }}
-              >
-                <Flag className="h-6 w-6" style={{ color: team.color }} />
-              </div> */}
               <div>
                 <h3 className="font-bold text-xl tracking-tight">{team.name}</h3>
-                <div className="flex items-center gap-2 ">
+                <div className="flex items-center gap-2">
                   <div
                     className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium"
                     style={{
@@ -56,16 +52,16 @@ export const TeamCard = ({ team }: { team: Team }) => {
           </div>
         </CardHeader>
 
-        <CardContent className="px-6 pt-2 space-y-4 relative z-10">
+        <CardContent className="px-6 pt-2 flex-1 flex flex-col relative z-10">
           <div
-            className="relative  rounded-xl overflow-hidden border min-h-28 p-4 space-y-4"
+            className="relative rounded-xl overflow-hidden border flex-1 p-4"
             style={{ borderColor: `${team.color}50` }}
           >
-            <h4 className="font-semibold mb-2 flex items-center gap-2 text-sm">
+            <h4 className="font-semibold mb-3 flex items-center gap-2 text-sm">
               <Building className="h-4 w-4 text-muted-foreground" />
               Dahil Olan Kadrolar
             </h4>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2 content-start">
               {groups.length > 0 ? (
                 <>
                   {groups.slice(0, 4).map((group: any) => (
@@ -83,7 +79,7 @@ export const TeamCard = ({ team }: { team: Team }) => {
           <Flag
             style={{ color: `${team.color}` }}
             size={240}
-            className="absolute bottom-0 right-0 opacity-5 hidden sm:block"
+            className="absolute bottom-0 -left-5 opacity-5 hidden sm:block pointer-events-none"
           />
         </CardContent>
       </Card>

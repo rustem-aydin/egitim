@@ -1,6 +1,5 @@
 import { getLessonById } from '@/actions/lessons'
-import LessonDetails from '@/components/pages/lessons/details/lesson-details'
-import LessonSwappy from '@/components/pages/lessons/swappy/main'
+import MainDetails from '@/components/pages/lessons/details/main'
 import { notFound } from 'next/navigation'
 export const dynamic = 'force-dynamic'
 
@@ -9,11 +8,11 @@ interface Props {
 }
 const LessonDetailsePage = async ({ params }: Props) => {
   const id = (await params).id
-  const lesson = await getLessonById(String(id))
+  const lesson = await getLessonById(id)
   if (isNaN(id)) {
     notFound()
   }
-  return <LessonSwappy lesson={lesson} />
+  return <MainDetails lesson={lesson} />
 }
 
 export default LessonDetailsePage

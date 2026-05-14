@@ -1,8 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Item, ItemActions, ItemContent, ItemDescription, ItemTitle } from '@/components/ui/item'
 import { User } from '@/payload-types'
-import { ExternalLinkIcon } from 'lucide-react'
-import Link from 'next/link'
+import { MiniUsersCard } from '../users/mini-users-card'
 
 export const LessonCompletedUser = ({ users }: { users: (number | User)[] | null }) => {
   return (
@@ -18,19 +16,9 @@ export const LessonCompletedUser = ({ users }: { users: (number | User)[] | null
                 </CardTitle>
               </div>
             </CardHeader>
-            <CardContent>
+            <CardContent className="flex flex-col gap-2">
               {users.map((user: any) => (
-                <Item variant="outline" asChild>
-                  <Link href={'/users/' + user?.id} target="_blank" rel="noopener noreferrer">
-                    <ItemContent>
-                      <ItemTitle>{user?.name}</ItemTitle>
-                      <ItemDescription>{user?.rank}</ItemDescription>
-                    </ItemContent>
-                    <ItemActions>
-                      <ExternalLinkIcon className="size-4" />
-                    </ItemActions>
-                  </Link>
-                </Item>
+                <MiniUsersCard key={user?.id} user={user} />
               ))}
             </CardContent>
           </Card>

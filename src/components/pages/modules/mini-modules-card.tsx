@@ -1,10 +1,8 @@
-import { Flag, Puzzle, CheckCheck } from 'lucide-react'
-import Link from 'next/link'
+import { Puzzle, CheckCheck } from 'lucide-react'
 
 import MotionCard from '@/components/motion-card'
 import { Module, Team } from '@/payload-types'
 import BadgeModule from './modules-badge-code'
-import { getTeamsByExpertIds } from '@/actions/teams'
 
 interface ModulesCardProps {
   module: Module
@@ -12,35 +10,11 @@ interface ModulesCardProps {
 }
 
 // Module'deki expert ID'lerini çıkar
-function getExpertIds(module: Module): number[] {
-  if (!module.experts?.docs) return []
-
-  return module.experts.docs.map((expert) => (typeof expert === 'number' ? expert : expert.id))
-}
 
 // Expert ID'lerinden tüm team'leri çek (tekrarsız)
-async function getTeamsFromModule(module: Module): Promise<Team[]> {
-  // Önce populate edilmiş teams'i kontrol et
-  const populatedTeams = (module.experts?.docs || []).flatMap(
-    (expert) => (expert as any).teams?.docs || [],
-  ) as Team[]
-
-  if (populatedTeams.length > 0) {
-    return populatedTeams.filter(
-      (team, index, self) => index === self.findIndex((t) => t.id === team.id),
-    )
-  }
-
-  // Boşsa expert ID'lerinden çek
-  const expertIds = getExpertIds(module)
-  if (expertIds.length === 0) return []
-
-  return await getTeamsByExpertIds(expertIds)
-}
 
 export async function MiniModuleCard({ module, isCompleted }: ModulesCardProps) {
-  const teams = await getTeamsFromModule(module)
-
+  const teams = module.teams?.docs as Team[]
   const defaultColor = '#888888'
 
   let cardStyle

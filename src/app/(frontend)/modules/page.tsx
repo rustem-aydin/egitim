@@ -3,6 +3,7 @@ import { getAllLessons } from '@/actions/lessons'
 import { getAllTeams } from '@/actions/teams'
 import FilterTab from '@/components/filters/filter-tab'
 import FilterLoading from '@/components/filters/filterLoading'
+import { ModulesTab } from '@/components/pages/modules/layouts/modules-tab'
 import ModulesList from '@/components/pages/modules/modules-list'
 import { getSortOptions, ModuleFilterParams } from '@/types/filters'
 import { Suspense } from 'react'
@@ -39,7 +40,7 @@ export default async function ModulesPage({
           </div>
         </div>
         <FilterTab
-          layoutOptions={['grid', 'kanban', 'gant', 'table', 'calender']}
+          layoutOptions={['grid', 'sankey']}
           lessons={lessons}
           groups={groups}
           sortOptions={mySortOptions}
@@ -47,7 +48,7 @@ export default async function ModulesPage({
           teams={teams}
         />
         <Suspense fallback={<FilterLoading />}></Suspense>
-        <ModulesList {...filter} />
+        <ModulesTab {...filter} />
       </div>
     </div>
   )

@@ -12,13 +12,14 @@ import {
   Kanban,
   ChartArea,
   Puzzle,
+  ChartNetwork,
 } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { Command, CommandGroup, CommandItem, CommandList } from '@/components/ui/command'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
-import { TopLessonsCompleters } from '../pages/users/layouts/charts/topLessonsCompleters'
+import { sankey } from '@visx/sankey'
 
 interface SortConfig {
   icon: React.ReactNode
@@ -33,6 +34,10 @@ const sortConfigs: Record<string, SortConfig> = {
   chart: {
     icon: <ChartArea size={16} />,
     label: 'Grafikler',
+  },
+  sankey: {
+    icon: <ChartNetwork size={16} />,
+    label: 'Sankey',
   },
   modules: {
     icon: <Puzzle size={16} />,
@@ -65,7 +70,7 @@ interface SortSelectProps {
   startTransition: React.TransitionStartFunction
 }
 
-export default function SortSelect({ options, startTransition }: SortSelectProps) {
+export default function Layout({ options, startTransition }: SortSelectProps) {
   const id = useId()
   const router = useRouter()
   const pathname = usePathname()

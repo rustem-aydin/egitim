@@ -6,39 +6,40 @@ import UserDetails from './user-details'
 import { User } from '@/payload-types'
 import UserCompletersLessons from './users-completers-lessons'
 import { UserModuleChart } from '../layouts/charts/user-module-progress-chart'
+import UserModulesDetails from './user-modules-details'
 
 export const MainDetails = async ({ user }: { user: User }) => {
   const users = await getAllUsers(0)
-
   return (
-    <div style={{ maxWidth: '72rem', width: '100%', margin: '0 auto', padding: '1rem' }}>
-      {/* Üst satır: Fallback ve Dropdown */}
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(12, 1fr)',
-          gap: '1rem',
-          marginBottom: '1rem',
-        }}
-      >
-        <div style={{ gridColumn: 'span 6 / span 6' }}>
-          <Fallback />
-        </div>
-        <div style={{ gridColumn: 'span 6 / span 6', display: 'flex', justifyContent: 'flex-end' }}>
-          <UsersDropdownList users={users} />
+    <div className="mx-auto w-full max-w-6xl ">
+      <div className="sticky top-0 z-50 pt-2  backdrop-blur-md bg-background/80">
+        <div className="grid grid-cols-12 gap-4">
+          <div className="col-span-6">
+            <Fallback />
+          </div>
+          <div className="col-span-6 flex justify-end">
+            <UsersDropdownList users={users} />
+          </div>
         </div>
       </div>
 
-      {/* Alt satır: İki UserDetails yan yana */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: '1rem' }}>
-        <div style={{ gridColumn: 'span 8 / span 6' }}>
+      {/* İçerik - Header'ın altından başlar */}
+      <div className="grid grid-cols-12 gap-4 items-stretch ">
+        <div className="col-span-8">
           <UserDetails user={user} />
         </div>
-        <div style={{ gridColumn: 'span 4 / span 6' }}>
-          <UserCompletersLessons user={user} />
+
+        <div className="col-span-4 flex flex-col gap-4">
+          <div className="shrink-0">
+            <UserModuleChart isTitle={false} user={user} />
+          </div>
+
+          <div className="flex-1">
+            <UserCompletersLessons user={user} />
+          </div>
         </div>
-        <div style={{ gridColumn: 'span 4 / span 6' }}>
-          <UserModuleChart user={user} />
+        <div className="col-span-8 flex flex-col gap-4">
+          <UserModulesDetails user={user} />
         </div>
       </div>
     </div>

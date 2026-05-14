@@ -46,7 +46,6 @@ const UserModuleProgress: React.FC<UserModuleProgressProps> = ({
   return (
     <div className="space-y-2">
       <div className="flex justify-between text-sm text-gray-600">
-        <span>İlerleme</span>
         <span>{percentage}%</span>
       </div>
       <Progress value={percentage} className="h-2 transition-all border duration-300 ease-in-out" />

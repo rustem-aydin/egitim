@@ -14,7 +14,6 @@ export async function UsersTab(props: UsersFilterParams) {
   const allUsers = results.flatMap((result) => result?.data || [])
   const hasNextPage = results[results.length - 1]?.hasNextPage || false
 
-  console.log(JSON.stringify(allUsers[0], null, 2))
   return (
     <div className="flex w-full  items-center">
       <Tabs value={activeTab || 'grid'}>
@@ -36,7 +35,7 @@ export async function UsersTab(props: UsersFilterParams) {
             {allUsers.map((user) => (
               <UserModuleChart key={user.id} user={user} />
             ))}
-          </div>{' '}
+          </div>
         </AnimatedTabsContent>
       </Tabs>
     </div>

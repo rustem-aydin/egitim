@@ -1,13 +1,13 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Module } from '@/payload-types'
-import BadgeModule from '../../lesson-badge-module'
-import MiniLessonCard from '../../mini-lesson-card'
+import BadgeModule from '../lesson-badge-module'
+import MiniLessonCard from '../mini-lesson-card'
 
 export const LessonsModulesDetails = ({ modules }: { modules: Module }) => {
   return (
     <>
       {modules && (
-        <div className="group relative w-full transform shadow-2xl rounded-2xl transition-all duration-500">
+        <div className="group relative w-full h-full transform shadow-2xl rounded-2xl transition-all duration-500">
           <Card className="h-full border max-h-[400px] flex flex-col">
             <CardHeader className="relative flex-shrink-0">
               <div className="flex items-center gap-2">

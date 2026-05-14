@@ -41,6 +41,7 @@ export const Groups: CollectionConfig = {
       name: 'users',
       type: 'join',
       collection: 'users',
+      maxDepth: 3,
       admin: {
         hidden: true,
       },

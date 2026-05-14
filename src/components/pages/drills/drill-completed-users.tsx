@@ -12,9 +12,9 @@ export const DrillCompletedUser = ({ users }: { users: (number | User)[] | null 
           <Card className="h-full border">
             <CardHeader className=" relative">
               <div className="flex items-center gap-2">
-                <Users size={18} />{' '}
+                <Users size={18} />
                 <CardTitle className="text-lg font-semibold tracking-tight">
-                  {'Tamamlayan Personeller'}
+                  Tamamlayan Personeller
                 </CardTitle>
               </div>
             </CardHeader>

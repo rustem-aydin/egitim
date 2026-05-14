@@ -4,7 +4,6 @@ import {
   dynamicStatusReadHook,
   preventDowngradeIfAssignedHook,
   setCreatedByHook,
-  validateDatesHook,
   validateDateTo,
 } from '../_hooks/Lessons'
 
@@ -182,7 +181,7 @@ export const Lessons: CollectionConfig = {
     {
       name: 'users',
       label: 'Dersi Alanlar',
-      maxDepth: 1,
+      maxDepth: 3,
       admin: {
         hidden: true,
         description: 'Bu derse kayıtlı olan kullanıcılar.',

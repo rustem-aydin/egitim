@@ -34,7 +34,7 @@ export const Modules: CollectionConfig = {
     {
       name: 'teams',
       type: 'join',
-      maxDepth: 3,
+      maxDepth: 2,
       collection: 'teams',
       admin: {
         hidden: true,
@@ -44,7 +44,7 @@ export const Modules: CollectionConfig = {
     {
       name: 'groups',
       type: 'join',
-      maxDepth: 3,
+      maxDepth: 1,
       collection: 'groups',
       admin: {
         hidden: true,
@@ -81,7 +81,7 @@ export const Modules: CollectionConfig = {
     {
       name: 'lessons',
       label: 'Dersler',
-      maxDepth: 3,
+      maxDepth: 1,
       type: 'join',
       collection: 'lessons',
       on: 'module',

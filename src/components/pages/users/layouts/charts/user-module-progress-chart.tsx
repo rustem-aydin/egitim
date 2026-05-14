@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { Pie, PieChart } from 'recharts'
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   ChartContainer,
   ChartTooltip,
@@ -11,10 +11,6 @@ import {
   type ChartConfig,
 } from '@/components/ui/chart'
 import { Group, Module, Team, User } from '@/payload-types'
-
-interface UserModuleChartProps {
-  user: any
-}
 
 const categoryColors: Record<string, string> = {
   A: '#22c55e', // green-500
@@ -56,7 +52,7 @@ const chartConfig = {
   takimKT: { label: 'Takım - Kadro (K)', color: categoryColors.K },
   takimKK: { label: 'Takım - Kadro (Kalan)', color: withOpacity(categoryColors.K, 0.1) },
 } satisfies ChartConfig
-export function UserModuleChart({ user }: { user: User }) {
+export function UserModuleChart({ user, isTitle = true }: { user: User; isTitle?: boolean }) {
   const { groupData, teamData } = React.useMemo(() => {
     const completedModuleIds = new Set(
       (user.lessons || []).map((l: any) => l.module?.id).filter(Boolean),
@@ -138,13 +134,15 @@ export function UserModuleChart({ user }: { user: User }) {
 
   return (
     <Card className="flex flex-col ">
-      <CardHeader className="items-center pb-0">
-        <CardTitle>
-          {user.rank} {user.name}
-        </CardTitle>
-      </CardHeader>
+      {isTitle && (
+        <CardHeader className="items-center pb-0">
+          <CardTitle>
+            {user.rank} {user.name}
+          </CardTitle>
+        </CardHeader>
+      )}
       <CardContent className="flex-1 pb-0 ">
-        <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[250px] px-0">
+        <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-61 px-0">
           <PieChart>
             <ChartTooltip content={<ChartTooltipContent nameKey="name" indicator="line" />} />
             <Pie
@@ -170,26 +168,29 @@ export function UserModuleChart({ user }: { user: User }) {
       <CardContent className="text-center text-xs text-muted-foreground mt-2 ">
         <div className="flex justify-center gap-3 flex-wrap">
           <span>
-            İç halka: <span className="font-medium text-foreground">Grup</span>
+            İç halka: <span className="font-medium text-foreground">Kadro</span>
           </span>
           <span>
             Dış halka: <span className="font-medium text-foreground">Takım</span>
           </span>
         </div>
-        <div className="flex justify-center gap-2 mt-2">
-          <span className="flex items-center gap-1">
-            <span className="h-2 w-2 rounded-full" style={{ background: categoryColors.A }}></span>{' '}
+        <div className="flex  justify-between mt-2">
+          <span className="flex items-center gap-1 border p-1 w-full">
+            <span
+              className="h-2 w-2 rounded-full border"
+              style={{ background: categoryColors.A }}
+            ></span>
             Temel
           </span>
-          <span className="flex items-center gap-1">
+          <span className="flex items-center gap-1 border p-1 w-full">
             <span className="h-2 w-2 rounded-full" style={{ background: categoryColors.B }}></span>{' '}
             Orta
           </span>
-          <span className="flex items-center gap-1">
+          <span className="flex items-center gap-1 border p-1 w-full">
             <span className="h-2 w-2 rounded-full" style={{ background: categoryColors.C }}></span>{' '}
             Zor
           </span>
-          <span className="flex items-center gap-1">
+          <span className="flex items-center gap-1 border p-1 w-full">
             <span className="h-2 w-2 rounded-full" style={{ background: categoryColors.K }}></span>{' '}
             Kadro
           </span>

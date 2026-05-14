@@ -14,12 +14,12 @@ export const getAllTeamsDepth0 = async (): Promise<Team[]> => {
   return teams.docs
 }
 
-export const getAllTeams = async (): Promise<Team[]> => {
+export const getAllTeams = async (depth: number = 0): Promise<Team[]> => {
   const payload = await getPayload({ config })
 
   const teams = await payload.find({
     collection: 'teams',
-    depth: 3,
+    depth: depth,
   })
 
   return teams.docs
@@ -54,8 +54,16 @@ export const fetchTeams = async (
 
   // --- Modules ---
   if (filters.modules) {
-    const moduleCodes = filters.modules.split(',')
-    and.push({ 'modules.code': { in: moduleCodes } })
+    and.push({ 'modules.name': { equals: filters.modules } })
+  }
+  if (filters.lesson) {
+    and.push({ 'modules.lessons.name': { equals: filters.lesson } })
+  }
+  if (filters.user) {
+    and.push({ 'groups.users.name': { equals: filters.user } })
+  }
+  if (filters.group) {
+    and.push({ 'groups.name': { equals: filters.group } })
   }
 
   // --- Sort ---
@@ -75,7 +83,7 @@ export const fetchTeams = async (
           limit: filters.limit ? Number(filters.limit) : 12,
         }),
     sort: sortField,
-    depth: 2,
+    depth: 3,
     overrideAccess: true,
   })
 
@@ -86,7 +94,7 @@ export const fetchTeams = async (
   }
 }
 
-export const getTeamById = async (id: string): Promise<Team> => {
+export const getTeamById = async (id: number): Promise<Team> => {
   const payload = await getPayload({ config })
 
   const teams = await payload.find({

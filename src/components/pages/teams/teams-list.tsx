@@ -14,7 +14,7 @@ const TeamList = async (props: TeamsFilterParams) => {
     <div className="mx-auto relative z-10">
       {!allTeams?.length && <NotFoundItem title="Takım Bulunamadı" description="" />}
 
-      <div className="w-full grid grid-cols-1 lg:grid-cols-4 gap-8 items-start justify-center py-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mt-4 gap-4 items-stretch">
         {allTeams?.map((team: any) => (
           <TeamCard key={team.id} team={team} />
         ))}

@@ -1,5 +1,5 @@
 import { getTeamById } from '@/actions/teams'
-import { TeamDetails } from '@/components/pages/teams/team-details'
+import MainDetails from '@/components/pages/teams/details/main'
 import { notFound } from 'next/navigation'
 export const dynamic = 'force-dynamic'
 
@@ -9,11 +9,11 @@ interface Props {
 
 const TeamDetailsPage = async ({ params }: Props) => {
   const id = (await params).id
-  const team = await getTeamById(String(id))
+  const team = await getTeamById(id)
   if (isNaN(id)) {
     notFound()
   }
-  return <TeamDetails team={team} />
+  return <MainDetails team={team} />
 }
 
 export default TeamDetailsPage

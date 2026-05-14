@@ -1,5 +1,8 @@
+import { getAllGroups } from '@/actions/groups'
+import { getAllLessons } from '@/actions/lessons'
 import { getAllModules } from '@/actions/modules'
 import { getAllTeams } from '@/actions/teams'
+import { getAllUsers } from '@/actions/users'
 import FilterTab from '@/components/filters/filter-tab'
 import FilterLoading from '@/components/filters/filterLoading'
 import TeamList from '@/components/pages/teams/teams-list'
@@ -15,6 +18,9 @@ const TeamsPage = async ({
 }) => {
   const filter = await searchParams
   const modules = await getAllModules()
+  const groups = await getAllGroups()
+  const users = await getAllUsers()
+  const lessons = await getAllLessons()
   return (
     <div className="min-h-screen  py-6 px-4 relative overflow-hidden">
       <div className=" mx-auto relative z-10">
@@ -27,9 +33,12 @@ const TeamsPage = async ({
           </div>
         </div>
         <FilterTab
-          layoutOptions={['modular']}
+          lessons={lessons}
+          users={users}
+          groups={groups}
+          layoutOptions={['grid']}
           sortOptions={mySortOptions}
-          modules={modules} // Modül filtresini aktif eder
+          modules={modules}
         />
         <Suspense fallback={<FilterLoading />}></Suspense>
         <TeamList {...filter} />
